@@ -5,10 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ClienteComponent } from './cliente/cliente.component';
 
 
 const appRoutes:Routes=[
   {path:'', component: LoginComponent},
+  {path:'cliente/:cedula', component:ClienteComponent},
   {path:'**', component: NotFoundComponent},
 ]
 
@@ -16,7 +18,8 @@ const appRoutes:Routes=[
   declarations: [
     AppComponent,
     LoginComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ClienteComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

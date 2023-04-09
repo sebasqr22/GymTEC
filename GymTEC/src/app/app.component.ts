@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 
 
 @Component({
@@ -6,6 +6,10 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
+  constructor(private renderer: Renderer2, private el: ElementRef) { }
   title = 'GymTEC';
+
+  ngOnInit() {
+  }
 }
