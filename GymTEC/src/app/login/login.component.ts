@@ -6,7 +6,6 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit{
-  mostrando = 0
   mostrar = false
   ngOnInit() {
     const signin = document.getElementById("signin") as HTMLInputElement
@@ -24,12 +23,26 @@ export class LoginComponent implements OnInit{
     this.mostrar = !this.mostrar
   }
 
-  cambiarPantalla(){
+  mostrarContra2(){
+    const input = document.getElementById('floatingPassword1') as HTMLInputElement
+    if(this.mostrar){
+      input.type = 'password'
+    }
+    else{
+      input.type = 'text'
+    }
+    this.mostrar = !this.mostrar
+  }
+
+  cambiarPantalla(type:number, event:Event){
+    event.preventDefault();
     const signin = document.getElementById("signin") as HTMLInputElement
     const login = document.getElementById("login") as HTMLInputElement
-    if(this.mostrando === 0){
+
+    if(type === 0){
       login.style.display = 'none'
       signin.style.display = 'block'
+      console.log("a")
     }
     else{
       signin.style.display = 'none'
