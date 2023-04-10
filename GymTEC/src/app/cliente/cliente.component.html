@@ -30,9 +30,8 @@
 
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header">Páginas:</h6>
-              <a class="collapse-item" (click)="cambiarPantalla('principal')">Main</a>
-              <a class="collapse-item" (click)="cambiarPantalla('busqueda')">Búsqueda</a>
-              <a class="collapse-item active" (click)="cambiarPantalla('registro')">Registro</a>
+              <a class="collapse-item pointer" (click)="cambiarPantalla('principal')">Main</a>
+              <a class="collapse-item active pointer" (click)="cambiarPantalla('busqueda')">Búsqueda y Registro</a>
             </div>
           </div>
         </li>
@@ -167,6 +166,10 @@
                 <input type="date" class="form-control form-control-user" id="fechaFinaliza">
                 <label for="fechaFinaliza">Fecha de Finalización</label>
               </div>
+              <div class="col-sm">
+                <select class="form-control form-control-user" id="sede"></select>
+                <label for="fechaFinaliza">Sede</label>
+              </div>
               <a class="btn btn-outline-primary btn-user btn-block" (click)="buscarClases()">
                 Buscar
               </a>
@@ -178,7 +181,7 @@
           </div>
 
           <div id="registro" class="container-fluid">
-            Registro
+            <h1 class="h3 mb-4 text-gray-800" id="registroName"></h1>
           </div>
           <!-- /.container-fluid -->
 

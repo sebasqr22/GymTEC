@@ -45,7 +45,10 @@ export class ClienteComponent implements OnInit{
   }
 
   clase(tipo:string){
-    alert(tipo)
+    this.cambiarPantalla('registro')
+    const titulo = document.getElementById('registroName') as HTMLInputElement
+    titulo.innerHTML = `Registro de ${tipo}`
+
   }
 
   crearCartaClase(tipo:string, src:string, caption:string){
@@ -68,17 +71,19 @@ export class ClienteComponent implements OnInit{
   buscarClases(){
     const inicio = document.getElementById('fechaInicio') as HTMLInputElement
     const final = document.getElementById('fechaFinaliza') as HTMLInputElement
+    const sedes = document.getElementById('sede') as HTMLInputElement
 
-    if(inicio && final){
+    if(inicio && final && sedes){
       const fi = inicio.value
       const ff = final.value
+      const sede = sedes.value
       if(fi != "" && ff != ""){
         const div = document.getElementById('clasesCartas') as HTMLInputElement
         div.appendChild(this.crearCartaClase('natacion', 'https://img.freepik.com/premium-vector/continuous-line-drawing-young-professional-swimmer-practicing-swimming-indoor-pool-sports_500861-500.jpg', 'Natacion'))
         div.appendChild(this.crearCartaClase('pilates', 'https://t3.ftcdn.net/jpg/03/72/43/12/360_F_372431283_rhVo7VWm2Fmgf2K0CBo99cbZuvfoCdau.jpg', 'Pilates'))
       }
       else{
-        alert("Los datos de Fecha de Inicio y Fecha de Finalización no deben estar vacíos!!")
+        alert("Los datos de Fecha de Inicio, Fecha de Finalización y Sede no deben estar vacíos!!")
       }
     }
   }

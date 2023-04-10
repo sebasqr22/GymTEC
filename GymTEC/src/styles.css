@@ -11307,3 +11307,7 @@ body.sidebar-toggled footer.sticky-footer {
 .cartaClase:hover{
   grid-template-rows: 1fr 6rem;
 }
+
+.pointer{
+  cursor: pointer;
+}
