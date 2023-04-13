@@ -74,6 +74,8 @@ export class ClienteComponent implements OnInit{
     const sedes = document.getElementById('sede') as HTMLInputElement
 
     if(inicio && final && sedes){
+      const claseCartas = document.getElementById('clasesCartas') as HTMLInputElement
+      claseCartas.innerHTML = ''
       const fi = inicio.value
       const ff = final.value
       const sede = sedes.value

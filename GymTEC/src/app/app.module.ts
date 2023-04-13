@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ClienteComponent } from './cliente/cliente.component';
+import { AdminComponent } from './admin/admin.component';
 
 
 const appRoutes:Routes=[
   {path:'', component: LoginComponent},
   {path:'cliente/:cedula', component:ClienteComponent},
+  {path:'admin/:cedula', component:AdminComponent},
   {path:'**', component: NotFoundComponent},
 ]
 
@@ -19,7 +21,8 @@ const appRoutes:Routes=[
     AppComponent,
     LoginComponent,
     NotFoundComponent,
-    ClienteComponent
+    ClienteComponent,
+    AdminComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

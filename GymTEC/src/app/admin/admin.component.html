@@ -1,0 +1,360 @@
+<div id="visual">
+  <div id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+          <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fa-solid fa-dumbbell"></i>
+          </div>
+          <div class="sidebar-brand-text mx-3">Admin/{{tipo}}</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Funciones Mixtas
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='gestSuc' class="nav-link collapsed" data-toggle="collapse" data-target="#gestSucC" aria-expanded="false" aria-controls="gestSucC" (click)="mostrar('gestSuc', 'gestSucC')">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Gestión de sucursales </span>
+          </a>
+          <div id="gestSucC" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Funcionalidades</h6>
+              <a class="collapse-item">Activación de Spa</a>
+              <a class="collapse-item">Activación de Tienda</a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='gestTratSpa' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Tratamientos de Spa</span>
+          </a>
+        </li>
+
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='gestPuest' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Gestión de puestos</span>
+          </a>
+        </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='gestTipPla' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Tipos de planilla</span>
+          </a>
+        </li>
+
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='gestEmpl' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Gestión de empleados</span>
+          </a>
+        </li>
+
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='gestServ' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Gestión de Servicios</span>
+          </a>
+        </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='gestTipEquip' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Gestión de Tipos Equipo</span>
+          </a>
+        </li>
+
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='gestInvet' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Gestión de inventario</span>
+          </a>
+        </li>
+
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='gestProduct' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Gestión de productos</span>
+          </a>
+        </li>
+
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='confGym' class="nav-link collapsed" data-toggle="collapse" data-target="#confGymC" aria-expanded="false" aria-controls="confGymC" (click)="mostrar('confGym', 'confGymC')">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Configuración Gimnasio</span>
+          </a>
+          <div id="confGymC" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Funcionalidades</h6>
+              <a class="collapse-item">Asociación de tratamientos<br> al Spa del gimnasio:</a>
+              <a class="collapse-item">Asociación de productos<br> a la tienda del gimnasio: </a>
+              <a class="collapse-item">Asociación de inventario:</a>
+              <a class="collapse-item">Crear clases:</a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='genPlan' class="nav-link collapsed" data-toggle="collapse" data-target="#genPlanC" aria-expanded="false" aria-controls="genPlanC" (click)="mostrar('genPlan', 'genPlanC')">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Generación de planilla</span>
+          </a>
+          <div id="genPlanC" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Funcionalidades</h6>
+              <a class="collapse-item"> ¿Como se calcular el pago<br>de los tipos de planilla?</a>
+              <a class="collapse-item">Mensuales</a>
+              <a class="collapse-item">Pago por horas</a>
+              <a class="collapse-item">Pago por clase</a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='copCalen' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Copiar calendario de actividades</span>
+          </a>
+        </li>
+
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a id ='copGym' class="nav-link collapsed" data-toggle="collapse" >
+            <i class="fas fa-fw fa-cog"></i>
+            <span> Copiar Gimnasio</span>
+          </a>
+        </li>
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+      </ul>
+      <!-- End of Sidebar -->
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+          <!-- Topbar -->
+          <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+            <!-- Sidebar Toggle (Topbar) -->
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+              <i class="fa fa-bars"></i>
+            </button>
+
+            <!-- Topbar Navbar -->
+            <ul class="navbar-nav ml-auto">
+
+              <!-- Nav Item - User Information -->
+              <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="mostrarDropdown()">
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{nombre}}</span>
+                  <img class="img-profile rounded-circle"
+                       src="/assets/undraw_profile.svg">
+                </a>
+                <!-- Dropdown - User Information -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                     aria-labelledby="userDropdown" id="dropdown">
+                  <a class="dropdown-item">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Profile
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Logout
+                  </a>
+                </div>
+              </li>
+
+            </ul>
+
+          </nav>
+          <!-- End of Topbar -->
+
+          <!-- Begin Page Content -->
+          <div id="principal">
+            <div class="container-fluid">
+              <!-- Page Heading -->
+              <h1 class="h3 mb-4 text-gray-800">Información General</h1>
+
+              <div class="row">
+
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                          <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total de Estudiantes</div>
+                          <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            140
+                          </div>
+                        </div>
+                        <div class="col-auto">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 20 20">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Clases Impartidas</h6>
+                </div>
+                <div class="card-body">
+                  <h4 class="small font-weight-bold">Indoor Cycling <span class="float-right"></span></h4>
+                  <div class="progress mb-4">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <h4 class="small font-weight-bold">Pilates <span class="float-right"></span></h4>
+                  <div class="progress mb-4">
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <h4 class="small font-weight-bold">Yoga <span class="float-right"></span></h4>
+                  <div class="progress mb-4">
+                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <h4 class="small font-weight-bold">Zumba <span class="float-right"></span></h4>
+                  <div class="progress mb-4">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <h4 class="small font-weight-bold">Natación <span class="float-right"></span></h4>
+                  <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div> <!-- termina el page content -->
+          </div>
+
+          <div id="busqueda" class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800">Búsqueda de Clases</h1>
+
+            <div class="form-group row">
+              <div class="col-sm-6 mb-3 mb-sm-0">
+                <input type="date" class="form-control form-control-user" id="fechaInicio">
+                <label for="fechaInicio">Fecha de Inicio</label>
+              </div>
+              <div class="col-sm-6">
+                <input type="date" class="form-control form-control-user" id="fechaFinaliza">
+                <label for="fechaFinaliza">Fecha de Finalización</label>
+              </div>
+              <div class="col-sm">
+                <select class="form-control form-control-user" id="sede"></select>
+                <label for="fechaFinaliza">Sede</label>
+              </div>
+              <a class="btn btn-outline-primary btn-user btn-block" >
+                Buscar
+              </a>
+              <hr class="sidebar-divider my-0">
+            </div>
+
+            <div id="clasesCartas" class="row"></div>
+
+          </div>
+
+          <div id="registro" class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800" id="registroName"></h1>
+          </div>
+          <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright &copy; GymTEC 2023</span>
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
+
+      </div>
+      <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
