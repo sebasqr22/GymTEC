@@ -12,9 +12,9 @@ export class AdminComponent implements OnInit{
 
   pantallaActual = 'principal'
 
-  pantallas = ['gestSucSpa', 'gestSucTienda', 'gestTratSpaP', 'gestPuest', 'gestTipPlaP', 'gestEmplP', 'gestServP', 'gestTipEquipP'
+  pantallas = ['gestSucSpa', 'gestSucTienda', 'gestTratSpaP', 'gestTipPlaP', 'gestEmplP', 'gestServP', 'gestTipEquipP'
     , 'gestInvetP', 'gestProductP', 'confGymPSpa' , 'confGymPProduc' , 'confGymPInventario' , 'confGymPCrear', 'genPlanPComo' , 'genPlanPMensuales' ,
-    'genPlanPHoras' , 'genPlanPClase', 'copCalenP', 'copGymp']
+    'genPlanPHoras' , 'genPlanPClase', 'copCalenP', 'copGymp', 'gestPuestP']
 
 
   ngOnInit() {
