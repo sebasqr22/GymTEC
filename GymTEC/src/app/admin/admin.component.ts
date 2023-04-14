@@ -16,6 +16,7 @@ export class AdminComponent implements OnInit{
     , 'gestInvetP', 'gestProductP', 'confGymPSpa' , 'confGymPProduc' , 'confGymPInventario' , 'confGymPCrear', 'genPlanPComo' , 'genPlanPMensuales' ,
     'genPlanPHoras' , 'genPlanPClase', 'copCalenP', 'copGymp']
 
+
   ngOnInit() {
     for (let i = 0; i < this.pantallas.length; i++) {
       const tmp = document.getElementById(this.pantallas[i]) as HTMLInputElement
@@ -46,9 +47,7 @@ export class AdminComponent implements OnInit{
     const tmp = document.getElementById(pantalla) as HTMLInputElement
     tmp.style.display = 'block'
 
-    this.pantallaActual = act.className
-
-    alert(`Actual: ${this.pantallaActual}`)
+    this.pantallaActual = tmp.id
   }
 mostrarDropdown(){
   const drop = document.getElementById("dropdown") as HTMLInputElement

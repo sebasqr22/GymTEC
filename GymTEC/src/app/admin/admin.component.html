@@ -15,6 +15,12 @@
           <div class="sidebar-brand-text mx-3">Admin/{{tipo}}</div>
         </a>
 
+        <li class="nav-item">
+          <a id ='home' class="nav-link collapsed" data-toggle="collapse" data-target="#gestSucC" aria-expanded="false" aria-controls="gestSucC" (click)="mostrarPantalla('principal')">
+            <i class="fa-regular fa-building"></i>
+            <span>Home</span>
+          </a>
+        </li>
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
 
@@ -37,7 +43,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header">Funcionalidades</h6>
               <a class="collapse-item"(click)="mostrarPantalla('gestSucSpa')">Activación de Spa</a>
-              <a class="collapse-item"(click)="mostrarPantalla('gestSucTienda')"Activación de Tienda</a>
+              <a class="collapse-item"(click)="mostrarPantalla('gestSucTienda')">Activación de Tienda</a>
             </div>
           </div>
         </li>
@@ -45,7 +51,7 @@
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
           <a id ='gestTratSpa' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('gestTratSpaP')">
-            <i class="fa-regular fa-spa"></i>
+            <i class="fas fa-regular fa-spa"></i>
             <span>Tratamientos de Spa</span>
           </a>
         </li>
