@@ -36,15 +36,15 @@
           <div id="gestSucC" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header">Funcionalidades</h6>
-              <a class="collapse-item">Activación de Spa</a>
-              <a class="collapse-item">Activación de Tienda</a>
+              <a class="collapse-item"(click)="mostrarPantalla('gestSucSpa')">Activación de Spa</a>
+              <a class="collapse-item"(click)="mostrarPantalla('gestSucTienda')"Activación de Tienda</a>
             </div>
           </div>
         </li>
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='gestTratSpa' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='gestTratSpa' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('gestTratSpaP')">
             <i class="fa-regular fa-spa"></i>
             <span>Tratamientos de Spa</span>
           </a>
@@ -53,7 +53,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='gestPuest' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='gestPuest' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('gestPuest')">
             <i class="fas fa-sharp fa-light fa-hard-drive"></i>
             <span>Gestión de puestos</span>
           </a>
@@ -61,7 +61,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='gestTipPla' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='gestTipPla' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('gestTipPlaP')">
             <i class="fa-solid fa-person"></i>
             <span>Tipos de planilla</span>
           </a>
@@ -70,7 +70,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='gestEmpl' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='gestEmpl' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('gestEmplP')">
             <i class="fa-solid fa-person-shelter"></i>
             <span>Gestión de empleados</span>
           </a>
@@ -79,7 +79,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='gestServ' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='gestServ' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('gestServP')">
             <i class="fas fa-fw fa-cog"></i>
             <span>Gestión de Servicios</span>
           </a>
@@ -87,7 +87,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='gestTipEquip' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='gestTipEquip' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('gestTipEquipP')">
             <i class="fas fa-thin fa-motorcycle"></i>
             <span>Gestión de Tipos Equipo</span>
           </a>
@@ -96,7 +96,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='gestInvet' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='gestInvet' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('gestInvetP')">
             <i class="fas fa-light fa-warehouse"></i>
             <span>Gestión de inventario</span>
           </a>
@@ -105,7 +105,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='gestProduct' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='gestProduct' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('gestProductP')">
             <i class="fa-solid fa-truck-ramp-box"></i>
             <span>Gestión de productos</span>
           </a>
@@ -121,10 +121,10 @@
           <div id="confGymC" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header">Funcionalidades</h6>
-              <a class="collapse-item">Asociación de tratamientos<br> al Spa del gimnasio:</a>
-              <a class="collapse-item">Asociación de productos<br> a la tienda del gimnasio: </a>
-              <a class="collapse-item">Asociación de inventario:</a>
-              <a class="collapse-item">Crear clases:</a>
+              <a class="collapse-item"(click)="mostrarPantalla('confGymPSpa')">Asociación de tratamientos<br> al Spa del gimnasio:</a>
+              <a class="collapse-item"(click)="mostrarPantalla('confGymPProduc')">Asociación de productos<br> a la tienda del gimnasio: </a>
+              <a class="collapse-item"(click)="mostrarPantalla('confGymPInventario')">Asociación de inventario:</a>
+              <a class="collapse-item"(click)="mostrarPantalla('confGymPCrear')">Crear clases:</a>
             </div>
           </div>
         </li>
@@ -138,17 +138,17 @@
           <div id="genPlanC" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header">Funcionalidades</h6>
-              <a class="collapse-item"> ¿Como se calcular el pago<br>de los tipos de planilla?</a>
-              <a class="collapse-item">Mensuales</a>
-              <a class="collapse-item">Pago por horas</a>
-              <a class="collapse-item">Pago por clase</a>
+              <a class="collapse-item"(click)="mostrarPantalla('genPlanPComo')"> ¿Como se calcular el pago<br>de los tipos de planilla?</a>
+              <a class="collapse-item"(click)="mostrarPantalla('genPlanPMensuales')">Mensuales</a>
+              <a class="collapse-item"(click)="mostrarPantalla('genPlanPHoras')">Pago por horas</a>
+              <a class="collapse-item"(click)="mostrarPantalla('genPlanPClase')">Pago por clase</a>
             </div>
           </div>
         </li>
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='copCalen' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='copCalen' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('copCalenP')">
             <i class="fa-regular fa-calendar-days"></i>
             <span>Copiar calendario de actividades</span>
           </a>
@@ -157,7 +157,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id ='copGym' class="nav-link collapsed" data-toggle="collapse" >
+          <a id ='copGym' class="nav-link collapsed" data-toggle="collapse" (click)="mostrarPantalla('copGymp')">
             <i class="fas fa-sharp fa-regular fa-shop"></i>
             <span> Copiar Gimnasio</span>
           </a>
@@ -282,35 +282,47 @@
             </div> <!-- termina el page content -->
           </div>
 
-          <div id="busqueda" class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800">Búsqueda de Clases</h1>
+          <div id="gestSucSpa" class="container-fluid"></div>
 
-            <div class="form-group row">
-              <div class="col-sm-6 mb-3 mb-sm-0">
-                <input type="date" class="form-control form-control-user" id="fechaInicio">
-                <label for="fechaInicio">Fecha de Inicio</label>
-              </div>
-              <div class="col-sm-6">
-                <input type="date" class="form-control form-control-user" id="fechaFinaliza">
-                <label for="fechaFinaliza">Fecha de Finalización</label>
-              </div>
-              <div class="col-sm">
-                <select class="form-control form-control-user" id="sede"></select>
-                <label for="fechaFinaliza">Sede</label>
-              </div>
-              <a class="btn btn-outline-primary btn-user btn-block" >
-                Buscar
-              </a>
-              <hr class="sidebar-divider my-0">
-            </div>
+          <div id="gestSucTienda" class="container-fluid"></div>
 
-            <div id="clasesCartas" class="row"></div>
 
-          </div>
+          <div id="gestTratSpaP" class="container-fluid"></div>
 
-          <div id="registro" class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800" id="registroName"></h1>
-          </div>
+          <div id="gestPuestP" class="container-fluid" ></div>
+
+          <div id="gestTipPlaP" class="container-fluid" ></div>
+
+          <div id="gestEmplP" class="container-fluid" ></div>
+
+          <div id="gestServP" class="container-fluid" ></div>
+
+          <div id="gestTipEquipP" class="container-fluid" ></div>
+
+          <div id="gestInvetP" class="container-fluid" ></div>
+
+          <div id="gestProductP" class="container-fluid" ></div>
+
+          <div id="confGymPSpa" class="container-fluid" ></div>
+
+          <div id="confGymPProduc" class="container-fluid" ></div>
+
+          <div id="confGymPInventario" class="container-fluid" ></div>
+
+          <div id="confGymPCrear" class="container-fluid" ></div>
+
+          <div id="genPlanPComo" class="container-fluid" ></div>
+
+          <div id="genPlanPMensuales" class="container-fluid" ></div>
+
+          <div id="genPlanPHoras" class="container-fluid" ></div>
+
+          <div id="genPlanPClase" class="container-fluid" ></div>
+
+          <div id="copCalenP" class="container-fluid" ß></div>
+
+          <div id="copGymp" class="container-fluid" ></div>
+
           <!-- /.container-fluid -->
 
         </div>
