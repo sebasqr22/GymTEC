@@ -7,11 +7,15 @@ import { GetApiService } from './get-api.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  constructor(private api:GetApiService) { }
+  constructor(private getApi:GetApiService) { }
   title = 'GymTEC';
 
   ngOnInit() {
-    this.api.apiCall().subscribe((data)=>{
+    this.getApi.call_AgregarTratamientoSPA().subscribe((data)=>{
+      console.log(data);
+    });
+
+    this.getApi.call_EliminarTratamientoSPA().subscribe((data)=>{
       console.log(data);
     });
   }

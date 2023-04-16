@@ -8,8 +8,12 @@ export class GetApiService {
 
   constructor(private http:HttpClient) {}
 
-   apiCall(){
-    return this.http.get("https://localhost:7194/cliente/eliminarTratamientoSPA", {});
+   call_EliminarTratamientoSPA(){
+     return this.http.get("https://localhost:7194/usuarios/cliente/EliminarTratamientoSPA");
    }
+
+   call_AgregarTratamientoSPA(){
+      return this.http.post("https://localhost:7194/usuarios/cliente/AgregarTratamientoSPA", {});
+  }
 
 }
