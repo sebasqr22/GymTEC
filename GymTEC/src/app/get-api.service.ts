@@ -6,11 +6,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class GetApiService {
 
-  constructor() {
-    private http: HttpClient;
-   }
+  constructor(private http:HttpClient) {}
 
    apiCall(){
-    return  this.http.get("");
+    return this.http.get("https://localhost:7194/cliente/eliminarTratamientoSPA", {});
    }
+
 }

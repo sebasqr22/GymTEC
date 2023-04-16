@@ -4,7 +4,10 @@ using System.Text;
 using System.Text.Json;
 
 namespace Metodos{
-    public class MetodosAPI{
+
+    [ApiController]
+    [Route("usuarios")]
+    public class MetodosAPI: ControllerBase{
 
         [HttpPost]
         [Route("cliente/agregarTratamientoSPA")]
@@ -15,7 +18,7 @@ namespace Metodos{
         [HttpGet]
         [Route("cliente/eliminarTratamientoSPA")]
         public string EliminarTratamientoSPA(){
-            return "{ 'status': 'ok' }";
+            return "'status' AAAA 'ok' ";
         }
     }
 }
