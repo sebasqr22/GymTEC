@@ -23,10 +23,10 @@ CREATE TABLE EMPLEADO (
 -- Informaci�n de las sucursales del gimnasio.
 -- Autor: Eduardo Bol�var Minguet
 CREATE TABLE SUCURSAL (
-	Nombre NVARCHAR(10) NOT NULL,
-	Distrito NVARCHAR(10),
-	Canton NVARCHAR(10) NOT NULL,
-	Provincia NVARCHAR(10) NOT NULL,
+	Nombre NVARCHAR(15) NOT NULL,
+	Distrito NVARCHAR(15),
+	Canton NVARCHAR(15) NOT NULL,
+	Provincia NVARCHAR(15) NOT NULL,
 	Fecha_apertura DATE,
 	Hora_apertura TIME,
 	Hora_cierre TIME,
@@ -85,7 +85,7 @@ CREATE TABLE SERVICIO (
 -- Autor: Eduardo Bol�var Minguet
 CREATE TABLE TRATAMIENTO (
 	Identificador INT NOT NULL,
-	Nombre NVARCHAR(10),
+	Nombre NVARCHAR(30),
 	PRIMARY KEY (Identificador)
 );
 
@@ -122,7 +122,7 @@ CREATE TABLE PRODUCTO (
 -- Informaci�n de los empleados del gimnasio.
 -- Autor: Eduardo Bol�var Minguet
 CREATE TABLE TIENDA (
-	Nombre_sucursal NVARCHAR(10) NOT NULL,
+	Nombre_sucursal NVARCHAR(15) NOT NULL,
 	Num_tienda INT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Num_tienda)
 );
@@ -131,7 +131,7 @@ CREATE TABLE TIENDA (
 -- Informaci�n de los empleados del gimnasio.
 -- Autor: Eduardo Bol�var Minguet
 CREATE TABLE SPA (
-	Nombre_sucursal NVARCHAR(10) NOT NULL,
+	Nombre_sucursal NVARCHAR(15) NOT NULL,
 	Num_spa INT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Num_spa)
 );
@@ -140,7 +140,7 @@ CREATE TABLE SPA (
 -- Informaci�n de los empleados del gimnasio.
 -- Autor: Eduardo Bol�var Minguet
 CREATE TABLE VENTA_PRODUCTO (
-	Nsucursal NVARCHAR(10) NOT NULL,
+	Nsucursal NVARCHAR(15) NOT NULL,
 	Tienda INT NOT NULL,
 	Codigo_producto INT NOT NULL,
 	PRIMARY KEY (Nsucursal, Tienda, Codigo_producto)
@@ -150,7 +150,7 @@ CREATE TABLE VENTA_PRODUCTO (
 -- Informaci�n de los empleados del gimnasio.
 -- Autor: Eduardo Bol�var Minguet
 CREATE TABLE TRATAMIENTO_SPA (
-	Nsucursal NVARCHAR(10) NOT NULL,
+	Nsucursal NVARCHAR(15) NOT NULL,
 	Spa INT NOT NULL,
 	Id_tratamiento INT NOT NULL,
 	PRIMARY KEY (Nsucursal, Spa, Id_tratamiento)
@@ -160,7 +160,7 @@ CREATE TABLE TRATAMIENTO_SPA (
 -- Informaci�n de los empleados del gimnasio.
 -- Autor: Eduardo Bol�var Minguet
 CREATE TABLE INVENTARIO_EN_SUCURSAL (
-	Nombre_sucursal NVARCHAR(10) NOT NULL,
+	Nombre_sucursal NVARCHAR(15) NOT NULL,
 	Num_serie_maquina INT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Num_serie_maquina)
 );
@@ -169,7 +169,7 @@ CREATE TABLE INVENTARIO_EN_SUCURSAL (
 -- Informaci�n de los empleados del gimnasio.
 -- Autor: Eduardo Bol�var Minguet
 CREATE TABLE SERVICIOS_EN_SUCURSAL (
-	Nombre_sucursal NVARCHAR(10) NOT NULL,
+	Nombre_sucursal NVARCHAR(15) NOT NULL,
 	Id_servicio INT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Id_servicio)
 );
@@ -178,7 +178,7 @@ CREATE TABLE SERVICIOS_EN_SUCURSAL (
 -- Informaci�n de los empleados del gimnasio.
 -- Autor: Eduardo Bol�var Minguet
 CREATE TABLE TELEFONO_SUCURSAL (
-	Nombre_sucursal NVARCHAR(10) NOT NULL,
+	Nombre_sucursal NVARCHAR(15) NOT NULL,
 	Telefono NVARCHAR(13) NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Telefono)
 );
