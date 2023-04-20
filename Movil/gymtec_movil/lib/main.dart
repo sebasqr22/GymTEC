@@ -426,3 +426,97 @@ class _ClassScreenState extends State<ClassScreen>{
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
   }
 }
+
+class RegisterClass extends StatefulWidget {
+  const RegisterClass ({super.key});
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+  // This class is the configuration for the state.
+  @override
+  _RegisterClassState createState() => _RegisterClassState();
+}
+
+class _RegisterClassState extends State<RegisterClass> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    final ButtonStyle style =
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+    return Scaffold(
+        body: Center(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "LOGO",
+                  style: TextStyle(fontSize: 25),
+                ),
+                Text(
+                  "Registro de Clase en SUCURSAL NOMBRE: ",
+                  style: TextStyle(fontSize: 40),
+                ),
+                 Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const ListTile(
+                        leading: Icon(Icons.album),
+                        title: Text('The Enchanted Nightingale'),
+                        subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          TextButton(
+                            child: const Text('BUY TICKETS'),
+                            onPressed: () {/* ... */},
+                          ),
+                          const SizedBox(width: 8),
+                          TextButton(
+                            child: const Text('LISTEN'),
+                            onPressed: () {/* ... */},
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  style: style,
+                  onPressed: () {
+                    _ShowRegistrationState(context);
+                  },
+                  child: const Text('Registrar Clase'),
+                ),
+              ],
+            ),
+            margin: const EdgeInsets.all(10.0),
+            width: 320.0,
+            height: 600.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(color: Colors.blue, spreadRadius: 3),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  void _ShowRegistrationState(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen()));
+  }
+}
