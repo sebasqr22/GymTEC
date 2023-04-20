@@ -517,7 +517,7 @@
               <select class="form-control form-control-user" id="gestTipPlaPSELECT"></select>
               <label for="gestTipPlaPSELECT">Tipo de Planilla</label>
             </div>
-            
+
             <div class="form-group row">
               <div class="col-sm-6">
                 <input type="text" class="form-control form-control-user" id="gestTipPlaPID" readonly>
@@ -526,14 +526,14 @@
 
               <div class="col-sm-6">
                 <input type="number" class="form-control form-control-user" id="gestTipPlaPPAGOMENSUAL" step="0.01">
-                <label for="gestTipPlaPAGOMENSUAL">Pago Mensual</label>
+                <label for="gestTipPlaPPAGOMENSUAL">Pago Mensual</label>
               </div>
 
               <div class="col-sm-6">
                 <input type="number" class="form-control form-control-user" id="gestTipPlaPPAGOPORHORAS" step="0.01">
                 <label for="gestTipPlaPPAGOPORHORAS">Pago por Horas</label>
               </div>
-              
+
               <div class="col-sm-6">
                 <input type="number" class="form-control form-control-user" id="gestTipPlaPPAGOPORCLASE" step="0.01">
                 <label for="gestTipPlaPPAGOPORCLASE">Pago por Clase</label>
@@ -548,7 +548,7 @@
             <a class="btn btn-outline-primary btn-user btn-block">
               Guardar
             </a>
-            
+
           </div> <!--GESTION DE TIPOS DE PLANILLA-->
 
           <div id="gestEmplP" class="container-fluid"> <!--GESTION DE EMPLEADOS-->
@@ -664,7 +664,7 @@
                 <label for="gestEmplPPASSWORD">Contraseña</label>
               </div>
             </div>
-            
+
             <a class="btn btn-outline-primary btn-user btn-block">
               Guardar nuevo
             </a>
@@ -678,7 +678,7 @@
               <select class="form-control form-control-user" id="gestServPSELECT"></select>
               <label for="gestServPSELECT">Servicio</label>
             </div>
-            
+
             <div class="form-group row">
               <div class="col-sm-6">
                 <input type="text" class="form-control form-control-user" id="gestServPID" readonly>
@@ -725,6 +725,52 @@
           </div> <!--GESTION DE SERVICIOS-->
 
           <div id="gestTipEquipP" class="container-fluid"> <!--GESTION DE TIPOS EQUIPO-->
+            <h1 class="h3 mb-4 text-gray-800">Gestión de tipos de equipo</h1>
+            <div class="form-group row">
+              <div class="col-sm">
+                <select class="form-control form-control-user" id="gestTipEquipPGYM"></select>
+                <label for="gestTipEquipPGYM">Gym</label>
+              </div>
+            </div>
+
+            <hr class="sidebar-divider my-0"><br><br>
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestTipEquipPID">
+                <label for="gestTipEquipPID">ID</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestTipEquipPDESCRIPCION">
+                <label for="gestTipEquipPDESCRIPCION">Descripción</label>
+              </div>
+            </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Guardar
+            </a>
+            <a class="btn btn-outline-danger btn-user btn-block">
+              Eliminar
+            </a>
+
+            <hr class="sidebar-divider my-0"><hr class="sidebar-divider">
+            <h1 class="h3 mb-4 text-gray-800">Agregar Nuevo Tipo Equipo</h1>
+            <div class="form-group row">
+              <div class="col-sm-6">
+              <input type="text" class="form-control form-control-user" id="gestTipEquipPIDNUEVO">
+              <label for="gestTipEquipPIDNUEVO">ID</label>
+            </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestTipEquipPDESCRIPCIONNUEVO">
+                <label for="gestTipEquipPDESCRIPCIONNUEVO">Descripción</label>
+              </div>
+            </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Guardar nuevo
+            </a>
+            <br>
 
           </div><!-- MARCO -->
 
@@ -810,24 +856,149 @@
           </div> <!--GESTION DE INVENTARIO-->
 
           <div id="gestProductP" class="container-fluid"> <!--GESTION DE PRODUCTOS-->
+            <h1 class="h3 mb-4 text-gray-800">Gestión de Productos</h1>
+            <div class="form-group row">
+              <div class="col-sm">
+                <select class="form-control form-control-user" id="gestProductPGYM"></select>
+                <label for="gestProductPGYM">Gym</label>
+              </div>
+              <div class="col-sm">
+                <select class="form-control form-control-user" id="gestProductPPRODUCTO"></select>
+                <label for="gestProductPPRODUCTO">Producto</label>
+              </div>
+            </div>
+
+            <hr class="sidebar-divider my-0"><br><br>
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestProductPNOMBRE">
+                <label for="gestProductPNOMBRE">Nombre</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestProductPCODIGO">
+                <label for="gestProductPCODIGO">Codigo de barras</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="number" class="form-control form-control-user" id="gestProductPDESCRIPCION">
+                <label for="gestProductPDESCRIPCION">Descripción</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="number" class="form-control form-control-user" id="gestProductPCOSTO">
+                <label for="gestProductPCOSTO">Costo</label>
+              </div>
+            </div>
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Guardar
+            </a>
+            <a class="btn btn-outline-danger btn-user btn-block">
+              Eliminar
+            </a>
+
+            <hr class="sidebar-divider my-0"><hr class="sidebar-divider">
+            <h1 class="h3 mb-4 text-gray-800">Agregar Producto</h1>
+
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="gestProductPGYMNUEVO"></select>
+              <label for="gestProductPGYMNUEVO">Gym</label>
+            </div>
+
+            <div class="form-group row">
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestProductPNOMBRENUEVO">
+                <label for="gestProductPNOMBRENUEVO">Nombre</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestProductPCODIGONUEVO">
+                <label for="gestProductPCODIGONUEVO">Codigo de barras</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="number" class="form-control form-control-user" id="gestProductPDESCRIPCIONNUEVO">
+                <label for="gestProductPDESCRIPCIONNUEVO">Descripcion</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="number" class="form-control form-control-user" id="gestProductPCOSTONUEVO">
+                <label for="gestProductPCOSTONUEVO">Costo</label>
+              </div>
+
+            </div>
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Guardar
+            </a><br>
 
           </div><!-- MARCO -->
 
-          <div id="confGymPSpa" class="container-fluid"></div> <!--CONFIGURACION GYM ASOCIA-->
+          <div id="confGymPSpa" class="container-fluid"></div> <!--CONFIGURACION GYM ASOCIA SPA-->
 
-          <div id="confGymPProduc" class="container-fluid"> <!-- CONFIGURACION GIMNASIO-->
 
+          <div id="confGymPProduc" class="container-fluid"> <!-- CONFIGURACION GIMNASIO ASOCIA RPO-->
+            <h1 class="h3 mb-4 text-gray-800">Asociar productos a tienda</h1>
+
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="confGymPProducSELECT"></select>
+              <label for="confGymPProducSELECT">Gym</label>
+            </div>
+
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="confGymPProducASOCIAR"></select>
+              <label for="confGymPProducASOCIAR">Producto</label>
+            </div>
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Asociar
+            </a><br>
+            <hr class="sidebar-divider my-0"><br><br>
+
+            <div class="form-group row">
+
+              <div class="col-sm">
+                <textarea class="form-control form-control-user" id="confGymPProducASOCIADOS" rows="4" cols="50"></textarea>
+                <label for="confGymPProducASOCIADOS">Asociados</label>
+              </div>
+
+              <div class="col-sm">
+                <textarea class="form-control form-control-user" id="confGymPProducNOASOCIADOS" rows="4" cols="50"></textarea>
+                <label for="confGymPProducNOASOCIADOS">No asociados</label>
+              </div>
           </div><!-- MARCO -->
 
           <div id="confGymPInventario" class="container-fluid"></div>
 
           <div id="confGymPCrear" class="container-fluid"> <!--CONFIGURACION CREAR GIMNASIO-->
+            <h1 class="h3 mb-4 text-gray-800">Crear clase</h1>
 
-          </div><!-- MARCO -->
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="confGymPCrearSELECT"></select>
+              <label for="confGymPCrearSELECT">Clase</label>
+            </div>
+
+            <hr class="sidebar-divider my-0"><br><br>
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="confGymPCrearTIPO">
+                <label for="confGymPCrearTIPO">Tipo</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="confGymPCrearINSTRUCTOR">
+                <label for="confGymPCrearINSTRUCTOR">Instructor</label>
+              </div>
+
+
+            </div>
+
+
+          </div><!-- MARCO --> <!--ESTA DE ACA NO SSIRVE NO SE POAIHPOQHTPOAHFOHDHFAHFPASDFHAPSDFHPOASDHFAPUFAPSDFHPAOSHFPOAISDHFPOIASFPOAISH-->
 
           <div id="genPlanPComo" class="container-fluid"></div>
 
           <div id="genPlanPMensuales" class="container-fluid"> <!--GENERACION PLANTILLA (MENSUALES)-->
+
 
           </div><!-- MARCO -->
 
