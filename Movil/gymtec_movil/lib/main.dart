@@ -31,12 +31,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late TextEditingController _controller;
   late TextEditingController _controller2;
+  bool passwordVisible=false;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
     _controller2 = TextEditingController();
+    passwordVisible=true;
   }
 
   @override
@@ -75,9 +77,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   "Contraseña: ",
                   style: TextStyle(fontSize: 25),
                 ),
-                TextField(
-                  controller: _controller2,
-                  obscureText: true,
+                 TextField(
+                  obscureText: passwordVisible,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: "Password",
+                    labelText: "Password",
+                    helperText:"Password must contain special character",
+                    helperStyle:TextStyle(color:Colors.green),
+                    suffixIcon: IconButton(
+                      icon: Icon(passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(
+                          () {
+                            passwordVisible = !passwordVisible;
+                          },
+                        );
+                      },
+                    ),
+                    alignLabelWithHint: false,
+                    filled: true,
+                  ),
+                  keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.done,
                 ),
                 ElevatedButton(
                   style: style,
@@ -110,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _navigateToWelcome(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen()));
   }
 
   void _navigateToRegister(BuildContext context) {
@@ -243,6 +267,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
                 ElevatedButton(
                   style: style,
                   onPressed: () {
+                    _navigateToRegister(context);
                   },
                   child: const Text('Registrarse'),
                 ),
@@ -260,5 +285,144 @@ class _RegisterScreenState extends State<RegisterScreen>{
             ),
           ),
         ));
+  }
+
+  void _navigateToRegister(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
+  }
+}
+
+class ClassScreen  extends StatefulWidget {
+  const ClassScreen ({super.key});
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+  // This class is the configuration for the state.
+  @override
+  _ClassScreenState createState() => _ClassScreenState();
+}
+
+
+
+class _ClassScreenState extends State<ClassScreen>{
+  late TextEditingController _controller;
+  String? selectedValue = null;
+  final _dropdownFormKey = GlobalKey<FormState>();
+
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ButtonStyle style =
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+    return Scaffold(
+      body: Center(
+          child: Container(
+            child: ListView(
+              padding: EdgeInsets.all(20),
+              children: <Widget>[
+                Text(
+                  "LOGO",
+                  style: TextStyle(fontSize: 25),
+                ),
+                Text(
+                  "Búsqueda de una clase",
+                  style: TextStyle(fontSize: 40),
+                ),
+                DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue, width: 2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue, width: 2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      filled: true,
+                      fillColor: Colors.blueAccent,
+                    ),
+                    validator: (value) => value == null ? "Seleccione una sucursal" : null,
+                    dropdownColor: Colors.blueAccent,
+                    value: selectedValue,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedValue = newValue!;
+                      });
+                    },
+                  items: SucursalesItems),
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue, width: 2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue, width: 2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      filled: true,
+                      fillColor: Colors.blueAccent,
+                    ),
+                    validator: (value) => value == null ? "Seleccione un tipo de clase" : null,
+                    dropdownColor: Colors.blueAccent,
+                    value: selectedValue,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedValue = newValue!;
+                      });
+                    },
+                  items: ClasesItems),
+                  // Faltan fechas
+                  ElevatedButton(
+                  style: style,
+                  onPressed: () {
+                    _navigateToClases(context);
+                  },
+                  child: const Text('Buscar clases'),
+                ),  
+              ],
+            ),
+            margin: const EdgeInsets.all(10.0),
+            width: 320.0,
+            height: 600.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(color: Colors.blue, spreadRadius: 3),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  List<DropdownMenuItem<String>> get SucursalesItems{
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(child: Text("Sucursal 1"),value: "Sucursal 1"),
+      DropdownMenuItem(child: Text("Sucursal 2"),value: "Sucursal 2"),
+      DropdownMenuItem(child: Text("Sucursal 3"),value: "Sucursal 3"),
+      DropdownMenuItem(child: Text("Sucursal 4"),value: "Sucursal 4"),
+    ];
+    return menuItems;
+  }
+
+   List<DropdownMenuItem<String>> get ClasesItems{
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(child: Text("Indoor Cycling"),value: "Indoor Cycling"),
+      DropdownMenuItem(child: Text("Yoga"),value: "Yoga"),
+      DropdownMenuItem(child: Text("Zumba"),value: "Zumba"),
+      DropdownMenuItem(child: Text("Natación"),value: "Natación"),
+    ];
+    return menuItems;
+  }
+
+  void _navigateToClases(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
   }
 }
