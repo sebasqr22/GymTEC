@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj": {}
+    "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj": {}
   },
   "projects": {
-    "c:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj": {
+    "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
+        "projectUniqueName": "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "c:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
+        "projectPath": "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
         "packagesPath": "C:\\Users\\jimen\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\obj\\",
+        "outputPath": "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jimen\\AppData\\Roaming\\NuGet\\NuGet.Config"

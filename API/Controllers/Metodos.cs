@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using DataBaseManagement;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace Metodos{
 
@@ -35,12 +36,15 @@ namespace Metodos{
 
       [HttpPost]
       [Route("cliente/RegistrarCliente")]
-      public dynamic RegistrarCliente(string cedula, string nombre, string apellido1, string apellido2, string edad, string fechaNacimiento, string peso, string IMC, string direccion, string correoElectronico, string contrasena) {
+      public dynamic RegistrarCliente(string cedula, string nombre, string apellido1, string apellido2, string edad, string fechaNacimiento, string peso, string direccion, string correoElectronico, string contrasena) {
           try {
-              DB_Handler.ConectarServer(DB_Handler.pc_eduardo);
+
+             double pesoNew = Convert.ToDouble(peso, CultureInfo.InvariantCulture);
+             double peso2Decimals = Math.Round(pesoNew, 2);
+              DB_Handler.ConectarServer();
               string contrasenaEncriptada = "";
               // VERIFICACION DE DATOS
-              if (string.IsNullOrEmpty(cedula) || string.IsNullOrEmpty(nombre)|| string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2)|| string.IsNullOrEmpty(edad) || string.IsNullOrEmpty(fechaNacimiento)|| string.IsNullOrEmpty(peso) || string.IsNullOrEmpty(IMC)|| string.IsNullOrEmpty(direccion) || string.IsNullOrEmpty(correoElectronico)|| string.IsNullOrEmpty(contrasena)) {
+              if (string.IsNullOrEmpty(cedula) || string.IsNullOrEmpty(nombre)|| string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2)|| string.IsNullOrEmpty(edad) || string.IsNullOrEmpty(fechaNacimiento)|| string.IsNullOrEmpty(peso) || string.IsNullOrEmpty(direccion) || string.IsNullOrEmpty(correoElectronico)|| string.IsNullOrEmpty(contrasena)) {
                   return new { message = "error" };}
               if (cedula.Length != 9 || cedula[0] == '0' || !correoElectronico.Contains("@") || !correoElectronico.Contains(".")) {
                   return new { message = "error" };}
@@ -62,16 +66,16 @@ namespace Metodos{
               string añoNacimiento = fechaNacimientoSeparada[2];
               // INSERTAR DATOS EN LA BASE DE DATOS
               DB_Handler.AbrirConexion();
-              string queryInsert = "INSERT INTO CLIENTE (Cédula, Nombre, Apellido1, Apellido2, Día_nacimiento, Mes_nacimiento, Año_nacimiento, Peso, Direccion, Correo, Contraseña) VALUES (@Cédula, @Nombre, @Apellido1, @Apellido2, @Día_nacimiento, @Mes_nacimiento, @Año_nacimiento, @Peso, @Direccion, @Correo, @Contraseña)";
+              string queryInsert = "INSERT INTO CLIENTE VALUES (@Cedula, @Nombre, @Apellido1, @Apellido2, @Dia_nacimiento, @Mes_nacimiento, @Año_nacimiento, @Peso, @Direccion, @Correo, @Contraseña)";
               using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-                  comando.Parameters.AddWithValue("@Cédula", cedula);
+                  comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
                   comando.Parameters.AddWithValue("@Nombre", nombre);
                   comando.Parameters.AddWithValue("@Apellido1", apellido1);
                   comando.Parameters.AddWithValue("@Apellido2", apellido2);
-                  comando.Parameters.AddWithValue("@Día_nacimiento", diaNacimiento);
+                  comando.Parameters.AddWithValue("@Dia_nacimiento", diaNacimiento);
                   comando.Parameters.AddWithValue("@Mes_nacimiento", mesNacimiento);
                   comando.Parameters.AddWithValue("@Año_nacimiento", añoNacimiento);
-                  comando.Parameters.AddWithValue("@Peso", peso);
+                  comando.Parameters.AddWithValue("@Peso", peso2Decimals);
                   comando.Parameters.AddWithValue("@Direccion", direccion);
                   comando.Parameters.AddWithValue("@Correo", correoElectronico);
                   comando.Parameters.AddWithValue("@Contraseña", contrasenaEncriptada);
@@ -80,6 +84,7 @@ namespace Metodos{
               DB_Handler.CerrarConexion();
               return new { message = "ok" };
           } catch (Exception e) {
+              Console.WriteLine(e);
               return new { message = "error" };
           }
       }

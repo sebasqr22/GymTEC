@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ISTh/ubFJPjswXKIgGvRoeFkk/rd2vI6UpPqmph07TvGZ1czxG6epgO1YvegSHqtS5nDgCDib3RlpjQyBEGXxA==",
+  "dgSpecHash": "SkjuVTmp67mZWn5eqh+23I0UZRpR2MF1RM6falngLOz51t6AJRTP29EjgucbN2SeryoomSXK01ijuB5GdJiOKw==",
   "success": true,
-  "projectFilePath": "c:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
+  "projectFilePath": "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jimen\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\jimen\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

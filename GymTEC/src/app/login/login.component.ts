@@ -1,3 +1,4 @@
+import { GetApiService } from './../get-api.service';
 import {Component, OnInit} from '@angular/core';
 
 @Component({
@@ -7,9 +8,12 @@ import {Component, OnInit} from '@angular/core';
 })
 export class LoginComponent implements OnInit{
   mostrar = false
+  constructor(private getApi:GetApiService) { }
+
   ngOnInit() {
     const signin = document.getElementById("signin") as HTMLInputElement
     signin.style.display = 'none'
+
   }
 
   mostrarContra(){
@@ -47,6 +51,11 @@ export class LoginComponent implements OnInit{
     else{
       signin.style.display = 'none'
       login.style.display = 'block'
+
+      //Registrar cliente en la BD
+      this.getApi.call_RegistrarCliente().subscribe((data)=>{
+        console.log(data);
+      });
     }
   }
 }

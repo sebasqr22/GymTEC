@@ -4,13 +4,13 @@ using System.Data.SqlClient;
 
 namespace DataBaseManagement{
   public class DatabaseHandler {
-      public string pc_eduardo = "DESKTOP-E7FF35K";
-      private string pc_jimena = "MENA-LAPTOPHP";
+      public string nombreBD = "GymTEC-DB";
       string conexionText = "";
       public SqlConnection conectarDB = new SqlConnection();
 
-      public void ConectarServer(string pc_name){
-          conexionText = "Data Source=" + pc_name + "\\SQLEXPRESS;Initial Catalog=GymTEC-DB; Integrated Security=True;";
+      public void ConectarServer(){
+          //conexionText = "Data Source=.\\SQLEXPRESS;Initial Catalog=" + nombreBDjimena + "; Integrated Security=True;";
+          conexionText = "Data Source=.\\SQLEXPRESS;Database=" + nombreBD + ";Trusted_Connection=True;Trusted_Connection=True;";
           conectarDB.ConnectionString = conexionText;
       }
 
