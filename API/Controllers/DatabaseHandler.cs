@@ -9,7 +9,6 @@ namespace DataBaseManagement{
       public SqlConnection conectarDB = new SqlConnection();
 
       public void ConectarServer(){
-          //conexionText = "Data Source=.\\SQLEXPRESS;Initial Catalog=" + nombreBDjimena + "; Integrated Security=True;";
           conexionText = "Data Source=.\\SQLEXPRESS;Database=" + nombreBD + ";Trusted_Connection=True;Trusted_Connection=True;";
           conectarDB.ConnectionString = conexionText;
       }
