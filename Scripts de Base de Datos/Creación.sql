@@ -1,32 +1,35 @@
--- //////////////////////////////////////////// TABLAS /////////////////////////////////////////////////////////
-USE gymtec
+-- Instituto Tecnológico de Costa Rica
+-- Curso: Bases de Datos
+-- Proyecto I - GymTEC
+-- Script de creación
+-- Estudiante: Eduardo Bolívar Minguet
+-- Carné: 2020158103
+
 -- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Informacion de los empleados del gimnasio.
 CREATE TABLE EMPLEADO (
 	Cedula INT NOT NULL,
-	Nombre NVARCHAR(15) NOT NULL,
-	Apellido1 NVARCHAR(15) NOT NULL,
-	Apellido2 NVARCHAR(15),
-	Distrito NVARCHAR(10),
-	Canton NVARCHAR(10),
-	Provincia NVARCHAR(10) NOT NULL,
+	Nombre NVARCHAR(30) NOT NULL,
+	Apellido1 NVARCHAR(30) NOT NULL,
+	Apellido2 NVARCHAR(30),
+	Distrito NVARCHAR(30),
+	Canton NVARCHAR(30),
+	Provincia NVARCHAR(30) NOT NULL,
 	Correo NVARCHAR(30) NOT NULL,
 	Contraseña NVARCHAR(30) NOT NULL,
-	Salario DECIMAL(10,2),
+	Salario FLOAT NOT NULL,
 	Id_puesto INT NOT NULL,
 	Id_planilla INT NOT NULL,
 	PRIMARY KEY (Cedula)
 );
 
 -- Tabla SUCURSAL
--- Informaci�n de las sucursales del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Informacion de las sucursales del gimnasio.
 CREATE TABLE SUCURSAL (
-	Nombre NVARCHAR(15) NOT NULL,
-	Distrito NVARCHAR(15),
-	Canton NVARCHAR(15) NOT NULL,
-	Provincia NVARCHAR(15) NOT NULL,
+	Nombre NVARCHAR(50) NOT NULL,
+	Distrito NVARCHAR(50),
+	Canton NVARCHAR(50) NOT NULL,
+	Provincia NVARCHAR(50) NOT NULL,
 	Fecha_apertura DATE,
 	Hora_apertura TIME,
 	Hora_cierre TIME,
@@ -36,26 +39,24 @@ CREATE TABLE SUCURSAL (
 );
 
 -- Tabla CLIENTE
--- Informaci�n de los usuarios de la aplicaci�n GymTEC.
--- Autor: Eduardo Bol�var Minguet
+-- Informacion de los usuarios de la aplicacion GymTEC.
 CREATE TABLE CLIENTE (
 	Cedula INT NOT NULL,
-	Nombre NVARCHAR(15) NOT NULL,
-	Apellido1 NVARCHAR(15),
-	Apellido2 NVARCHAR(15),
+	Nombre NVARCHAR(50) NOT NULL,
+	Apellido1 NVARCHAR(50),
+	Apellido2 NVARCHAR(50),
 	Dia_nacimiento VARCHAR(2) NOT NULL,
 	Mes_nacimiento VARCHAR(2) NOT NULL,
 	Año_nacimiento VARCHAR(4) NOT NULL,
-	Peso DECIMAL(3,2),
+	Peso FLOAT NOT NULL,
 	Direccion NVARCHAR(50),
-	Correo NVARCHAR(30) NOT NULL,
-	Contraseña NVARCHAR(30) NOT NULL,
+	Correo NVARCHAR(50) NOT NULL,
+	Contraseña NVARCHAR(50) NOT NULL,
 	PRIMARY KEY (Cedula)
 );
 
 -- Tabla PUESTO
 -- Puestos de trabajo disponibles para los empleados.
--- Autor: Eduardo Bol�var Minguet
 CREATE TABLE PUESTO (
 	Identificador INT NOT NULL,
 	Descripcion NVARCHAR(50),
@@ -63,8 +64,7 @@ CREATE TABLE PUESTO (
 );
 
 -- Tabla PLANILLA
--- Planilla de suscripci�n que pueden escoger los clientes.
--- Autor: Eduardo Bol�var Minguet
+-- Planilla con la que reciben el pago los empleados.
 CREATE TABLE PLANILLA (
 	Identificador INT NOT NULL,
 	Descripcion NVARCHAR(50),
@@ -73,7 +73,6 @@ CREATE TABLE PLANILLA (
 
 -- Tabla SERVICIO
 -- Servicios que ofrecen las sucursales del gimnasio.
--- Autor: Eduardo Bol�var Minguet
 CREATE TABLE SERVICIO (
 	Identificador INT NOT NULL,
 	Descripcion NVARCHAR(50),
@@ -82,16 +81,14 @@ CREATE TABLE SERVICIO (
 
 -- Tabla TRATAMIENTO
 -- Tratamientos dados dentro de los spas del gimnasio.
--- Autor: Eduardo Bol�var Minguet
 CREATE TABLE TRATAMIENTO (
 	Identificador INT NOT NULL,
-	Nombre NVARCHAR(30),
+	Nombre NVARCHAR(50),
 	PRIMARY KEY (Identificador)
 );
 
 -- Tabla TIPO_EQUIPO
--- Tipo de equipo disponible en el gym.
--- Autor: Eduardo Bol�var Minguet
+-- Tipo de equipo disponible en el gimnasio.
 CREATE TABLE TIPO_EQUIPO (
 	Identificador INT NOT NULL,
 	Descripcion NVARCHAR(50),
@@ -99,117 +96,105 @@ CREATE TABLE TIPO_EQUIPO (
 );
 
 -- Tabla INVENTARIO
--- Las m�quinas para ejercitar que se encuentran en el gym.
--- Autor: Eduardo Bol�var Minguet
+-- Las maquinas disponibles en el gimnasio.
 CREATE TABLE INVENTARIO (
 	Numero_serie INT NOT NULL,
-	Marca NVARCHAR(10) NOT NULL,
+	Marca NVARCHAR(50) NOT NULL,
 	PRIMARY KEY (Numero_serie)
 );
 
 -- Tabla PRODUCTO
--- Informaci�n de los productos que venden las tiendas del gym.
--- Autor: Eduardo Bol�var Minguet
+-- Informacion de los productos que venden las tiendas.
 CREATE TABLE PRODUCTO (
 	Codigo_barras INT NOT NULL,
-	Nombre NVARCHAR(15) NOT NULL,
-	Descripcion NVARCHAR(30),
-	Costo DECIMAL(10,2),
+	Nombre NVARCHAR(50) NOT NULL,
+	Descripcion NVARCHAR(50),
+	Costo FLOAT NOT NULL,
 	PRIMARY KEY (Codigo_barras)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla TIENDA
+-- Tiendas dentro de las sucursales.
 CREATE TABLE TIENDA (
-	Nombre_sucursal NVARCHAR(15) NOT NULL,
+	Nombre_sucursal NVARCHAR(50) NOT NULL,
 	Num_tienda INT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Num_tienda)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla SPA
+-- Spas dentro de las sucursales.
 CREATE TABLE SPA (
-	Nombre_sucursal NVARCHAR(15) NOT NULL,
+	Nombre_sucursal NVARCHAR(50) NOT NULL,
 	Num_spa INT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Num_spa)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla VENTA_PRODUCTO
+-- Relaciona las tiendas con los productos que venden.
 CREATE TABLE VENTA_PRODUCTO (
-	Nsucursal NVARCHAR(15) NOT NULL,
+	Nsucursal NVARCHAR(50) NOT NULL,
 	Tienda INT NOT NULL,
 	Codigo_producto INT NOT NULL,
 	PRIMARY KEY (Nsucursal, Tienda, Codigo_producto)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla TRATAMIENTO_SPA
+-- Relaciona los spas con los tratamientos que ofrecen.
 CREATE TABLE TRATAMIENTO_SPA (
-	Nsucursal NVARCHAR(15) NOT NULL,
+	Nsucursal NVARCHAR(50) NOT NULL,
 	Spa INT NOT NULL,
 	Id_tratamiento INT NOT NULL,
 	PRIMARY KEY (Nsucursal, Spa, Id_tratamiento)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla INVENTARIO_EN_SUCURSAL
+-- Relaciona la sucursal con las maquinas que tiene disponibles.
 CREATE TABLE INVENTARIO_EN_SUCURSAL (
-	Nombre_sucursal NVARCHAR(15) NOT NULL,
+	Nombre_sucursal NVARCHAR(50) NOT NULL,
 	Num_serie_maquina INT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Num_serie_maquina)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla SERVICIOS_EN_SUCURSAL
+-- Relaciona la sucursal con los servicios que ofrece.
 CREATE TABLE SERVICIOS_EN_SUCURSAL (
-	Nombre_sucursal NVARCHAR(15) NOT NULL,
+	Nombre_sucursal NVARCHAR(50) NOT NULL,
 	Id_servicio INT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Id_servicio)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla TELEFONO_SUCURSAL
+-- Guarda los numeros de telefono de las sucursales
 CREATE TABLE TELEFONO_SUCURSAL (
-	Nombre_sucursal NVARCHAR(15) NOT NULL,
+	Nombre_sucursal NVARCHAR(50) NOT NULL,
 	Telefono NVARCHAR(13) NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Telefono)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla TIPO_DE_MAQUINA
+-- Relaciona una maquina con el tipo de equipo al que pertenece.
 CREATE TABLE TIPO_DE_MAQUINA (
 	Num_serie_maquina INT NOT NULL,
 	Id_tipo_equipo INT NOT NULL,
 	PRIMARY KEY (Num_serie_maquina, Id_tipo_equipo)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla CLASE
+-- Informacion de una clase impartida en una sucursal.
 CREATE TABLE CLASE (
 	Id_servicio INT NOT NULL,
 	Num_clase INT NOT NULL,
 	Fecha DATE,
 	Hora_inicio TIME,
 	Hora_fin TIME,
-	Modalidad NVARCHAR(10),
+	Modalidad NVARCHAR(50),
 	Capacidad INT,
 	Cedula_instructor INT NOT NULL,
 	PRIMARY KEY (Id_servicio, Num_clase)
 );
 
--- Tabla EMPLEADO
--- Informaci�n de los empleados del gimnasio.
--- Autor: Eduardo Bol�var Minguet
+-- Tabla ASISTENCIA_CLASE
+-- Relaciona a los clientes con la clase a la que se registran.
 CREATE TABLE ASISTENCIA_CLASE (
 	Cedula_cliente INT NOT NULL,
 	Id_servicio INT NOT NULL,
