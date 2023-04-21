@@ -8,7 +8,6 @@ export class GetApiService {
 
   constructor(private http:HttpClient) {}
   
-
    call_EliminarTratamientoSPA(){
      return this.http.get("https://localhost:7194/usuarios/cliente/EliminarTratamientoSPA");
    }
