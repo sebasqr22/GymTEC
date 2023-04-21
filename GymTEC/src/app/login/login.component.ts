@@ -51,11 +51,6 @@ export class LoginComponent implements OnInit{
     else{
       signin.style.display = 'none'
       login.style.display = 'block'
-
-      //Registrar cliente en la BD
-      this.getApi.call_RegistrarCliente().subscribe((data)=>{
-        console.log(data);
-      });
     }
   }
 }
