@@ -52,10 +52,10 @@ export class LoginComponent implements OnInit{
       signin.style.display = 'none'
       login.style.display = 'block'
 
-      //Registrar cliente en la BD
-      this.getApi.call_RegistrarCliente().subscribe((data)=>{
+
+      /** this.getApi.call_RegistrarCliente(login.value.ced, string nombre, string apellido1, string apellido2, ).subscribe((data)=>{
         console.log(data);
-      });
+      });*/
     }
   }
 }

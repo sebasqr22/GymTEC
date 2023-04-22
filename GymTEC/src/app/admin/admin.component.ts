@@ -46,6 +46,7 @@ export class AdminComponent implements OnInit{
 
     const tmp = document.getElementById(pantalla) as HTMLInputElement
     tmp.style.display = 'block'
+    console.log(tmp)
 
     this.pantallaActual = tmp.id
   }
