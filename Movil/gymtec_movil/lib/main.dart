@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
@@ -156,14 +157,23 @@ class RegisterScreen  extends StatefulWidget {
 
 
 class _RegisterScreenState extends State<RegisterScreen>{
-  late TextEditingController _controller;
-  late TextEditingController _controller2;
+  late TextEditingController _controller,_controller2,controller3,controller4,controller5,controller6,controller7,controller8,controller9;
+  TextEditingController dateInput = TextEditingController();
+  bool passwordVisible=false;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
     _controller2 = TextEditingController();
+    controller3 = TextEditingController();
+    controller4 = TextEditingController();
+    controller5 = TextEditingController();
+    controller6 = TextEditingController();
+    controller7 = TextEditingController();
+    controller8 = TextEditingController();
+    controller9 = TextEditingController();
+    passwordVisible = true;
   }
 
   @override
@@ -202,14 +212,14 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller,
+                  controller: controller3,
                 ),
                 Text(
                   "Segundo Apellido: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller2,
+                  controller: controller4,
                   obscureText: true,
                 ),
                 Text(
@@ -217,57 +227,104 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller,
+                  controller: controller5,
                 ),
                 Text(
                   "Fecha de Nacimiento: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller2,
-                  obscureText: true,
-                ),
+              controller: dateInput,
+              //editing controller of this TextField
+              decoration: InputDecoration(
+                  icon: Icon(Icons.calendar_today), //icon of text field
+                  labelText: "Ingrese una fecha" //label text of field
+                  ),
+              readOnly: true,
+              //set it true, so that user will not able to edit text
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1950),
+                    //DateTime.now() - not to allow to choose before today.
+                    lastDate: DateTime(2100));
+ 
+                if (pickedDate != null) {
+                  print(
+                      pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                  String formattedDate =
+                      DateFormat('yyyy-MM-dd').format(pickedDate);
+                  print(
+                      formattedDate); //formatted date output using intl package =>  2021-03-16
+                  setState(() {
+                    dateInput.text =
+                        formattedDate; //set output date to TextField value.
+                  });
+                } else {}
+              }),
                 Text(
                   "Peso: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller,
+                  controller: controller6,
                 ),
                 Text(
                   "IMC: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller2,
-                  obscureText: true,
+                  controller: controller7,
                 ),
                 Text(
                   "Dirección: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller,
+                  controller: controller8,
                 ),
                 Text(
                   "Correo Electrónico: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller2,
-                  obscureText: true,
+                  controller: controller9,
                 ),
                 Text(
                   "Contraseña: ",
                   style: TextStyle(fontSize: 25),
                 ),
-                TextField(
-                  controller: _controller,
+                 TextField(
+                  obscureText: passwordVisible,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: "Password",
+                    labelText: "Password",
+                    helperText:"Password must contain special character",
+                    helperStyle:TextStyle(color:Colors.green),
+                    suffixIcon: IconButton(
+                      icon: Icon(passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(
+                          () {
+                            passwordVisible = !passwordVisible;
+                          },
+                        );
+                      },
+                    ),
+                    alignLabelWithHint: false,
+                    filled: true,
+                  ),
+                  keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.done,
                 ),
                 ElevatedButton(
                   style: style,
                   onPressed: () {
-                    _navigateToRegister(context);
+                    _navigateToClass(context);
                   },
                   child: const Text('Registrarse'),
                 ),
@@ -287,8 +344,8 @@ class _RegisterScreenState extends State<RegisterScreen>{
         ));
   }
 
-  void _navigateToRegister(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
+  void _navigateToClass(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen()));
   }
 }
 
@@ -306,8 +363,8 @@ class ClassScreen  extends StatefulWidget {
 
 class _ClassScreenState extends State<ClassScreen>{
   late TextEditingController _controller;
-  String? selectedValue = null;
-  final _dropdownFormKey = GlobalKey<FormState>();
+  String? selectedSucursal = null;
+  String? selectedClass = null;
 
 
   @override
@@ -324,7 +381,7 @@ class _ClassScreenState extends State<ClassScreen>{
       body: Center(
           child: Container(
             child: ListView(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(40),
               children: <Widget>[
                 Text(
                   "LOGO",
@@ -332,30 +389,30 @@ class _ClassScreenState extends State<ClassScreen>{
                 ),
                 Text(
                   "Búsqueda de una clase",
-                  style: TextStyle(fontSize: 40),
+                  style: TextStyle(fontSize: 30),
                 ),
-                DropdownButtonFormField(
-                    decoration: InputDecoration(
+                  DropdownButtonFormField(
+                  items: SucursalesItems,
+                    onChanged: (String? newValue) {
+                        selectedSucursal = newValue;
+                    },
+                      value: selectedSucursal,
+                  hint: Text("Seleccione la sucursal"),
+                  validator: (value) => value == null ? "Seleccione una sucursal" : null,
+                  dropdownColor: Colors.blueAccent,
+                  decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue, width: 2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                       border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue, width: 2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                       filled: true,
                       fillColor: Colors.blueAccent,
                     ),
-                    validator: (value) => value == null ? "Seleccione una sucursal" : null,
-                    dropdownColor: Colors.blueAccent,
-                    value: selectedValue,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedValue = newValue!;
-                      });
-                    },
-                  items: SucursalesItems),
+                  ),
                   DropdownButtonFormField(
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -369,20 +426,24 @@ class _ClassScreenState extends State<ClassScreen>{
                       filled: true,
                       fillColor: Colors.blueAccent,
                     ),
+                    hint: Text("Seleccione tipo de clase"),
                     validator: (value) => value == null ? "Seleccione un tipo de clase" : null,
                     dropdownColor: Colors.blueAccent,
-                    value: selectedValue,
+                    value: selectedClass,
                     onChanged: (String? newValue) {
-                      setState(() {
-                        selectedValue = newValue!;
-                      });
+                        selectedClass = newValue;
+                      
                     },
+                    isDense: true,
+                    isExpanded: true,
                   items: ClasesItems),
                   // Faltan fechas
                   ElevatedButton(
                   style: style,
                   onPressed: () {
-                    _navigateToClases(context);
+                    if(selectedSucursal!=null && selectedClass !=null){
+                     _navigateToClases(context);
+                    }
                   },
                   child: const Text('Buscar clases'),
                 ),  
@@ -403,12 +464,13 @@ class _ClassScreenState extends State<ClassScreen>{
   }
 
   List<DropdownMenuItem<String>> get SucursalesItems{
-    List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Sucursal 1"),value: "Sucursal 1"),
-      DropdownMenuItem(child: Text("Sucursal 2"),value: "Sucursal 2"),
-      DropdownMenuItem(child: Text("Sucursal 3"),value: "Sucursal 3"),
-      DropdownMenuItem(child: Text("Sucursal 4"),value: "Sucursal 4"),
-    ];
+    List<DropdownMenuItem<String>> menuItems = <String>["Sucursal 1","Sucursal 2","Sucursal 3","Sucursal 4"].map((item) {
+                          return new DropdownMenuItem<String>(
+                            child: new Text(item,
+                                textAlign: TextAlign.center),
+                            value: item, 
+                          );
+                        }).toList();
     return menuItems;
   }
 
@@ -423,7 +485,7 @@ class _ClassScreenState extends State<ClassScreen>{
   }
 
   void _navigateToClases(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterClass()));
   }
 }
 
