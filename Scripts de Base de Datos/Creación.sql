@@ -20,6 +20,7 @@ CREATE TABLE EMPLEADO (
 	Salario FLOAT NOT NULL,
 	Id_puesto INT NOT NULL,
 	Id_planilla INT NOT NULL,
+	Nombre_suc NVARCHAR(50),
 	PRIMARY KEY (Cedula)
 );
 
@@ -58,7 +59,7 @@ CREATE TABLE CLIENTE (
 -- Tabla PUESTO
 -- Puestos de trabajo disponibles para los empleados.
 CREATE TABLE PUESTO (
-	Identificador INT NOT NULL,
+	Identificador INT IDENTITY(1,1) NOT NULL,
 	Descripcion NVARCHAR(50),
 	PRIMARY KEY (Identificador)
 );
@@ -66,7 +67,7 @@ CREATE TABLE PUESTO (
 -- Tabla PLANILLA
 -- Planilla con la que reciben el pago los empleados.
 CREATE TABLE PLANILLA (
-	Identificador INT NOT NULL,
+	Identificador INT IDENTITY(1,1) NOT NULL,
 	Descripcion NVARCHAR(50),
 	PRIMARY KEY (Identificador)
 );
@@ -74,7 +75,7 @@ CREATE TABLE PLANILLA (
 -- Tabla SERVICIO
 -- Servicios que ofrecen las sucursales del gimnasio.
 CREATE TABLE SERVICIO (
-	Identificador INT NOT NULL,
+	Identificador INT IDENTITY(1,1) NOT NULL,
 	Descripcion NVARCHAR(50),
 	PRIMARY KEY (Identificador)
 );
@@ -82,7 +83,7 @@ CREATE TABLE SERVICIO (
 -- Tabla TRATAMIENTO
 -- Tratamientos dados dentro de los spas del gimnasio.
 CREATE TABLE TRATAMIENTO (
-	Identificador INT NOT NULL,
+	Identificador INT IDENTITY(1,1) NOT NULL,
 	Nombre NVARCHAR(50),
 	PRIMARY KEY (Identificador)
 );
@@ -90,7 +91,7 @@ CREATE TABLE TRATAMIENTO (
 -- Tabla TIPO_EQUIPO
 -- Tipo de equipo disponible en el gimnasio.
 CREATE TABLE TIPO_EQUIPO (
-	Identificador INT NOT NULL,
+	Identificador INT IDENTITY(1,1) NOT NULL,
 	Descripcion NVARCHAR(50),
 	PRIMARY KEY (Identificador)
 );
@@ -207,6 +208,9 @@ ADD CONSTRAINT FK_PUESTO FOREIGN KEY (Id_puesto) REFERENCES PUESTO(Identificador
 
 ALTER TABLE EMPLEADO
 ADD CONSTRAINT FK_PLANILLA FOREIGN KEY (Id_planilla) REFERENCES PLANILLA(Identificador);
+
+ALTER TABLE EMPLEADO
+ADD CONSTRAINT FK_SUCURSAL FOREIGN KEY (Nombre_suc) REFERENCES SUCURSAL(Nombre);
 
 ALTER TABLE SUCURSAL
 ADD CONSTRAINT FK_ADMIN FOREIGN KEY (Cedula_administrador) REFERENCES EMPLEADO(Cedula);
