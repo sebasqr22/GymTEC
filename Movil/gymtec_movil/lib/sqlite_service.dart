@@ -1,3 +1,4 @@
+import 'package:gymtec_movil/database_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -23,4 +24,32 @@ class SqliteService {
      version: 1,
     );
   }
+
+  Future createCliente(CLIENTE cliente) async {
+    int result = 0;
+    final Database db = await initializeDB();
+    final id = await db.insert(
+      'CLIENTE', cliente.toMap(), 
+      conflictAlgorithm: ConflictAlgorithm.replace);   
+      }
+
+  Future<CLIENTE> obtenerClientePorCedula(int cedula) async {
+  final db = await initializeDB();
+  final List<Map<String, Object?>> queryResult = await db.query(
+    'CLIENTES',
+    where: '${CLIENTE.cedulaColumn} = ?',
+    whereArgs: [cedula],
+  );
+  if (queryResult.isNotEmpty) {
+    return CLIENTE.fromMap(queryResult.first);
+  }
+  return new CLIENTE();
 }
+
+}
+
+
+
+
+
+

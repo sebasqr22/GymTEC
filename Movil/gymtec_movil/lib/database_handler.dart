@@ -1,4 +1,5 @@
 class CLIENTE{
+  static final cedulaColumn= "cedula";
   int cedula;
   String Nombre,Apellido1,Apellido2, Dia_nacimiento, Mes_nacimiento, Year, Direccion, Correo, Password;
   double peso;
