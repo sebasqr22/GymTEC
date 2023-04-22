@@ -51,6 +51,11 @@ export class LoginComponent implements OnInit{
     else{
       signin.style.display = 'none'
       login.style.display = 'block'
+
+
+      /** this.getApi.call_RegistrarCliente(login.value.ced, string nombre, string apellido1, string apellido2, ).subscribe((data)=>{
+        console.log(data);
+      });*/
     }
   }
 }

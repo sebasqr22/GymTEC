@@ -5,11 +5,13 @@
 -- Estudiante: Eduardo Bolívar Minguet
 -- Carné: 2020158103
 
+USE [GymTEC-DB];
+
 -- Tratamientos que se ofrecen por default.
-INSERT INTO TRATAMIENTO VALUES (1, 'Masaje relajante');
-INSERT INTO TRATAMIENTO VALUES (2, 'Masaje descarga muscular');
-INSERT INTO TRATAMIENTO VALUES (3, 'Sauna');
-INSERT INTO TRATAMIENTO VALUES (4, 'Baño a vapor');
+INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje relajante');
+INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje descarga muscular');
+INSERT INTO TRATAMIENTO (Nombre) VALUES ('Sauna');
+INSERT INTO TRATAMIENTO (Nombre) VALUES ('Baño a vapor');
 
 -- Puestos default de GymTEC.
 INSERT INTO PUESTO VALUES (1, 'Administrador: Gestiona la sucursal');
@@ -37,7 +39,7 @@ INSERT INTO TIPO_EQUIPO VALUES (4, 'Remos');
 INSERT INTO TIPO_EQUIPO VALUES (5, 'Pesas');
 
 -- Empleado Administrador General.
-INSERT INTO EMPLEADO VALUES ();
+---INSERT INTO EMPLEADO VALUES ();
 
 -- Sucursales ya existentes en los campus del Tecnológico de Costa Rica.
 INSERT INTO SUCURSAL VALUES ('GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123);
@@ -45,9 +47,9 @@ INSERT INTO SUCURSAL VALUES ('GymTEC Campus San José', 'Barrio Amón', 'San José'
 INSERT INTO SUCURSAL VALUES ('GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123);
 
 -- Se tiene por default un Spa inactivo en cada sucursal.
-INSERT INTO SPA VALUES ('GymTEC Campus Central Cartago', 1);
-INSERT INTO SPA VALUES ('GymTEC Campus San José', 1);
-INSERT INTO SPA VALUES ('GymTEC Campus San Carlos', 1);
+INSERT INTO SPA VALUES ('GymTEC Campus Central Cartago');
+INSERT INTO SPA VALUES ('GymTEC Campus San José');
+INSERT INTO SPA VALUES ('GymTEC Campus San Carlos');
 
 -- Se tiene por default una Tienda inactiva en cada sucursal.
 INSERT INTO TIENDA VALUES ('GymTEC Campus Central Cartago', 1);
