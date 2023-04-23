@@ -17,7 +17,6 @@ namespace Metodos{
       private DatabaseHandler DB_Handler = new DatabaseHandler();  
       AuxiliarFunctions aux = new AuxiliarFunctions();
 
-
       [HttpGet]
       [Route("admin/VerTiposEquipo")]
       public dynamic VerTiposEquipo(){
@@ -92,7 +91,7 @@ namespace Metodos{
           return new { message = "error" };
         }
       }
-S
+
       [HttpPost]
       [Route("admin/AgregarEmpleado")]
       public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_planilla, int nombre_suc){
