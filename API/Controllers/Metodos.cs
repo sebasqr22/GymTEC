@@ -18,13 +18,86 @@ namespace Metodos{
       AuxiliarFunctions aux = new AuxiliarFunctions();
 
       [HttpGet]
-      [Route("VerTratamientosSPA")]
-      public dynamic VerTratamientosSPA(){
+      [Route("admin/AgregarEmpleado")]{
+      public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_puesto, int nombre_suc){
+        // VERIFICACION DE DATOS
+        if(string.IsNullOrEmpty(cedula) || cedula.Length != 9 ||string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(distrito) || string.IsNullOrEmpty(canton) || string.IsNullOrEmpty(provincia) || string.IsNullOrEmpty(correo) || !correo.Contains('@') || !correo.Contains('.') || string.IsNullOrEmpty(contrasena) || string.IsNullOrEmpty(salario) || id_puesto == 0 || id_planilla == 0 || nombre_suc == 0){
+          return new { message = "error" };}
+
+        // VERIFICAR QUE EL EMPLEADO NO EXISTA EN LA BASE DE DATOS
+        dynamic existeEmpleado = aux.VerificarExistenciaEmpleado_aux(cedula);
+      }
+
+      [HttpGet]
+      [Route("admin/VerPlanillas")]
+      public dynamic VerPlanillas(){
         try{
-          return aux.VerTratamientosSPA_aux();
+          return aux.VerPlanillas_aux();
         }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };
+        }
+      }
+      
+      [HttpPost]
+      [Route("admin/AgregarPlanilla")]
+        public dynamic AgregarPlanilla(string descripcionPlanilla){
+            try{
+
+                // VERIFICACION DE DATOS
+                if(string.IsNullOrEmpty(descripcionPlanilla)){
+                    return new { message = "error" };}
+
+                // INSERTAR PLANILLA EN LA BASE DE DATOS
+                dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux(descripcionPlanilla);
+                if(existePlanilla){
+                    return new { message = "Ya existe esta planilla en la BD" };
+                }
+
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string queryInsert = "INSERT INTO PLANILLA (Descripcion) VALUES (@Descripcion)";
+                using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Descripcion", descripcionPlanilla);
+                    comando.ExecuteNonQuery();
+                }
+                DB_Handler.CerrarConexion();
+                return new { message = "ok" };
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error" };
+            }
+
+        }
+
+      [HttpPost]
+      [Route("admin/EliminarPlanilla")]
+      public dynamic EliminarPlanilla(string descripcionPlanilla){
+        try{
+            // VERIFICACION DE DATOS
+            if(string.IsNullOrEmpty(descripcionPlanilla)){
+                return new { message = "error" };}
+
+            // ELIMINAR PLANILLA EN LA BASE DE DATOS
+            dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux();
+            if(!existePlanilla){
+                return new { message = "No existe esta planilla en la BD" };
+            }
+
+            DB_Handler.ConectarServer();
+            DB_Handler.AbrirConexion();
+            string queryDelete = "DELETE FROM PLANILLA WHERE Descripcion = @Descripcion";
+            using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+                comando.Parameters.AddWithValue("@Descripcion", descripcionPlanilla);
+                comando.ExecuteNonQuery();
+            }
+            DB_Handler.CerrarConexion();
+            return new { message = "ok" };
+
+        }catch(Exception e){
+            Console.WriteLine(e);
+            return new { message = "error" };
         }
       }
 
@@ -46,14 +119,13 @@ namespace Metodos{
             if(string.IsNullOrEmpty(descripcionPuesto)){
                 return new { message = "error" };}
 
-            // INSERTAR PUESTO EN LA BASE DE DATOS
             dynamic existePuesto = aux.VerificarExistenciaPuesto_aux(descripcionPuesto);
             if (existePuesto) {
                 return new { message = "Puesto ya existe en la BD. Error" };}
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryInsert = "INSERT INTO PUESTO VALUES (@Descripcion)";
+            string queryInsert = "INSERT INTO PUESTO (Descripcion) VALUES (@Descripcion)";
             using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Descripcion", descripcionPuesto);
                 comando.ExecuteNonQuery();
@@ -92,6 +164,18 @@ namespace Metodos{
             return new { message = "error" };
         }
       }      
+      
+      [HttpGet]
+      [Route("admin/VerTratamientosSPA")]
+      public dynamic VerTratamientosSPA(){
+        try{
+          return aux.VerTratamientosSPA_aux();
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
       [HttpPost]
       [Route("admin/AgregarTratamientoSPA")]
       public dynamic AgregarTratamientoSPA(string nombreSucursal, int numSpa){
@@ -123,7 +207,7 @@ namespace Metodos{
         }
     }
 
-      [HttpGet]
+      [HttpPost]
       [Route("admin/EliminarTratamientoSPA")]
       public dynamic EliminarTratamientoSPA(string nombreSucursal, int numSpa){
         try{

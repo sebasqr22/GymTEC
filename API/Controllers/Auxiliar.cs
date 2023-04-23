@@ -12,6 +12,130 @@ namespace funcionesAuxiliares{
     public class AuxiliarFunctions{
         private DatabaseHandler DB_Handler = new DatabaseHandler();  
 
+        public dynamic VerEmpleados(){
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM EMPLEADO";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { 
+                            var empleadosExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                empleadosExistentes.Add(new {
+                                    Cedula = reader.GetInt64(0),
+                                    Nombre = reader.GetString(1),
+                                    Apellido1 = reader.GetString(2),
+                                    Apellido2 = reader.GetString(3),
+                                    Distrito = reader.GetString(4),
+                                    Canton = reader.GetString(5),
+                                    Provincia = reader.GetString(6),
+                                    Correo = reader.GetString(7),
+                                    Contraseña = reader.GetString(8),
+                                    Salario = reader.GetInt64(9),
+                                    Id_puesto = reader.GetInt64(10),
+                                    Id_planilla = reader.GetInt64(11)
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+
+                             string json_empleadosExistentes = JsonSerializer.Serialize(empleadosExistentes);
+                            return json_empleadosExistentes;
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay empleados en la BD" };
+                        }
+                    }
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerEmpleados" };
+            }
+        }
+            
+        public dynamic VerificarExistenciaEmpleado(string cedula){
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM EMPLEADO WHERE Cedula = @Cedula";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Cedula", cedula);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+                
+
+                DB_Handler.CerrarConexion();
+                return false;
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaEmpleado" };
+            }
+        }
+
+        public dynamic VerificarExistenciaPlanilla_aux(string descripcionPlanilla){
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM PLANILLA WHERE Descripcion = @Descripcion";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Descripcion", descripcionPlanilla);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+            
+                DB_Handler.CerrarConexion();
+                return false;
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaPlanilla_aux" };
+            }
+        }
+        
+        public dynamic VerPlanillas_aux(){
+            // VER PLANILLAS EXISTENTES
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM PLANILLA";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
+                            var planillasExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                planillasExistentes.Add(new {
+                                    Id_planilla = reader.GetInt64(0),
+                                    Descripcion = reader.GetString(1)
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+
+                            string json_planillasExistentes = JsonSerializer.Serialize(planillasExistentes);
+                            return json_planillasExistentes;
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay planillas en la BD" };
+                        }
+                    }
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerPlanillas_aux" };
+            }
+        }
+        
         public dynamic VerPuestos_aux(){
             try{
                 DB_Handler.ConectarServer();
@@ -78,7 +202,7 @@ namespace funcionesAuxiliares{
                             while (reader.Read()) {
                                 tratamientosExistentes.Add(new {
                                     Nsucursal = reader.GetString(0),
-                                    Spa = reader.GetInt32(1)
+                                    Spa = reader.GetInt64(1)
                                 });
                             }
                             DB_Handler.CerrarConexion();
