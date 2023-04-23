@@ -12,6 +12,62 @@ namespace funcionesAuxiliares{
     public class AuxiliarFunctions{
         private DatabaseHandler DB_Handler = new DatabaseHandler();  
 
+        public dynamic VerTiposEquipo_aux(){
+            // VER TIPOS DE EQUIPO EXISTENTES
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM TIPO_EQUIPO";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
+                            var tiposEquipoExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                tiposEquipoExistentes.Add(new {
+                                    Identificador = reader.GetInt64(0),
+                                    Descripcion = reader.GetString(1)
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+
+                            string json_tiposEquipoExistentes = JsonSerializer.Serialize(tiposEquipoExistentes);
+                            return json_tiposEquipoExistentes;
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay tipos de equipo en la BD" };
+                        }
+                    }
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerTiposEquipo" };
+            }
+        }
+
+        public dynamic VerificarExistenciaTipoEquipo_aux(string descripcion){
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM TIPO_EQUIPO WHERE Descripcion = @Descripcion";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Descripcion", descripcion);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+            
+                DB_Handler.CerrarConexion();
+                return false;
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaTipoEquipo" };
+            }
+        }
+
         public dynamic VerEmpleados_aux(){
             try{
                 DB_Handler.ConectarServer();
@@ -168,24 +224,23 @@ namespace funcionesAuxiliares{
         
         public dynamic VerificarExistenciaPuesto_aux(string descripcionPuesto){
            try{ 
-            
-            DB_Handler.ConectarServer();
-            DB_Handler.AbrirConexion();
-            string querySelect = "SELECT * FROM PUESTO WHERE Descripcion = @Descripcion";
-            using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Descripcion", descripcionPuesto);
-                using (SqlDataReader reader = comando.ExecuteReader()) {
-                    if (reader.HasRows) {
-                        DB_Handler.CerrarConexion();
-                        return true;
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM PUESTO WHERE Descripcion = @Descripcion";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Descripcion", descripcionPuesto);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
                     }
                 }
-            }
-            return false;
-            }catch(Exception e){
-                Console.WriteLine(e);
-                return new { message = "error en VerificarExistenciaPuesto_aux" };
-            }
+                return false;
+                }catch(Exception e){
+                    Console.WriteLine(e);
+                    return new { message = "error en VerificarExistenciaPuesto_aux" };
+                }
         }
         
         public dynamic VerTratamientosSPA_aux(){

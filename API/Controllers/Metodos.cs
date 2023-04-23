@@ -17,7 +17,83 @@ namespace Metodos{
       private DatabaseHandler DB_Handler = new DatabaseHandler();  
       AuxiliarFunctions aux = new AuxiliarFunctions();
 
+
       [HttpGet]
+      [Route("admin/VerTiposEquipo")]
+      public dynamic VerTiposEquipo(){
+        try{
+          return aux.VerTiposEquipo_aux();
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+      
+      [HttpPost]
+      [Route("admin/AgregarTipoEquipo")]
+      public dynamic AgregarTipoEquipo(string descripcion){
+        try{
+            if(string.IsNullOrEmpty(descripcion)){
+              return new { message = "error" };}
+
+            // INSERTAR TIPO DE EQUIPO EN LA BASE DE DATOS
+            dynamic existeTipoEquipo = aux.VerificarExistenciaTipoEquipo_aux(descripcion);
+            if(existeTipoEquipo){
+              return new { message = "Ya existe este tipo de equipo en la BD" };
+            }
+            DB_Handler.ConectarServer();
+            DB_Handler.AbrirConexion();
+            string queryInsert = "INSERT INTO TIPO_EQUIPO VALUES (@Descripcion)";
+            using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+              comando.Parameters.AddWithValue("@Descripcion", descripcion);
+              comando.ExecuteNonQuery();
+            }
+            DB_Handler.CerrarConexion();
+            return new { message = "ok" };
+          }catch(Exception e){
+            Console.WriteLine(e);
+            return new { message = "error" };
+          }
+      }
+
+      [HttpPost]
+      [Route("admin/EliminarTipoEquipo")]
+      public dynamic EliminarTipoEquipo(string descripcion){
+        try{
+            if(string.IsNullOrEmpty(descripcion)){
+              return new { message = "error" };}
+
+            // ELIMINAR TIPO DE EQUIPO EN LA BASE DE DATOS
+            dynamic existeTipoEquipo = aux.VerificarExistenciaTipoEquipo_aux(descripcion);
+            if(!existeTipoEquipo){
+              return new { message = "No existe este tipo de equipo en la BD" };
+            }
+            DB_Handler.ConectarServer();
+            DB_Handler.AbrirConexion();
+            string queryDelete = "DELETE FROM TIPO_EQUIPO WHERE Descripcion = @Descripcion";
+            using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+              comando.Parameters.AddWithValue("@Descripcion", descripcion);
+              comando.ExecuteNonQuery();
+            }
+            DB_Handler.CerrarConexion();
+            return new { message = "ok" };
+          }catch(Exception e){
+            Console.WriteLine(e);
+            return new { message = "error" };
+          }
+      }
+      [HttpGet]
+      [Route("admin/VerEmpleados")]
+      public dynamic VerEmpleados(){
+        try{
+          return aux.VerEmpleados_aux();
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpPost]
       [Route("admin/AgregarEmpleado")]
       public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_planilla, int nombre_suc){
         try{
@@ -56,6 +132,32 @@ namespace Metodos{
         }
       }
 
+      [HttpPost]
+      [Route("admin/EliminarEmpleado")]
+      public dynamic EliminarEmpleado(string cedula){
+        try{
+          if(string.IsNullOrEmpty(cedula) || cedula.Length != 9){
+            return new { message = "error" };}
+
+          // ELIMINAR EMPLEADO EN LA BASE DE DATOS
+          dynamic existeEmpleado = aux.VerificarExistenciaEmpleado_aux(cedula);
+          if(!existeEmpleado){
+            return new { message = "No existe este empleado en la BD" };
+          }
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string queryDelete = "DELETE FROM EMPLEADO WHERE Cedula = @Cedula";
+          using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
       [HttpGet]
       [Route("admin/VerPlanillas")]
       public dynamic VerPlanillas(){
