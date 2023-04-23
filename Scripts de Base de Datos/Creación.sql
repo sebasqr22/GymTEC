@@ -5,9 +5,6 @@
 -- Estudiante: Eduardo Bolívar Minguet
 -- Carné: 2020158103
 
-CREATE DATABASE [GymTEC-DB];
-USE [GymTEC-DB];
-
 -- Tabla EMPLEADO
 -- Informacion de los empleados del gimnasio.
 CREATE TABLE EMPLEADO (
@@ -121,13 +118,12 @@ CREATE TABLE PRODUCTO (
 -- Tiendas dentro de las sucursales.
 CREATE TABLE TIENDA (
 	Nombre_sucursal NVARCHAR(50) NOT NULL,
-	Num_tienda INT NOT NULL,
+	Num_tienda INT IDENTITY(1,1) NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Num_tienda)
 );
 
 -- Tabla SPA
 -- Spas dentro de las sucursales.
-DROP TABLE SPA;
 CREATE TABLE SPA (
 	Nombre_sucursal NVARCHAR(50) NOT NULL,
 	Num_spa INT IDENTITY(1,1) NOT NULL,
@@ -269,9 +265,3 @@ ADD CONSTRAINT FK_Assist_Client FOREIGN KEY (Cedula_cliente) REFERENCES CLIENTE(
 
 ALTER TABLE ASISTENCIA_CLASE
 ADD CONSTRAINT FK_Assist_Class FOREIGN KEY (Id_servicio, Num_clase) REFERENCES CLASE(Id_servicio, Num_clase);
-
-SELECT * FROM TRATAMIENTO;
-
-SELECT * FROM TRATAMIENTO_SPA;
-
-SELECT * FROM SPA;

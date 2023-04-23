@@ -37,25 +37,27 @@ INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Remos');
 INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Pesas');
 
 -- Empleado Administrador General.
-INSERT INTO EMPLEADO VALUES (123, 'Hector', 'Perez', 'R', 'Luna', 'Sol', 'XD', 'ajdlasj', 'lllllll', 1000000, 1, 1);
+INSERT INTO EMPLEADO VALUES (123456789, 'Héctor', 'Perez', 'Rodríguez', 'Dulce Nombre', 'Cartago', 'Cartago', 'pjhector01@gmail.com', '987654321hec', 3480000, 1, 1, NULL);
 
 -- Sucursales ya existentes en los campus del Tecnológico de Costa Rica.
-INSERT INTO SUCURSAL VALUES ('GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123);
-INSERT INTO SUCURSAL VALUES ('GymTEC Campus San José', 'Barrio Amón', 'San José', 'San José', '2006-06-20', '7:00', '18:00', 25, 123);
-INSERT INTO SUCURSAL VALUES ('GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123);
+INSERT INTO SUCURSAL VALUES ('GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789);
+INSERT INTO SUCURSAL VALUES ('GymTEC Campus San José', 'Barrio Amón', 'San José', 'San José', '2006-06-20', '7:00', '18:00', 25, 123456789);
+INSERT INTO SUCURSAL VALUES ('GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123456789);
+
+UPDATE EMPLEADO SET Nombre_suc = 'GymTEC Campus Central Cartago' WHERE Cedula = 123456789;
 
 -- Se tiene por default un Spa inactivo en cada sucursal.
-INSERT INTO SPA VALUES ('GymTEC Campus Central Cartago', 1);
-INSERT INTO SPA VALUES ('GymTEC Campus San José', 1);
-INSERT INTO SPA VALUES ('GymTEC Campus San Carlos', 1);
+DBCC CHECKIDENT('SPA', RESEED, 0);
+INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus Central Cartago');
+DBCC CHECKIDENT('SPA', RESEED, 0);
+INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus San José');
+DBCC CHECKIDENT('SPA', RESEED, 0);
+INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus San Carlos');
 
 -- Se tiene por default una Tienda inactiva en cada sucursal.
-INSERT INTO TIENDA VALUES ('GymTEC Campus Central Cartago', 1);
-INSERT INTO TIENDA VALUES ('GymTEC Campus San José', 1);
-INSERT INTO TIENDA VALUES ('GymTEC Campus San Carlos', 1);
-
-select * from TRATAMIENTO;
-select * from PUESTO;
-select * from PLANILLA;
-select * from SERVICIO;
-select * from TIPO_EQUIPO;
+DBCC CHECKIDENT('TIENDA', RESEED, 0);
+INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus Central Cartago');
+DBCC CHECKIDENT('TIENDA', RESEED, 0);
+INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus San José');
+DBCC CHECKIDENT('TIENDA', RESEED, 0);
+INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus San Carlos');
