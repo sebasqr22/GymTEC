@@ -12,7 +12,7 @@ namespace funcionesAuxiliares{
     public class AuxiliarFunctions{
         private DatabaseHandler DB_Handler = new DatabaseHandler();  
 
-        public dynamic VerEmpleados(){
+        public dynamic VerEmpleados_aux(){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
@@ -54,7 +54,7 @@ namespace funcionesAuxiliares{
             }
         }
             
-        public dynamic VerificarExistenciaEmpleado(string cedula){
+        public dynamic VerificarExistenciaEmpleado_aux(string cedula){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
@@ -68,7 +68,6 @@ namespace funcionesAuxiliares{
                         }
                     }
                 }
-                
 
                 DB_Handler.CerrarConexion();
                 return false;

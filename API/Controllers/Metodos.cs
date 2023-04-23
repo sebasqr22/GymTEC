@@ -18,14 +18,42 @@ namespace Metodos{
       AuxiliarFunctions aux = new AuxiliarFunctions();
 
       [HttpGet]
-      [Route("admin/AgregarEmpleado")]{
-      public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_puesto, int nombre_suc){
-        // VERIFICACION DE DATOS
-        if(string.IsNullOrEmpty(cedula) || cedula.Length != 9 ||string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(distrito) || string.IsNullOrEmpty(canton) || string.IsNullOrEmpty(provincia) || string.IsNullOrEmpty(correo) || !correo.Contains('@') || !correo.Contains('.') || string.IsNullOrEmpty(contrasena) || string.IsNullOrEmpty(salario) || id_puesto == 0 || id_planilla == 0 || nombre_suc == 0){
-          return new { message = "error" };}
+      [Route("admin/AgregarEmpleado")]
+      public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_planilla, int nombre_suc){
+        try{
+          if(string.IsNullOrEmpty(cedula) || cedula.Length != 9 ||string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(distrito) || string.IsNullOrEmpty(canton) || string.IsNullOrEmpty(provincia) || string.IsNullOrEmpty(correo) || !correo.Contains('@') || !correo.Contains('.') || string.IsNullOrEmpty(contrasena) || string.IsNullOrEmpty(salario) || id_puesto == 0 || id_planilla == 0 || nombre_suc == 0){
+            return new { message = "error" };}
 
-        // VERIFICAR QUE EL EMPLEADO NO EXISTA EN LA BASE DE DATOS
-        dynamic existeEmpleado = aux.VerificarExistenciaEmpleado_aux(cedula);
+          // INSERTAR EMPLEADO EN LA BASE DE DATOS
+          dynamic existeEmpleado = aux.VerificarExistenciaEmpleado_aux(cedula);
+          if(existeEmpleado){
+            return new { message = "Ya existe este empleado en la BD" };
+          }
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string queryInsert = "INSERT INTO EMPLEADO VALUES (@Cedula, @Nombre, @Apellido1, @Apellido2, @Distrito, @Canton, @Provincia, @Correo, @Contrasena, @Salario, @Id_Puesto, @Id_Planilla, @Nombre_Suc)";
+          using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+            comando.Parameters.AddWithValue("@Nombre", nombre);
+            comando.Parameters.AddWithValue("@Apellido1", apellido1);
+            comando.Parameters.AddWithValue("@Apellido2", apellido2);
+            comando.Parameters.AddWithValue("@Distrito", distrito);
+            comando.Parameters.AddWithValue("@Canton", canton);
+            comando.Parameters.AddWithValue("@Provincia", provincia);
+            comando.Parameters.AddWithValue("@Correo", correo);
+            comando.Parameters.AddWithValue("@Contrasena", contrasena);
+            comando.Parameters.AddWithValue("@Salario", Int64.Parse(salario));
+            comando.Parameters.AddWithValue("@Id_Puesto", id_puesto);
+            comando.Parameters.AddWithValue("@Id_Planilla", id_planilla);
+            comando.Parameters.AddWithValue("@Nombre_Suc", nombre_suc);
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
       }
 
       [HttpGet]
@@ -80,7 +108,7 @@ namespace Metodos{
                 return new { message = "error" };}
 
             // ELIMINAR PLANILLA EN LA BASE DE DATOS
-            dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux();
+            dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux(descripcionPlanilla);
             if(!existePlanilla){
                 return new { message = "No existe esta planilla en la BD" };
             }
