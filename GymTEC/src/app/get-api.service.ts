@@ -23,7 +23,8 @@ export class GetApiService {
   }
   call_AgregarTratamientoSPA(nombreSucursal:string, numSpa: number){
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTratamientoSPA?nombreSucursal=${nombreSucursal}&numSpa=${numSpa}`, {});
-}
+  }
+
   call_EliminarTratamientoSPA(nombreSucursal:string, numSpa: number){
     return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTratamientoSPA?nombreSucursal=${nombreSucursal}&numSpa=${numSpa}`, {});
   }
@@ -56,8 +57,12 @@ export class GetApiService {
     return this.http.get(`https://localhost:7194/usuarios/admin/VerEmpleados`);
   }
 
-  call_AgregarEmpleados(){
+  call_AgregarEmpleados(cedula:string, nombre:string, apellido1:string, apellido2:string, distrito:string, canton:string, provincia:string, correo:string, contrasena:string, salario:string, id_puesto:number, id_planilla:number, nombre_suc:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarEmpleados?cedula=${cedula}&nombre=${nombre}&apellido1=${apellido1}&apellido2=${apellido2}&distrito=${distrito}&canton=${canton}&provincia=${provincia}&correo=${correo}&contrasena=${contrasena}&salario=${salario}&id_puesto=${id_puesto}&id_planilla=${id_planilla}&nombre_suc=${nombre_suc}`, {});
+  }
 
+  call_EliminarEmpleados(cedula:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarEmpleados?cedula=${cedula}`, {});
   }
 
 

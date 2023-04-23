@@ -28,7 +28,7 @@ namespace Metodos{
           return new { message = "error" };
         }
       }
-      
+
       [HttpPost]
       [Route("admin/AgregarTipoEquipo")]
       public dynamic AgregarTipoEquipo(string descripcion){
@@ -92,7 +92,7 @@ namespace Metodos{
           return new { message = "error" };
         }
       }
-
+S
       [HttpPost]
       [Route("admin/AgregarEmpleado")]
       public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_planilla, int nombre_suc){
