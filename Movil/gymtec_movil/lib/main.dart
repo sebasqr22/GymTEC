@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gymtec_movil/sqlite_service.dart';
 import 'package:intl/intl.dart';
+import 'package:validators/validators.dart';
+import 'package:http/http.dart' as http;
 
-void main() => runApp(MyApp());
+const double font_size = 20;
+const double title_size = 32;
+
+void main() => runApp(
+  MyApp()
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  static const String _title = 'Flutter Stateful Clicker Counter';
+  static const String _title = 'GymTec';
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -21,50 +29,45 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-  // This class is the configuration for the state.
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late TextEditingController _controller;
-  late TextEditingController _controller2;
+  late SqliteService _sqliteService;
+  late TextEditingController _controllerPassword;
+  TextEditingController emailAddress = TextEditingController();
+  bool texterror = false;
   bool passwordVisible=false;
+  
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
-    _controller2 = TextEditingController();
+    _controllerPassword = TextEditingController();
     passwordVisible=true;
+    emailAddress.text = "";
+    this._sqliteService= SqliteService();
+    this._sqliteService.initializeDB();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     final ButtonStyle style =
-        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: font_size));
     return Scaffold(
+        backgroundColor: Colors.cyan[100],
         appBar: AppBar(
             title: Text(
           "Bienvenido a GymTEC",
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.normal),
+          style: TextStyle(fontSize: title_size, fontWeight: FontWeight.normal),
         )),
         body: Center(
           child: Container(
             child: Column(
               children: <Widget>[
-                Text(
-                  "LOGO",
-                  style: TextStyle(fontSize: 25),
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
                 ),
                 Icon(IconData(0xe043, fontFamily: 'MaterialIcons'),size:60),
                 Text(
@@ -72,20 +75,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller,
-                ),
+                       controller: emailAddress ,
+                       decoration: InputDecoration( 
+                        hintText: "Correo electrónico",
+                         errorText: texterror?"Email no válido":null,
+                       )
+                     ),
                 Text(
                   "Contraseña: ",
                   style: TextStyle(fontSize: 25),
                 ),
                  TextField(
+                  controller: _controllerPassword,
                   obscureText: passwordVisible,
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
-                    hintText: "Password",
-                    labelText: "Password",
-                    helperText:"Password must contain special character",
-                    helperStyle:TextStyle(color:Colors.green),
+                    hintText: "Contraseña",
                     suffixIcon: IconButton(
                       icon: Icon(passwordVisible
                           ? Icons.visibility
@@ -107,7 +112,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 ElevatedButton(
                   style: style,
                   onPressed: () {
-                    _navigateToWelcome(context);
+                    if(isEmail(emailAddress.text) && _controllerPassword.text.isNotEmpty){
+                            texterror = false;
+                            /*
+                            var requestBody = {
+                              'parametro1': 'valor1',
+                              'parametro2': 'valor2',
+                            };
+                            Future<http.Response> LoginCliente() {
+                                return http.get(Uri.parse('this.http.get("https://localhost:7194/usuarios/cliente/LoginCliente'));
+                            }
+                            */
+                            _navigateToWelcome(context);
+                        }else{
+                            texterror = true;
+                    }
                   },
                   child: const Text('Iniciar sesión'),
                 ),
@@ -125,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 600.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
-              color: Colors.white,
+              color: Colors.cyan[100],
               boxShadow: [
                 BoxShadow(color: Colors.blue, spreadRadius: 3),
               ],
