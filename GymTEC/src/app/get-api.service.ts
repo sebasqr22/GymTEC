@@ -65,5 +65,17 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/EliminarEmpleados?cedula=${cedula}`, {});
   }
 
+  call_VerTiposEquipo(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerTiposEquipo`);
+  }
+
+  call_AgregarTipoEquipo(descripcionTipoEquipo:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
+  }
+
+  call_EliminarTipoEquipo(descripcionTipoEquipo:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
+  }
+
 
 }
