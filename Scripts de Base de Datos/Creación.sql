@@ -5,6 +5,10 @@
 -- Estudiante: Eduardo Bolívar Minguet
 -- Carné: 2020158103
 
+CREATE DATABASE [GymTEC-DB];
+
+USE [GymTEC-DB];
+
 -- Tabla EMPLEADO
 -- Informacion de los empleados del gimnasio.
 CREATE TABLE EMPLEADO (
