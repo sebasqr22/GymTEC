@@ -7,6 +7,8 @@ using DataBaseManagement;
 using System.Data.SqlClient;
 using System.Globalization;
 
+
+
 namespace funcionesAuxiliares{
 
     public class AuxiliarFunctions{
@@ -24,14 +26,14 @@ namespace funcionesAuxiliares{
                             var tiposEquipoExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 tiposEquipoExistentes.Add(new {
-                                    Identificador = reader.GetInt64(0),
+                                    Identificador = reader.GetInt32(0),
                                     Descripcion = reader.GetString(1)
                                 });
                             }
                             DB_Handler.CerrarConexion();
 
-                            string json_tiposEquipoExistentes = JsonSerializer.Serialize(tiposEquipoExistentes);
-                            return json_tiposEquipoExistentes;
+                            //string json_tiposEquipoExistentes = JsonSerializer.Serialize(tiposEquipoExistentes);
+                            return new JsonResult(tiposEquipoExistentes);
                         }
                         else {
                             DB_Handler.CerrarConexion();
@@ -42,6 +44,39 @@ namespace funcionesAuxiliares{
             }catch(Exception e){
                 Console.WriteLine(e);
                 return new { message = "error en VerTiposEquipo" };
+            }
+        }
+
+
+        public dynamic VerTratamientos_aux(){
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM TRATAMIENTO";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { 
+                            var tratamientosExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                tratamientosExistentes.Add(new {
+                                    Identificador = reader.GetInt32(0),
+                                    Nombre = reader.GetString(1),
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+
+                            //string json_tratamientosExistentes = JsonSerializer.Serialize(tratamientosExistentes);
+                            return new JsonResult(tratamientosExistentes);
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay tratamientos en la BD" };
+                        }
+                    }
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerTratamientos_aux" };
             }
         }
 
@@ -65,48 +100,6 @@ namespace funcionesAuxiliares{
             }catch(Exception e){
                 Console.WriteLine(e);
                 return new { message = "error en VerificarExistenciaTipoEquipo" };
-            }
-        }
-
-        public dynamic VerEmpleados_aux(){
-            try{
-                DB_Handler.ConectarServer();
-                DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM EMPLEADO";
-                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    using (SqlDataReader reader = comando.ExecuteReader()) {
-                        if (reader.HasRows) { 
-                            var empleadosExistentes = new List<dynamic>();
-                            while (reader.Read()) {
-                                empleadosExistentes.Add(new {
-                                    Cedula = reader.GetInt64(0),
-                                    Nombre = reader.GetString(1),
-                                    Apellido1 = reader.GetString(2),
-                                    Apellido2 = reader.GetString(3),
-                                    Distrito = reader.GetString(4),
-                                    Canton = reader.GetString(5),
-                                    Provincia = reader.GetString(6),
-                                    Correo = reader.GetString(7),
-                                    Contraseña = reader.GetString(8),
-                                    Salario = reader.GetInt64(9),
-                                    Id_puesto = reader.GetInt64(10),
-                                    Id_planilla = reader.GetInt64(11)
-                                });
-                            }
-                            DB_Handler.CerrarConexion();
-
-                             string json_empleadosExistentes = JsonSerializer.Serialize(empleadosExistentes);
-                            return json_empleadosExistentes;
-                        }
-                        else {
-                            DB_Handler.CerrarConexion();
-                            return new { message = "No hay empleados en la BD" };
-                        }
-                    }
-                }
-            }catch(Exception e){
-                Console.WriteLine(e);
-                return new { message = "error en VerEmpleados" };
             }
         }
             
@@ -158,6 +151,73 @@ namespace funcionesAuxiliares{
             }
         }
         
+        public dynamic VerificarExistenciaTratamiento_aux(string nombreTratamiento)
+        {
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM TRATAMIENTO WHERE Nombre = @Nombre";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Nombre", nombreTratamiento);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+
+                DB_Handler.CerrarConexion();
+                return false;
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaTratamiento_aux" };
+            }
+        }
+
+        public dynamic VerEmpleados_aux(){
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM EMPLEADO";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { 
+                            var empleadosExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                empleadosExistentes.Add(new {
+                                    Cedula = reader.GetInt32(0),
+                                    Nombre = reader.GetString(1),
+                                    Apellido1 = reader.GetString(2),
+                                    Apellido2 = reader.GetString(3),
+                                    Distrito = reader.GetString(4),
+                                    Canton = reader.GetString(5),
+                                    Provincia = reader.GetString(6),
+                                    Correo = reader.GetString(7),
+                                    Contraseña = reader.GetString(8),
+                                    Salario = reader.GetDouble(9),
+                                    Id_puesto = reader.GetInt32(10),
+                                    Id_planilla = reader.GetInt32(11)
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+
+                            //string json_empleadosExistentes = JsonSerializer.Serialize(empleadosExistentes);
+                            return new JsonResult(empleadosExistentes);
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay empleados en la BD" };
+                        }
+                    }
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerEmpleados" };
+            }
+        }
+
         public dynamic VerPlanillas_aux(){
             // VER PLANILLAS EXISTENTES
             try{
@@ -170,14 +230,14 @@ namespace funcionesAuxiliares{
                             var planillasExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 planillasExistentes.Add(new {
-                                    Id_planilla = reader.GetInt64(0),
+                                    Id_planilla = reader.GetInt32(0),
                                     Descripcion = reader.GetString(1)
                                 });
                             }
                             DB_Handler.CerrarConexion();
 
-                            string json_planillasExistentes = JsonSerializer.Serialize(planillasExistentes);
-                            return json_planillasExistentes;
+                            //string json_planillasExistentes = JsonSerializer.Serialize(planillasExistentes);
+                            return new JsonResult(planillasExistentes);
                         }
                         else {
                             DB_Handler.CerrarConexion();
@@ -207,8 +267,8 @@ namespace funcionesAuxiliares{
                             }
                             DB_Handler.CerrarConexion();
 
-                            string json_puestosExistentes = JsonSerializer.Serialize(puestosExistentes);
-                            return json_puestosExistentes;
+                            //string json_puestosExistentes = JsonSerializer.Serialize(puestosExistentes);
+                            return new JsonResult(puestosExistentes);
                         }
                         else {
                             DB_Handler.CerrarConexion();
@@ -256,13 +316,14 @@ namespace funcionesAuxiliares{
                             while (reader.Read()) {
                                 tratamientosExistentes.Add(new {
                                     Nsucursal = reader.GetString(0),
-                                    Spa = reader.GetInt64(1)
+                                    idSpa = reader.GetInt32(1),
+                                    idTratamiento = reader.GetInt32(2)
                                 });
                             }
                             DB_Handler.CerrarConexion();
 
-                            string json_tratamientosExistentes = JsonSerializer.Serialize(tratamientosExistentes);
-                            return json_tratamientosExistentes;
+                            //string json_tratamientosExistentes = JsonSerializer.Serialize(tratamientosExistentes);
+                            return new JsonResult(tratamientosExistentes);
                         }
                         else {
                             DB_Handler.CerrarConexion();
@@ -276,14 +337,15 @@ namespace funcionesAuxiliares{
             }
         }
 
-        public dynamic VerificarExistenciaTratamientoSPA_aux(string nombreSucursal, int numSpa){
+        public dynamic VerificarExistenciaTratamientoSPA_aux(string nombreSucursal, int numSpa, int idTratamiento){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM TRATAMIENTO_SPA WHERE Nsucursal = @Nsucursal AND Spa = @Spa";
+                string querySelect = "SELECT * FROM TRATAMIENTO_SPA WHERE Nsucursal = @Nsucursal AND Spa = @Spa AND Id_tratamiento = @Id_tratamiento";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     comando.Parameters.AddWithValue("@Nsucursal", nombreSucursal);
                     comando.Parameters.AddWithValue("@Spa", numSpa);
+                    comando.Parameters.AddWithValue("@Id_tratamiento", idTratamiento);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();

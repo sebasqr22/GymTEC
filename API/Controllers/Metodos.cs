@@ -1,3 +1,4 @@
+using System.Net;
 using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
@@ -94,9 +95,9 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AgregarEmpleado")]
-      public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_planilla, int nombre_suc){
+      public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_planilla, string nombre_suc){
         try{
-          if(string.IsNullOrEmpty(cedula) || cedula.Length != 9 ||string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(distrito) || string.IsNullOrEmpty(canton) || string.IsNullOrEmpty(provincia) || string.IsNullOrEmpty(correo) || !correo.Contains('@') || !correo.Contains('.') || string.IsNullOrEmpty(contrasena) || string.IsNullOrEmpty(salario) || id_puesto == 0 || id_planilla == 0 || nombre_suc == 0){
+          if(string.IsNullOrEmpty(cedula) || cedula.Length != 9 ||string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(distrito) || string.IsNullOrEmpty(canton) || string.IsNullOrEmpty(provincia) || string.IsNullOrEmpty(correo) || !correo.Contains('@') || !correo.Contains('.') || string.IsNullOrEmpty(contrasena) || string.IsNullOrEmpty(salario) || id_puesto == 0 || id_planilla == 0 || string.IsNullOrEmpty(nombre_suc)){
             return new { message = "error" };}
 
           // INSERTAR EMPLEADO EN LA BASE DE DATOS
@@ -293,6 +294,47 @@ namespace Metodos{
             return new { message = "error" };
         }
       }      
+
+      [HttpGet]
+      [Route ("admin/VerTratamientos")]
+      public dynamic VerTratamientos(){
+        try{
+          return aux.VerTratamientos_aux();
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpPost]
+      [Route("admin/AgregarTratamiento")]
+      public dynamic AgregarTratamiento(string nombreTratamiento){
+        try{
+          // VERIFICACION DE DATOS
+          if (string.IsNullOrEmpty(nombreTratamiento)) {
+              return new { message = "error" };}
+
+          // INSERTAR TRATAMIENTO EN LA BASE DE DATOS
+          dynamic existeTratamiento = aux.VerificarExistenciaTratamiento_aux(nombreTratamiento);
+            if (existeTratamiento) {
+                return new { message = "Tratamiento ya existe en la BD. Error" };}
+
+            DB_Handler.ConectarServer();
+            DB_Handler.AbrirConexion();
+            string queryInsert = "INSERT INTO TRATAMIENTO (Nombre) VALUES (@Nombre)";
+            using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+                comando.Parameters.AddWithValue("@Nombre", nombreTratamiento);
+                comando.ExecuteNonQuery();
+                DB_Handler.CerrarConexion();
+            }
+            return new { message = "ok" };
+        }catch(Exception e){
+            Console.WriteLine(e);
+            return new { message = "error" };
+        }
+      }
+
+
       
       [HttpGet]
       [Route("admin/VerTratamientosSPA")]
@@ -307,23 +349,24 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AgregarTratamientoSPA")]
-      public dynamic AgregarTratamientoSPA(string nombreSucursal, int numSpa){
+      public dynamic AgregarTratamientoSPA(string nombreSucursal, int numSpa, int idTratamiento){
         try{
           // VERIFICACION DE DATOS
-          if (string.IsNullOrEmpty(nombreSucursal) || numSpa == 0) {
+          if (string.IsNullOrEmpty(nombreSucursal) || numSpa == 0 || idTratamiento == 0) {
               return new { message = "error" };}
 
           // INSERTAR TRATAMIENTO_SPA EN LA BASE DE DATOS
-          dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(nombreSucursal, numSpa);
+          dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(nombreSucursal, numSpa, idTratamiento);
             if (existeTratamientoSPA) {
                 return new { message = "Tratamiento ya existe en la BD. Error" };}
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryInsert = "INSERT INTO TRATAMIENTO_SPA VALUES (@Nsucursal, @Spa)";
+            string queryInsert = "INSERT INTO TRATAMIENTO_SPA VALUES (@Nsucursal, @Spa, @IdTratamiento)";
             using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Nsucursal", nombreSucursal);
                 comando.Parameters.AddWithValue("@Spa", numSpa);
+                comando.Parameters.AddWithValue("@IdTratamiento", idTratamiento);
                 comando.ExecuteNonQuery();
                 DB_Handler.CerrarConexion();
             }
@@ -338,14 +381,14 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/EliminarTratamientoSPA")]
-      public dynamic EliminarTratamientoSPA(string nombreSucursal, int numSpa){
+      public dynamic EliminarTratamientoSPA(string nombreSucursal, int numSpa, int idTratamiento){
         try{
             // VERIFICACION DE DATOS
             if (string.IsNullOrEmpty(nombreSucursal) || numSpa == 0) {
                 return new { message = "error" };}
 
             // ELIMINAR TRATAMIENTO_SPA EN LA BASE DE DATOS
-            dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(nombreSucursal, numSpa);
+            dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(nombreSucursal, numSpa, idTratamiento);
             if (!existeTratamientoSPA) {
                 return new { message = "Tratamiento no existe en la BD. Error" };}
 
@@ -363,7 +406,8 @@ namespace Metodos{
             return aux.VerTratamientosSPA_aux();  // JSON
                   
         }catch(Exception e){
-          return new { message = "error" };
+            Console.WriteLine(e);
+            return new { message = "error" };
         }
       }
 
@@ -438,9 +482,8 @@ namespace Metodos{
               }
           }
 
-          return new { message = "ok" };
-
         }catch(Exception e){
+          Console.WriteLine(e);
           return new { message = "error" };
         }
       }
