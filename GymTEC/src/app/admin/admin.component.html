@@ -951,7 +951,40 @@
 
           </div><!-- MARCO -->
 
-          <div id="confGymPSpa" class="container-fluid"></div> <!--CONFIGURACION GYM ASOCIA SPA-->
+          <div id="confGymPSpa" class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800">Asociación de tratamientos al SPA del Gimnacio</h1>
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="confGymPSpaSPA"></select>
+              <label for="confGymPSpaSPA">SPA</label>
+            </div>
+
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="confGymPSpaTratamiento"></select>
+              <label for="confGymPSpaTratamiento">Tratamiento</label>
+            </div>
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Asociar
+            </a><br>
+            <hr class="sidebar-divider my-0">
+            <br><br>
+
+            <div class="form-group row">
+
+              <div class="col-sm">
+                <textarea class="form-control form-control-user" id="confGymPSpaASOCIADOS" rows="4"
+                          cols="50"></textarea>
+                <label for="confGymPSpaASOCIADOS">Asociados</label>
+              </div>
+
+              <div class="col-sm">
+                <textarea class="form-control form-control-user" id="confGymPSpaNOASOCIADOS" rows="4"
+                          cols="50"></textarea>
+                <label for="confGymPSpaNOASOCIADOS">No asociados</label>
+              </div>
+            </div>
+
+          </div>
+          <!--CONFIGURACION GYM ASOCIA SPA SEBAS-->
 
 
           <div id="confGymPProduc" class="container-fluid"> <!-- CONFIGURACION GIMNASIO ASOCIA RPO-->
@@ -987,7 +1020,39 @@
               </div>
             </div><!-- MARCO -->
           </div>
-          <div id="confGymPInventario" class="container-fluid"></div>
+
+          <div id="confGymPInventario" class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800">Asociación de tratamientos al SPA del Gimnacio</h1>
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="confGymPInventarioGYM"></select>
+              <label for="confGymPInventarioGYM">GYM</label>
+            </div>
+
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="confGymPInventarioEQUIPO"></select>
+              <label for="confGymPInventarioEQUIPO">Equipo</label>
+            </div>
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Asociar
+            </a><br>
+            <hr class="sidebar-divider my-0">
+            <br><br>
+
+            <div class="form-group row">
+
+              <div class="col-sm">
+                <textarea class="form-control form-control-user" id="confGymPInventarioASOCIADO" rows="4"
+                          cols="50"></textarea>
+                <label for="confGymPInventarioASOCIADO">Asociados</label>
+              </div>
+
+              <div class="col-sm">
+                <textarea class="form-control form-control-user" id="confGymPInventarioNOASOCIADO" rows="4"
+                          cols="50"></textarea>
+                <label for="confGymPInventarioNOASOCIADO">No asociados</label>
+              </div>
+            </div>
+          </div>
 
           <div id="confGymPCrear" class="container-fluid"> <!--CONFIGURACION CREAR GIMNASIO-->
             <h1 class="h3 mb-4 text-gray-800">Crear clase</h1>
@@ -1044,7 +1109,8 @@
 
           </div><!-- MARCO -->
 
-          <div id="genPlanPComo" class="container-fluid"></div>
+          <div id="genPlanPComo" class="container-fluid">
+          </div>
 
           <div id="genPlanPMensuales" class="container-fluid"> <!--GENERACION PLANTILLA (MENSUALES)-->
 
@@ -1057,14 +1123,30 @@
 
           </div><!-- MARCO -->
 
-          <div id="copCalenP" class="container-fluid"></div>
+          <div id="copCalenP" class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800">Copiar Calendario Por Semana</h1>
+
+            <div class="col-sm">
+              <input type="week" class="form-control form-control-user" id="copCalenPSEMANA1">
+              <label for="copCalenPSEMANA1">Semana a Copiar</label>
+            </div>
+
+            <div class="col-sm">
+              <input type="week" class="form-control form-control-user" id="copCalenPSEMANA2">
+              <label for="copCalenPSEMANA2">Semana Destino</label>
+            </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Copiar
+            </a><br>
+          </div>
 
           <div id="copGymp" class="container-fluid"> <!--COPIAR GIMNASIO-->
             <h1 class="h3 mb-4 text-gray-800">Copiar Gym</h1>
 
             <div class="col-sm">
               <select class="form-control form-control-user" id="copGympSELECT"></select>
-              <label for="copGympSELECT">Gym a copiar</label>
+              <label for="copGympSELECT">Gym a copiar</label><br><br>
             </div>
 
             <div class="col-sm">
