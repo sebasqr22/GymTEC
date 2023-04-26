@@ -1006,16 +1006,43 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="confGymPCrearINSTRUCTOR">
+                <select class="form-control form-control-user" id="confGymPCrearINSTRUCTOR"></select>
                 <label for="confGymPCrearINSTRUCTOR">Instructor</label>
               </div>
 
+              <div class="col-sm-6">
+                <select class="form-control form-control-user" id="confGymPCrearGRUPOIND"></select>
+                <label for="confGymPCrearGRUPOIND">Grupal o individual</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type=number class="form-control form-control-user" id="confGymPCrearCAPACIDAD">
+                <label for="confGymPCrearCAPACIDAD">Capacidad</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type=date class="form-control form-control-user" id="confGymPCrearFECHA">
+                <label for="confGymPCrearFECHA">Fecha</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type=time class="form-control form-control-user" id="confGymPCrearHORAINICIO">
+                <label for="confGymPCrearHORAINICIO">Hora de inicio</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type=time class="form-control form-control-user" id="confGymPCrearHORAFINAL">
+                <label for="confGymPCrearHORAFINAL">Hora de finalización</label>
+              </div>
 
             </div>
 
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Crear
+            </a><br>
+
 
           </div><!-- MARCO -->
-          <!--ESTA DE ACA NO SSIRVE NO SE POAIHPOQHTPOAHFOHDHFAHFPASDFHAPSDFHPOASDHFAPUFAPSDFHPAOSHFPOAISDHFPOIASFPOAISH-->
 
           <div id="genPlanPComo" class="container-fluid"></div>
 
@@ -1033,7 +1060,22 @@
           <div id="copCalenP" class="container-fluid"></div>
 
           <div id="copGymp" class="container-fluid"> <!--COPIAR GIMNASIO-->
-            asdasdasdadassd
+            <h1 class="h3 mb-4 text-gray-800">Copiar Gym</h1>
+
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="copGympSELECT"></select>
+              <label for="copGympSELECT">Gym a copiar</label>
+            </div>
+
+            <div class="col-sm">
+              <input type="text" class="form-control form-control-user" id="copGympNUEVO">
+              <label for="copGympNUEVO">Nombre del nuevo Gym</label>
+            </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Copiar
+            </a><br>
+
           </div><!-- MARCO -->
           <!-- End of Main Content -->
 
