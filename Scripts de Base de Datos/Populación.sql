@@ -5,6 +5,8 @@
 -- Estudiante: Eduardo Bolívar Minguet
 -- Carné: 2020158103
 
+USE [GymTEC-DB]
+
 -- Tratamientos que se ofrecen por default.
 INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje relajante');
 INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje descarga muscular');
@@ -43,7 +45,6 @@ INSERT INTO EMPLEADO VALUES (123456789, 'Héctor', 'Perez', 'Rodríguez', 'Dulce N
 INSERT INTO SUCURSAL VALUES ('GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789);
 INSERT INTO SUCURSAL VALUES ('GymTEC Campus San José', 'Barrio Amón', 'San José', 'San José', '2006-06-20', '7:00', '18:00', 25, 123456789);
 INSERT INTO SUCURSAL VALUES ('GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123456789);
-INSERT INTO SUCURSAL VALUES ('GymTEC Campus Heredia', 'Heredia', 'Heredia', 'Heredia', '2010-04-10', '7:00', '18:00', 22, 123456789);
 
 UPDATE EMPLEADO SET Nombre_suc = 'GymTEC Campus Central Cartago' WHERE Cedula = 123456789;
 
@@ -54,8 +55,6 @@ INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus Central Cartago');
 INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus San José');
 ---DBCC CHECKIDENT('SPA', RESEED, 1);
 INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus San Carlos');
----DBCC CHECKIDENT('SPA', RESEED, 0);
-INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus Heredia');
 
 -- Se tiene por default una Tienda inactiva en cada sucursal.
 ---DBCC CHECKIDENT('TIENDA', RESEED, 0);
