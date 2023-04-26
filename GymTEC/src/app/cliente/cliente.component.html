@@ -23,19 +23,21 @@
           Clases
         </div>
 
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item active">
-          <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
-               data-parent="#accordionSidebar">
-
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Páginas:</h6>
-              <a class="collapse-item pointer" (click)="cambiarPantalla('principal')">Main</a>
-              <a class="collapse-item active pointer" (click)="cambiarPantalla('busqueda')">Búsqueda y Registro</a>
-            </div>
-          </div>
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-toggle="collapse" data-target="#gestSucC" aria-expanded="false"
+             aria-controls="gestSucC" (click)="cambiarPantalla('principal')">
+            <i class="fas fa-thin fa-house"></i>
+            <span>Main</span>
+          </a>
         </li>
 
+        <li class="nav-item">
+          <a id='home' class="nav-link collapsed" data-toggle="collapse" data-target="#gestSucC" aria-expanded="false"
+             aria-controls="gestSucC"(click)="cambiarPantalla('busqueda')">
+            <i class="fas fa-duotone fa-dumbbell"></i>
+            <span>Búsqueda y Registro</span>
+          </a>
+        </li>
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
