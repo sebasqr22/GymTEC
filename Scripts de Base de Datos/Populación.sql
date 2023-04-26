@@ -5,51 +5,61 @@
 -- Estudiante: Eduardo Bolívar Minguet
 -- Carné: 2020158103
 
+USE [GymTEC-DB]
+
 -- Tratamientos que se ofrecen por default.
-INSERT INTO TRATAMIENTO VALUES (1, 'Masaje relajante');
-INSERT INTO TRATAMIENTO VALUES (2, 'Masaje descarga muscular');
-INSERT INTO TRATAMIENTO VALUES (3, 'Sauna');
-INSERT INTO TRATAMIENTO VALUES (4, 'Baño a vapor');
+INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje relajante');
+INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje descarga muscular');
+INSERT INTO TRATAMIENTO (Nombre) VALUES ('Sauna');
+INSERT INTO TRATAMIENTO (Nombre) VALUES ('Baño a vapor');
 
 -- Puestos default de GymTEC.
-INSERT INTO PUESTO VALUES (1, 'Administrador: Gestiona la sucursal');
-INSERT INTO PUESTO VALUES (2, 'Instructor: Se encarga de impartir una clase');
-INSERT INTO PUESTO VALUES (3, 'Dependiente Spa: Encargado de gestionar un Spa');
-INSERT INTO PUESTO VALUES (4, 'Dependiente Tienda: Encargado de una tienda');
+INSERT INTO PUESTO (Descripcion) VALUES ('Administrador: Gestiona la sucursal');
+INSERT INTO PUESTO (Descripcion) VALUES ('Instructor: Se encarga de impartir una clase');
+INSERT INTO PUESTO (Descripcion) VALUES ('Dependiente Spa: Encargado de gestionar un Spa');
+INSERT INTO PUESTO (Descripcion) VALUES ('Dependiente Tienda: Encargado de una tienda');
 
 -- Planillas únicas que maneja el gimnasio.
-INSERT INTO PLANILLA VALUES (1, 'Pago mensual');
-INSERT INTO PLANILLA VALUES (2, 'Pago por horas');
-INSERT INTO PLANILLA VALUES (3, 'Pago por clase');
+INSERT INTO PLANILLA (Descripcion) VALUES ('Pago mensual');
+INSERT INTO PLANILLA (Descripcion) VALUES ('Pago por horas');
+INSERT INTO PLANILLA (Descripcion) VALUES ('Pago por clase');
 
 -- Servicios default que ofrece el gimnasio.
-INSERT INTO SERVICIO VALUES (1, 'Indoor Cycling');
-INSERT INTO SERVICIO VALUES (2, 'Pilates');
-INSERT INTO SERVICIO VALUES (3, 'Yoga');
-INSERT INTO SERVICIO VALUES (4, 'Zumba');
-INSERT INTO SERVICIO VALUES (5, 'Natación');
+INSERT INTO SERVICIO (Descripcion) VALUES ('Indoor Cycling');
+INSERT INTO SERVICIO (Descripcion) VALUES ('Pilates');
+INSERT INTO SERVICIO (Descripcion) VALUES ('Yoga');
+INSERT INTO SERVICIO (Descripcion) VALUES ('Zumba');
+INSERT INTO SERVICIO (Descripcion) VALUES ('Natación');
 
 -- Tipo de equipo por default que maneja el gimnasio.
-INSERT INTO TIPO_EQUIPO VALUES (1, 'Cintas de correr');
-INSERT INTO TIPO_EQUIPO VALUES (2, 'Bicicletas estacionarias');
-INSERT INTO TIPO_EQUIPO VALUES (3, 'Multigimnasios');
-INSERT INTO TIPO_EQUIPO VALUES (4, 'Remos');
-INSERT INTO TIPO_EQUIPO VALUES (5, 'Pesas');
+INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Cintas de correr');
+INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Bicicletas estacionarias');
+INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Multigimnasios');
+INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Remos');
+INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Pesas');
 
 -- Empleado Administrador General.
-INSERT INTO EMPLEADO VALUES ();
+INSERT INTO EMPLEADO VALUES (123456789, 'Héctor', 'Perez', 'Rodríguez', 'Dulce Nombre', 'Cartago', 'Cartago', 'pjhector01@gmail.com', '987654321hec', 3480000, 1, 1, NULL);
 
 -- Sucursales ya existentes en los campus del Tecnológico de Costa Rica.
-INSERT INTO SUCURSAL VALUES ('GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123);
-INSERT INTO SUCURSAL VALUES ('GymTEC Campus San José', 'Barrio Amón', 'San José', 'San José', '2006-06-20', '7:00', '18:00', 25, 123);
-INSERT INTO SUCURSAL VALUES ('GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123);
+INSERT INTO SUCURSAL VALUES ('GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789);
+INSERT INTO SUCURSAL VALUES ('GymTEC Campus San José', 'Barrio Amón', 'San José', 'San José', '2006-06-20', '7:00', '18:00', 25, 123456789);
+INSERT INTO SUCURSAL VALUES ('GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123456789);
+
+UPDATE EMPLEADO SET Nombre_suc = 'GymTEC Campus Central Cartago' WHERE Cedula = 123456789;
 
 -- Se tiene por default un Spa inactivo en cada sucursal.
-INSERT INTO SPA VALUES ('GymTEC Campus Central Cartago', 1);
-INSERT INTO SPA VALUES ('GymTEC Campus San José', 1);
-INSERT INTO SPA VALUES ('GymTEC Campus San Carlos', 1);
+---DBCC CHECKIDENT('SPA', RESEED, 0);
+INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus Central Cartago');
+---DBCC CHECKIDENT('SPA', RESEED, 0);
+INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus San José');
+---DBCC CHECKIDENT('SPA', RESEED, 1);
+INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus San Carlos');
 
 -- Se tiene por default una Tienda inactiva en cada sucursal.
-INSERT INTO TIENDA VALUES ('GymTEC Campus Central Cartago', 1);
-INSERT INTO TIENDA VALUES ('GymTEC Campus San José', 1);
-INSERT INTO TIENDA VALUES ('GymTEC Campus San Carlos', 1);
+---DBCC CHECKIDENT('TIENDA', RESEED, 0);
+INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus Central Cartago');
+---DBCC CHECKIDENT('TIENDA', RESEED, 0);
+INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus San José');
+---DBCC CHECKIDENT('TIENDA', RESEED, 1);
+INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus San Carlos');

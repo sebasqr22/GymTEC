@@ -24,16 +24,5 @@ namespace DataBaseManagement{
       public void CerrarConexion() {
           conectarDB.Close();
       }
-
-      public void ExecuteNonQueryH(string sql) {
-          using (SqlCommand command = new SqlCommand(sql, conectarDB)) {
-              command.ExecuteNonQuery();
-          }
-      }
-
-      public SqlDataReader ExecuteReaderH(string sql) {
-          SqlCommand command = new SqlCommand(sql, conectarDB);
-          return command.ExecuteReader();
-      }
   }
 }
