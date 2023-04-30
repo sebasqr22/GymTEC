@@ -49,7 +49,7 @@ FROM CLASE WHERE '2023-04-01' < Fecha AND Fecha < '2023-04-30'
 GROUP BY Id_servicio, Num_clase, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor
 
 insert into CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor) values (5, '2023-04-27', '10:00', '11:00', 'Virtual', '50', 123456789)
-insert into CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor) values (1, '2023-04-28', '14:00', '15:50', 'Presencial', '20', 123456789)
+insert into CLASE (Id_servicio, Fecha, Hora_inicio, EN CHora_fin, Modalidad, Capacidad, Cedula_instructor) values (1, '2023-04-28', '14:00', '15:50', 'Presencial', '20', 123456789)
 
 select * from clase;
 

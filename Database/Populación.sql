@@ -63,3 +63,4 @@ INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus Central Cartago');
 INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus San José');
 ---DBCC CHECKIDENT('TIENDA', RESEED, 1);
 INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus San Carlos');
+

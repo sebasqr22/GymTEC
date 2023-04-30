@@ -187,8 +187,8 @@ CREATE TABLE TIPO_DE_MAQUINA (
 -- Tabla CLASE
 -- Informacion de una clase impartida en una sucursal.
 CREATE TABLE CLASE (
-	Id_servicio INT NOT NULL,
 	Num_clase INT IDENTITY(1,1) NOT NULL,
+	Id_servicio INT NOT NULL,
 	Fecha DATE,
 	Hora_inicio TIME,
 	Hora_fin TIME,

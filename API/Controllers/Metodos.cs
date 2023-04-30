@@ -18,7 +18,145 @@ namespace Metodos{
     public class MetodosAPI: ControllerBase{
       private DatabaseHandler DB_Handler = new DatabaseHandler();  
       AuxiliarFunctions aux = new AuxiliarFunctions();
+
+      [HttpPost]
+      [Route("cliente/RegistrarClienteEnClase")]
+      public dynamic RegistrarClienteEnClase(string cedulaClient, string Num_clase, string Id_servicio, string Fecha, string Hora_inicio,string Modalidad, string Cedula_instructor){
+        try{
+          // VERIFICAR EXISTENCIA DE CLASE
+          dynamic existeClase = aux.VerificarExistenciaClase_aux(Id_servicio, Cedula_instructor, Modalidad, Fecha, Hora_inicio);
+          if(!existeClase){
+            return new { message = "No existe esta clase en la BD" };
+          }
+          // REGISTRAR CLIENTE EN CLASE
+          string queryInsert = "INSERT INTO ASISTENCIA_CLASE VALUES (@Num_clase, @Id_servicio, @Cedula_cliente)";
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Num_clase", Num_clase);
+            comando.Parameters.AddWithValue("@Id_servicio", Id_servicio);
+            comando.Parameters.AddWithValue("@Cedula_cliente", cedulaClient);
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion(); 
+          return new {message = "ok"};
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpGet]
+      [Route("cliente/BuscarClase")]
+      public dynamic BuscarClase(string Nombre_sucursal,string Id_servicio, string fechaInicio, string fecha_fin){
+        try{
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
+                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
+                           WHERE SUCURSAL.Nombre = @Nombre_sucursal AND CLASE.Id_servicio = Id_servicio AND @fecha_inicio <= Fecha AND Fecha <= fecha_fin
+                           GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Nombre_sucursal", Nombre_sucursal);
+            comando.Parameters.AddWithValue("@Id_servicio", Id_servicio);
+            comando.Parameters.AddWithValue("@fecha_inicio", fechaInicio);
+            comando.Parameters.AddWithValue("@fecha_fin", fecha_fin);
+            comando.ExecuteNonQuery();
+            SqlDataReader reader = comando.ExecuteReader();
+            if (reader.HasRows) { 
+                var clasesBuscadas = new List<dynamic>();
+                while (reader.Read()) {
+                    clasesBuscadas.Add(new {
+                        Fecha = reader.GetString(0),
+                        Hora_inicio = reader.GetString(1),
+                        Hora_fin = reader.GetString(2),
+                        EmpleadoNombre = reader.GetString(3),
+                        EmpleadoApellido1 = reader.GetString(4),
+                        EmpleadoApellido2 = reader.GetString(5),
+                        Capacidad = reader.GetInt32(6)
+                    });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(clasesBuscadas);
+            }
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "No hay clases en este rango de fechas" };
+
+        }catch{
+          return new { message = "error" };
+        }
+      }
+
+      [HttpPost]
+      [Route("admin/CopiarCalendarioActividades")]
+      public dynamic CopiarCalendarioActividades(string Id_servicio, string fechaInicio, string fechaFin, string Hora_inicio, string Hora_fin, string Modalidad, string Capacidad, string Cedula_instructor){
+        try{ 
+          // VERIFICAR EXISTENCIA DE CLASE 
+          dynamic existeCalendario = aux.VerificarExistenciaClase_aux(Id_servicio, Cedula_instructor, Modalidad, fechaInicio, Hora_inicio);
+          if(!existeCalendario){
+            return new { message = "No existe este calendario en la BD" };
+          }
+          // COPIAR CALENDARIO EN CLASE
+          try{
+            DB_Handler.ConectarServer();
+            DB_Handler.AbrirConexion();
+            string queryInsert = @"INSERT INTO CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor)
+                                   SELECT Id_servicio, DATEADD(WEEK, 1, Fecha), Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor
+                                   FROM CLASE WHERE @Fecha_Inicio < Fecha AND Fecha < @Fecha_fin
+                                   GROUP BY Id_servicio, Num_clase, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor
+                                   ";
+            using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+              comando.Parameters.AddWithValue("@Fecha_Inicio", fechaInicio);
+              comando.Parameters.AddWithValue("@Fecha_fin", fechaFin);
+              comando.ExecuteNonQuery();
+            }
+
+            DB_Handler.CerrarConexion();
+            return new {message = "ok"};
+          }catch{
+            return new { message = "error1" };
+          }
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error2" };
+        }
+      }
       
+      [HttpPost]
+      [Route("admin/EliminarInventario")] 
+      public dynamic EliminarInventario(string Numero_serie){
+        // VERIFICAR QUE EXISTE EL INVENTARIO EN LA BASE DE DATOS
+        dynamic existeInventario = aux.VerificarExistenciaInventario_aux(Numero_serie);
+        if(!existeInventario){
+          return new { message = "No existe en el inventario en la BD" };
+        }
+        // ELIMINAR UN ARTICULO DEL INVENTARIO EN LA BASE DE DATOS
+        try{
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          // VERIFICAR SI EXISTE EN UNA SUCURSAL DE LA BD
+          dynamic existeInventarioSucursal = aux.VerificarExistenciaInventarioEnSucursal_aux(Numero_serie);
+          if(existeInventarioSucursal){
+            string queryInsert2 = "DELETE FROM INVENTARIO_EN_SUCURSAL WHERE Num_serie_maquina = @Numero_serie";
+            using (SqlCommand comando = new SqlCommand(queryInsert2, DB_Handler.conectarDB)) {
+              comando.Parameters.AddWithValue("@Num_serie_maquina", Int64.Parse(Numero_serie));
+              comando.ExecuteNonQuery();
+            }
+          }
+          string queryInsert = "DELETE FROM INVENTARIO WHERE Numero_serie = @Numero_serie";
+          using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Numero_serie", Int64.Parse(Numero_serie));
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
       [HttpGet]
       [Route("admin/VerInventario")]
       public dynamic VerInventario(){
@@ -55,35 +193,38 @@ namespace Metodos{
                 comando.Parameters.AddWithValue("@Marca", marca);
                 comando.ExecuteNonQuery();
               }
-              string queryInsert = "INSERT INTO TIPO_DE_MAQUINA VALUES (@Num_serie, @Id_tipo_equipo)";
-              using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+              string queryInsert2 = "INSERT INTO TIPO_DE_MAQUINA VALUES (@Num_serie, @Id_tipo_equipo)";
+              using (SqlCommand comando = new SqlCommand(queryInsert2, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
                 comando.Parameters.AddWithValue("@Id_tipo_equipo", Int64.Parse(idTipoEquipo));
                 comando.ExecuteNonQuery();
               }
-              string queryInsert = "INSERT INTO INVENTARIO_EN_SUCURSAL VALUES (@Nombre_sucursal, @Num_serie)";
-              using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+              string queryInsert3 = "INSERT INTO INVENTARIO_EN_SUCURSAL VALUES (@Nombre_sucursal, @Num_serie)";
+              using (SqlCommand comando = new SqlCommand(queryInsert3, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Nombre_sucursal", nombreSucursal);
                 comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
                 comando.ExecuteNonQuery();
-              }
+              
               DB_Handler.CerrarConexion();
               return new { message = "ok" };
-          }catch{
-            return new { message = "error" };
+              }
+            }catch{
+                return new { message = "error" };
+            }
           }
-          else{
+           // NO SE ASOCIA A UNA SUCURSAL
+          else{ 
             try{
               DB_Handler.ConectarServer();
               DB_Handler.AbrirConexion();
-              string queryInsert = "INSERT INTO INVENTARIO VALUES (@Num_serie, @Marca)";
-              using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+              string queryInsert4 = "INSERT INTO INVENTARIO VALUES (@Num_serie, @Marca)";
+              using (SqlCommand comando = new SqlCommand(queryInsert4, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
                 comando.Parameters.AddWithValue("@Marca", marca);
                 comando.ExecuteNonQuery();
               }
-              string queryInsert = "INSERT INTO TIPO_DE_MAQUINA VALUES (@Num_serie, @Id_tipo_equipo)";
-              using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+              string queryInsert5 = "INSERT INTO TIPO_DE_MAQUINA VALUES (@Num_serie, @Id_tipo_equipo)";
+              using (SqlCommand comando = new SqlCommand(queryInsert5, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
                 comando.Parameters.AddWithValue("@Id_tipo_equipo", Int64.Parse(idTipoEquipo));
                 comando.ExecuteNonQuery();
@@ -94,13 +235,11 @@ namespace Metodos{
               return new { message = "error" };
             }
           }
-          }
-        catch(Exception e){
+        }catch(Exception e){
           Console.WriteLine(e);
-          return new { message = "error" };
+          return new { message = "error"};
         }
       }
-    }
 
       [HttpGet]
       [Route("admin/VerClases")]
@@ -212,15 +351,6 @@ namespace Metodos{
             return new { message = "error" };
           }
       }
-
-      [HttpGet]
-      [Route("admin/VerInventario")]
-
-      [HttpPost]
-      [Route("admin/AgregarInventario")]
-
-      [HttpPost]
-      [Route("admin/EliminarInventario")]
 
       [HttpPost]
       [Route("admin/VerProductos")]
@@ -538,33 +668,32 @@ namespace Metodos{
       [HttpPost]
       [Route("admin/AgregarPlanilla")]
         public dynamic AgregarPlanilla(string descripcionPlanilla){
-            try{
+          try{
 
-                // VERIFICACION DE DATOS
-                if(string.IsNullOrEmpty(descripcionPlanilla)){
-                    return new { message = "error" };}
+              // VERIFICACION DE DATOS
+              if(string.IsNullOrEmpty(descripcionPlanilla)){
+                  return new { message = "error" };}
 
-                // INSERTAR PLANILLA EN LA BASE DE DATOS
-                dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux(descripcionPlanilla);
-                if(existePlanilla){
-                    return new { message = "Ya existe esta planilla en la BD" };
-                }
+              // INSERTAR PLANILLA EN LA BASE DE DATOS
+              dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux(descripcionPlanilla);
+              if(existePlanilla){
+                  return new { message = "Ya existe esta planilla en la BD" };
+              }
 
-                DB_Handler.ConectarServer();
-                DB_Handler.AbrirConexion();
-                string queryInsert = "INSERT INTO PLANILLA (Descripcion) VALUES (@Descripcion)";
-                using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Descripcion", descripcionPlanilla);
-                    comando.ExecuteNonQuery();
-                }
-                DB_Handler.CerrarConexion();
-                return new { message = "ok" };
+              DB_Handler.ConectarServer();
+              DB_Handler.AbrirConexion();
+              string queryInsert = "INSERT INTO PLANILLA (Descripcion) VALUES (@Descripcion)";
+              using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+                  comando.Parameters.AddWithValue("@Descripcion", descripcionPlanilla);
+                  comando.ExecuteNonQuery();
+              }
+              DB_Handler.CerrarConexion();
+              return new { message = "ok" };
 
-            }catch(Exception e){
-                Console.WriteLine(e);
-                return new { message = "error" };
-            }
-
+          }catch(Exception e){
+              Console.WriteLine(e);
+              return new { message = "error" };
+          }
         }
 
       [HttpPost]
@@ -743,7 +872,7 @@ namespace Metodos{
           Console.WriteLine(e);
           return new { message = "error" };
         }
-    }
+      }
 
       [HttpPost]
       [Route("admin/EliminarTratamientoSPA")]
@@ -855,5 +984,4 @@ namespace Metodos{
       }
 
     }
-}
-}
+  }

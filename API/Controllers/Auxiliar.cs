@@ -14,13 +14,13 @@ namespace funcionesAuxiliares{
     public class AuxiliarFunctions{
         private DatabaseHandler DB_Handler = new DatabaseHandler();  
 
-        public dynamic VerificarExistenciaSucursal_aux(string Nombre_sucursal){
+        public dynamic VerificarExistenciaSucursal_aux(string Nombre){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM SUCURSAL WHERE Nombre_sucursal = @Nombre_sucursal";
+                string querySelect = "SELECT * FROM SUCURSAL WHERE Nombre = @Nombre";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Nombre_sucursal", Nombre_sucursal);
+                    comando.Parameters.AddWithValue("@Nombre", Nombre);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
@@ -38,19 +38,72 @@ namespace funcionesAuxiliares{
             }
         }
 
+        public dynamic VerificarExistenciaInventarioEnSucursal_aux(string Num_serie_maquina){
+            try{
+                // VERIFICAR EXISTENCIA DE INVENTARIO EN SUCURSAL
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM INVENTARIO_EN_SUCURSAL WHERE Num_serie_maquina = @Num_serie_maquina";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Num_serie_maquina", Int64.Parse(Num_serie_maquina));
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaInventarioEnSucursal_aux" };
+            }
+        }
+        public dynamic VerificarExistenciaInventario_aux(string Numero_serie){
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM INVENTARIO WHERE Numero_serie = @Numero_serie";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Numero_serie", Int64.Parse(Numero_serie));
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+                DB_Handler.CerrarConexion();
+                return false;
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaInventario_aux" };
+            }
+        }
 
         public dynamic VerInventario_aux(){
             try{
                 // VER INVENTARIO EXISTENTE
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM INVENTARIO"; 
+                string querySelect = @"SELECT INVENTARIO.Numero_serie, INVENTARIO.Marca, INVENTARIO_EN_SUCURSAL.Nombre_sucursal, TIPO_DE_MAQUINA.Id_tipo_equipo, TIPO_EQUIPO.Descripcion\
+                                     FROM INVENTARIO LEFT OUTER JOIN INVENTARIO_EN_SUCURSAL
+                                     ON INVENTARIO.Numero_serie = INVENTARIO_EN_SUCURSAL.Num_serie_maquina
+                                     LEFT OUTER JOIN TIPO_DE_MAQUINA 
+                                     ON INVENTARIO.Numero_serie = TIPO_DE_MAQUINA.Num_serie_maquina 
+                                     LEFT OUTER JOIN TIPO_EQUIPO 
+                                     ON TIPO_DE_MAQUINA.Id_tipo_equipo = TIPO_EQUIPO.Identificador"; 
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
                             var inventarioExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 inventarioExistentes.Add(new {
+                                    NumeroSerie = reader.GetInt32(0),
+                                    Marca = reader.GetString(1),
+                                    Nombre_sucursal = reader.GetString(2),
+                                    Id_tipo_equipo = reader.GetInt32(3),
+                                    Descripcion = reader.GetString(4)
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -311,13 +364,13 @@ namespace funcionesAuxiliares{
             }
         }
 
-        public dynamic VerificarExistenciaTipoEquipo_aux(string descripcion){
+        public dynamic VerificarExistenciaTipoEquipo_aux(string Identificador){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM TIPO_EQUIPO WHERE Descripcion = @Descripcion";
+                string querySelect = "SELECT * FROM TIPO_EQUIPO WHERE @Identificador = Identificador";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Descripcion", descripcion);
+                    comando.Parameters.AddWithValue("@Identificador", Identificador);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
