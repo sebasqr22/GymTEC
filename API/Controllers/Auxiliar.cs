@@ -14,6 +14,212 @@ namespace funcionesAuxiliares{
     public class AuxiliarFunctions{
         private DatabaseHandler DB_Handler = new DatabaseHandler();  
 
+        public dynamic VerInventario_aux(){
+            try{
+                // VER INVENTARIO EXISTENTE
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM INVENTARIO"; 
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
+                            var inventarioExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                inventarioExistentes.Add(new {
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+                            return new JsonResult(inventarioExistentes);
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay inventario en la BD" };
+                        }
+                    }
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerInventario_aux" };
+            }
+        }
+        public dynamic VerProductos_aux(){
+            try{
+                // VER PRODUCTOS EXISTENTES
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM PRODUCTO";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
+                            var productosExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                productosExistentes.Add(new {
+                                    Codigo_barras = reader.GetInt32(0),
+                                    Nombre = reader.GetString(1),
+                                    Descripcion = reader.GetString(2),
+                                    Costo = reader.GetFloat(3),
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+                            return new JsonResult(productosExistentes);
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay productos en la BD" };
+                        }
+                    }
+                }
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerProducto_aux" };
+            }
+        }
+
+        public dynamic VerificarExistenciaProducto_aux(string codigoBarras){
+            // VERIFICAR EXISTENCIA DE PRODUCTO
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM PRODUCTO WHERE Codigo_barras = @Codigo_barras";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Codigo_barras", Int64.Parse(codigoBarras));
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+                DB_Handler.CerrarConexion();
+                return false;
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaProducto" };
+            }
+        }
+
+        public dynamic VerClases_aux(){
+            // VER CLASES EXISTENTES
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM CLASE";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { 
+                            var clasesExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                clasesExistentes.Add(new {
+                                    Id_servicio = reader.GetInt32(0),
+                                    Num_clase = reader.GetInt32(1),
+                                    Fecha = reader.GetDateTime(2),
+                                    HoraInicio = reader.GetTimeSpan(3),
+                                    HoraFin = reader.GetTimeSpan(4),
+                                    Modalidad = reader.GetString(5),
+                                    Cedula_instructor = reader.GetInt32(6)
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+
+                            //string json_tiposEquipoExistentes = JsonSerializer.Serialize(tiposEquipoExistentes);
+                            return new JsonResult(clasesExistentes);
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay clases en la BD" };
+                        }
+                    }
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerClases_aux" };
+            }
+        }
+
+        public dynamic VerificarExistenciaServicio_aux(string Id_servicio){
+            // VERIFICAR EXISTENCIA TIPO DE CLASE 
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM SERVICIO WHERE Id_servicio = @Id_servicio";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
+                            var serviciosExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                serviciosExistentes.Add(new {
+                                    Identificador = reader.GetInt32(0),
+                                    Descripcion = reader.GetString(1)
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+
+                            //string json_tiposEquipoExistentes = JsonSerializer.Serialize(tiposEquipoExistentes);
+                            return new JsonResult(serviciosExistentes);
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No existe ese servicio en la BD" };
+                        }
+                    }
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaServicio_aux" };
+            }
+        }
+        public dynamic VerServicios_aux(){
+            // VER TIPOS DE CLASE EXISTENTES
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM SERVICIO";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { 
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No existen servicios en la BD" };
+                        }
+                    }
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerServicios_aux" };
+            }
+        }
+
+        public dynamic VerificarExistenciaClase_aux(string Id_servicio, string cedulaInstructor, string modalidad, string fecha, string horaInicio){            
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM CLASE WHERE Id_servicio = @Id_servicio AND Cedula_instructor = @Cedula_instructor AND Modalidad = @Modalidad AND Fecha = @Fecha AND Hora_inicio = @Hora_inicio";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(Id_servicio));
+                    comando.Parameters.AddWithValue("@Cedula_instructor", Int64.Parse(cedulaInstructor));
+                    comando.Parameters.AddWithValue("@Modalidad", modalidad);
+                    comando.Parameters.AddWithValue("@Fecha", DateTime.ParseExact(fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
+                    comando.Parameters.AddWithValue("@Hora_inicio", TimeSpan.ParseExact(horaInicio, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+            
+                DB_Handler.CerrarConexion();
+                return false;
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaClase_aux" };
+            }
+        }
+
         public dynamic VerTiposEquipo_aux(){
             // VER TIPOS DE EQUIPO EXISTENTES
             try{
@@ -43,7 +249,7 @@ namespace funcionesAuxiliares{
                 }
             }catch(Exception e){
                 Console.WriteLine(e);
-                return new { message = "error en VerTiposEquipo" };
+                return new { message = "error en VerTiposEquipo_aux" };
             }
         }
 

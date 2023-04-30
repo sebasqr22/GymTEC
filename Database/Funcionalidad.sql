@@ -7,7 +7,9 @@
 
 CREATE DATABASE [prueba_funcionalidad]
 
-USE [prueba_funcionalidad];
+---USE [prueba_funcionalidad];
+
+USE [GymTEC-DB];
 
 -- ///////////////////////////////////////// CONFIGURACION DE GIMNASIO /////////////////////////////////////////////////
 
@@ -52,7 +54,7 @@ insert into CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacid
 select * from clase;
 
 delete from clase
-DBCC CHECKIDENT('CLASE', RESEED, 0)
+---DBCC CHECKIDENT('CLASE', RESEED, 0)
 
 -- //////////////////////////////////////////////// COPIAR GIMNASIO /////////////////////////////////////////////////////////////////
 
@@ -80,4 +82,27 @@ INSERT INTO CLIENTE VALUES (9013, 'N', 'H', 'L', '02', '08', '2009', 60.0, 'Aqui
 INSERT INTO ASISTENCIA_CLASE VALUES (9012, 5, 1) -- REGISTRO DE PRUEBA
 INSERT INTO ASISTENCIA_CLASE VALUES (9012, 5, 4)
 INSERT INTO ASISTENCIA_CLASE VALUES (9013, 5, 4)
+
+-- ///////////////////////////////////////////////// AGREGAR INVENTARIO ///////////////////////////////////////////////////////////////////
+INSERT INTO INVENTARIO VALUES (987, 'Tiger')
+INSERT INTO INVENTARIO VALUES (456, 'Lion')
+INSERT INTO TIPO_DE_MAQUINA VALUES (987, 1)
+INSERT INTO TIPO_DE_MAQUINA VALUES (456, 2)
+
+
+INSERT INTO INVENTARIO_EN_SUCURSAL VALUES ('GymTEC Campus Central Cartago', 456)
+---INSERT INTO INVENTARIO_EN_SUCURSAL VALUES ('', 987)
+
+SELECT * FROM INVENTARIO 
+LEFT OUTER JOIN INVENTARIO_EN_SUCURSAL
+ON INVENTARIO.Numero_serie = INVENTARIO_EN_SUCURSAL.Num_serie_maquina;
+
+SELECT INVENTARIO.Numero_serie, INVENTARIO.Marca, INVENTARIO_EN_SUCURSAL.Nombre_sucursal, TIPO_DE_MAQUINA.Id_tipo_equipo, TIPO_EQUIPO.Descripcion
+FROM INVENTARIO LEFT OUTER JOIN INVENTARIO_EN_SUCURSAL
+ON INVENTARIO.Numero_serie = INVENTARIO_EN_SUCURSAL.Num_serie_maquina
+LEFT OUTER JOIN TIPO_DE_MAQUINA ON INVENTARIO.Numero_serie = TIPO_DE_MAQUINA.Num_serie_maquina 
+LEFT OUTER JOIN TIPO_EQUIPO ON TIPO_DE_MAQUINA.Id_tipo_equipo = TIPO_EQUIPO.Identificador
+WHERE INVENTARIO_EN_SUCURSAL.Num_serie_maquina IS NULL;
+
+--- pendiente el COSTO!!!!
 
