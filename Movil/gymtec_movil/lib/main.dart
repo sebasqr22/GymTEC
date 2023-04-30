@@ -201,15 +201,15 @@ class _RegisterScreenState extends State<RegisterScreen>{
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Scaffold(
+      backgroundColor: Colors.cyan[100],
       appBar: AppBar(title: const Text('Bienvenido a GymTec')),
       body: Center(
           child: Container(
             child: ListView(
               padding: EdgeInsets.all(20),
               children: <Widget>[
-                Text(
-                  "LOGO",
-                  style: TextStyle(fontSize: 25),
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
                 ),
                 Icon(IconData(0xe043, fontFamily: 'MaterialIcons'),size:60),
                 Text(
@@ -226,7 +226,6 @@ class _RegisterScreenState extends State<RegisterScreen>{
                 ),
                 TextField(
                   controller: _nombreController,
-                  obscureText: true,
                 ),
                 Text(
                   "Primer Apellido: ",
@@ -241,7 +240,6 @@ class _RegisterScreenState extends State<RegisterScreen>{
                 ),
                 TextField(
                   controller: _segundoApellidoController,
-                  obscureText: true,
                 ),
                 Text(
                   "Edad: ",
@@ -345,8 +343,8 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   onPressed: () {
                     if(int.parse(_cedulaController.text) !=0 && _nombreController.text != "" && int.parse(_edadController.text) >0 && isDate(dateInput.text) && double.parse(_pesoController.text) != 0 && double.parse(_imcController.text) > 0 &&_direccionController.text != "" && isEmail(_correoController.text) && _passwordController.text != ""){
                       crearCliente(int.parse(_cedulaController.text), _nombreController.text, _primerApellidoController.text, _segundoApellidoController.text, int.parse(_edadController.text), dateInput.text,double.parse(_pesoController.text), double.parse(_imcController.text), _direccionController.text, _correoController.text, _passwordController.text);
+                      _navigateToClass(context);
                     } 
-                    //_navigateToClass(context);
                   },
                   child: const Text('Registrarse'),
                 ),
@@ -357,7 +355,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
             height: 600.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
-              color: Colors.white,
+              color: Colors.cyan[100],
               boxShadow: [
                 BoxShadow(color: Colors.blue, spreadRadius: 3),
               ],
@@ -419,14 +417,14 @@ class _ClassScreenState extends State<ClassScreen>{
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Scaffold(
+      backgroundColor: Colors.cyan[100],
       body: Center(
           child: Container(
             child: ListView(
               padding: EdgeInsets.all(40),
               children: <Widget>[
-                Text(
-                  "LOGO",
-                  style: TextStyle(fontSize: 25),
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
                 ),
                 Text(
                   "Búsqueda de una clase",
@@ -495,7 +493,7 @@ class _ClassScreenState extends State<ClassScreen>{
             height: 600.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
-              color: Colors.white,
+              color: Colors.cyan[100],
               boxShadow: [
                 BoxShadow(color: Colors.blue, spreadRadius: 3),
               ],
@@ -557,13 +555,13 @@ class _RegisterClassState extends State<RegisterClass> {
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Scaffold(
+      backgroundColor: Colors.cyan[100],
         body: Center(
           child: Container(
             child: Column(
               children: <Widget>[
-                Text(
-                  "LOGO",
-                  style: TextStyle(fontSize: 25),
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
                 ),
                 Text(
                   "Registro de Clase en SUCURSAL NOMBRE: ",
@@ -574,7 +572,6 @@ class _RegisterClassState extends State<RegisterClass> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const ListTile(
-                        leading: Icon(Icons.album),
                         title: Text('The Enchanted Nightingale'),
                         subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
                       ),
@@ -582,12 +579,7 @@ class _RegisterClassState extends State<RegisterClass> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           TextButton(
-                            child: const Text('BUY TICKETS'),
-                            onPressed: () {/* ... */},
-                          ),
-                          const SizedBox(width: 8),
-                          TextButton(
-                            child: const Text('LISTEN'),
+                            child: const Text('Registrar clase'),
                             onPressed: () {/* ... */},
                           ),
                           const SizedBox(width: 8),
@@ -610,7 +602,7 @@ class _RegisterClassState extends State<RegisterClass> {
             height: 600.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
-              color: Colors.white,
+              color: Colors.cyan[100],
               boxShadow: [
                 BoxShadow(color: Colors.blue, spreadRadius: 3),
               ],
