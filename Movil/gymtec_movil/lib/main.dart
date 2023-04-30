@@ -174,7 +174,7 @@ class RegisterScreen  extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen>{
   late SqliteService _sqliteService;
-  late TextEditingController _cedulaController,_controller2,controller3,controller4,controller5,controller6,controller7,controller8,controller9;
+  late TextEditingController _cedulaController,_nombreController,_primerApellidoController,_segundoApellidoController,_edadController,_pesoController,_imcController,_direccionController,_correoController,_passwordController;
   TextEditingController dateInput = TextEditingController();
   bool passwordVisible=false;
 
@@ -182,14 +182,15 @@ class _RegisterScreenState extends State<RegisterScreen>{
   void initState() {
     super.initState();
     _cedulaController = TextEditingController();
-    _controller2 = TextEditingController();
-    controller3 = TextEditingController();
-    controller4 = TextEditingController();
-    controller5 = TextEditingController();
-    controller6 = TextEditingController();
-    controller7 = TextEditingController();
-    controller8 = TextEditingController();
-    controller9 = TextEditingController();
+    _nombreController = TextEditingController();
+    _primerApellidoController = TextEditingController();
+    _segundoApellidoController = TextEditingController();
+    _edadController = TextEditingController();
+    _pesoController = TextEditingController();
+    _imcController = TextEditingController();
+    _direccionController = TextEditingController();
+    _correoController = TextEditingController();
+    _passwordController = TextEditingController();
     passwordVisible = true;
     this._sqliteService= SqliteService();
     this._sqliteService.initializeDB();
@@ -224,22 +225,22 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller2,
+                  controller: _nombreController,
                   obscureText: true,
                 ),
                 Text(
-                  "Primer Aepllido: ",
+                  "Primer Apellido: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller3,
+                  controller: _primerApellidoController,
                 ),
                 Text(
                   "Segundo Apellido: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller4,
+                  controller: _segundoApellidoController,
                   obscureText: true,
                 ),
                 Text(
@@ -247,7 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller5,
+                  controller: _edadController,
                 ),
                 Text(
                   "Fecha de Nacimiento: ",
@@ -288,40 +289,38 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller6,
+                  controller: _pesoController,
                 ),
                 Text(
                   "IMC: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller7,
+                  controller: _imcController,
                 ),
                 Text(
                   "Dirección: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller8,
+                  controller: _direccionController,
                 ),
                 Text(
                   "Correo Electrónico: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller9,
+                  controller: _correoController,
                 ),
                 Text(
                   "Contraseña: ",
                   style: TextStyle(fontSize: 25),
                 ),
                  TextField(
+                  controller: _passwordController,
                   obscureText: passwordVisible,
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
-                    hintText: "Password",
-                    labelText: "Password",
-                    helperText:"Password must contain special character",
                     helperStyle:TextStyle(color:Colors.green),
                     suffixIcon: IconButton(
                       icon: Icon(passwordVisible
@@ -344,10 +343,9 @@ class _RegisterScreenState extends State<RegisterScreen>{
                 ElevatedButton(
                   style: style,
                   onPressed: () {
-                    if(int.parse(_cedulaController.text) !=0){
-                      print(_cedulaController.text);
+                    if(int.parse(_cedulaController.text) !=0 && _nombreController.text != "" && int.parse(_edadController.text) >0 && isDate(dateInput.text) && double.parse(_pesoController.text) != 0 && double.parse(_imcController.text) > 0 &&_direccionController.text != "" && isEmail(_correoController.text) && _passwordController.text != ""){
+                      crearCliente(int.parse(_cedulaController.text), _nombreController.text, _primerApellidoController.text, _segundoApellidoController.text, int.parse(_edadController.text), dateInput.text,double.parse(_pesoController.text), double.parse(_imcController.text), _direccionController.text, _correoController.text, _passwordController.text);
                     } 
-                    crearCliente();
                     //_navigateToClass(context);
                   },
                   child: const Text('Registrarse'),
@@ -372,19 +370,20 @@ class _RegisterScreenState extends State<RegisterScreen>{
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen()));
   }
 
-  void crearCliente(){
+  void crearCliente(int cedula, String nombre, String apellido1, String apellido2, int edad,String fecha_nacimiento, double peso, double imc,String direccion, String correo, String password){
+  DateTime fecha = DateTime.parse(fecha_nacimiento);
     CLIENTE cliente = CLIENTE(
-  cedula: 123456789, 
-  Nombre: "Juan", 
-  Apellido1: "Pérez", 
-  Apellido2: "García", 
-  Dia_nacimiento: "01",
-  Mes_nacimiento: "01",
-  Year: "1990",
-  peso: 70.5,
-  Direccion: "Calle 123, Ciudad",
-  Correo: "juanperez@example.com",
-  Password: "contraseña123"
+  cedula: cedula, 
+  Nombre: nombre, 
+  Apellido1: apellido1, 
+  Apellido2: apellido2, 
+  Dia_nacimiento: fecha.day.toString(),
+  Mes_nacimiento:fecha.month.toString(),
+  Year: fecha.year.toString(),
+  peso: peso,
+  Direccion: direccion,
+  Correo: correo,
+  Password: password
 );
     this._sqliteService.createCliente(cliente);
 
