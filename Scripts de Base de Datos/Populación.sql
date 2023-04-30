@@ -50,16 +50,16 @@ UPDATE EMPLEADO SET Nombre_suc = 'GymTEC Campus Central Cartago' WHERE Cedula = 
 
 -- Se tiene por default un Spa inactivo en cada sucursal.
 ---DBCC CHECKIDENT('SPA', RESEED, 0);
-INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus Central Cartago');
+INSERT INTO SPA (Nombre_sucursal, Estado) VALUES ('GymTEC Campus Central Cartago', 0);
 ---DBCC CHECKIDENT('SPA', RESEED, 0);
-INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus San José');
+INSERT INTO SPA (Nombre_sucursal, Estado) VALUES ('GymTEC Campus San José', 0);
 ---DBCC CHECKIDENT('SPA', RESEED, 1);
-INSERT INTO SPA (Nombre_sucursal) VALUES ('GymTEC Campus San Carlos');
+INSERT INTO SPA (Nombre_sucursal, Estado) VALUES ('GymTEC Campus San Carlos', 0);
 
 -- Se tiene por default una Tienda inactiva en cada sucursal.
 ---DBCC CHECKIDENT('TIENDA', RESEED, 0);
-INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus Central Cartago');
+INSERT INTO TIENDA (Nombre_sucursal, Estado) VALUES ('GymTEC Campus Central Cartago', 0);
 ---DBCC CHECKIDENT('TIENDA', RESEED, 0);
-INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus San José');
+INSERT INTO TIENDA (Nombre_sucursal, Estado) VALUES ('GymTEC Campus San José', 0);
 ---DBCC CHECKIDENT('TIENDA', RESEED, 1);
-INSERT INTO TIENDA (Nombre_sucursal) VALUES ('GymTEC Campus San Carlos');
+INSERT INTO TIENDA (Nombre_sucursal, Estado) VALUES ('GymTEC Campus San Carlos', 0);

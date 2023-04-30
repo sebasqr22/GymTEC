@@ -6,6 +6,7 @@
 -- Carné: 2020158103
 
 CREATE DATABASE [prueba_funcionalidad]
+DROP DATABASE prueba_funcionalidad
 
 USE [prueba_funcionalidad];
 
@@ -56,12 +57,25 @@ DBCC CHECKIDENT('CLASE', RESEED, 0)
 
 -- //////////////////////////////////////////////// COPIAR GIMNASIO /////////////////////////////////////////////////////////////////
 
-INSERT INTO SUCURSAL 
-SELECT 'Copia de ' + Nombre, Distrito, Canton, Provincia, Fecha_apertura, Hora_apertura, Hora_cierre, Max_capacidad, Cedula_administrador
-FROM SUCURSAL;
+INSERT INTO TRATAMIENTO_SPA
 
-select * from sucursal;
+SELECT Nombre_sucursal, Num_spa
+FROM SPA
+WHERE Nombre_sucursal = 'GymTEC Campus Heredia'
 
+SELECT Id_tratamiento
+FROM TRATAMIENTO_SPA 
+WHERE Nsucursal = 'GymTEC Campus Central Cartago'
+
+select * from sucursal
+select * from SPA
+select * from TRATAMIENTO_SPA
+select * from TRATAMIENTO
+
+insert into sucursal values ('GymTEC Campus Heredia', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789)
+insert into spa (Nombre_sucursal, Estado) values ('GymTEC Campus Heredia', 0)
+insert into TRATAMIENTO_SPA values ('GymTEC Campus Central Cartago', 1, 3)
+insert into TRATAMIENTO_SPA values ('GymTEC Campus Central Cartago', 1, 1)
 
 -- //////////////////////////////////////////////// BUSQUEDA DE UNA CLASE ////////////////////////////////////////////////////////////////
 

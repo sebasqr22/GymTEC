@@ -8,6 +8,7 @@
 CREATE DATABASE [GymTEC-DB];
 
 USE [GymTEC-DB];
+use prueba_funcionalidad
 
 -- Tabla EMPLEADO
 -- Informacion de los empleados del gimnasio.
@@ -123,6 +124,7 @@ CREATE TABLE PRODUCTO (
 CREATE TABLE TIENDA (
 	Nombre_sucursal NVARCHAR(50) NOT NULL,
 	Num_tienda INT IDENTITY(1,1) NOT NULL,
+	Estado BIT NOT NULL -- 0: Inactivo. 1: Activo.
 	PRIMARY KEY (Nombre_sucursal, Num_tienda)
 );
 
@@ -131,6 +133,7 @@ CREATE TABLE TIENDA (
 CREATE TABLE SPA (
 	Nombre_sucursal NVARCHAR(50) NOT NULL,
 	Num_spa INT IDENTITY(1,1) NOT NULL,
+	Estado BIT NOT NULL -- 0: Inactivo. 1: Activo.
 	PRIMARY KEY (Nombre_sucursal, Num_spa)
 );
 
@@ -139,7 +142,7 @@ CREATE TABLE SPA (
 CREATE TABLE VENTA_PRODUCTO (
 	Nsucursal NVARCHAR(50) NOT NULL,
 	Tienda INT NOT NULL,
-	Codigo_producto INT NOT NULL,
+	Codigo_producto INT,
 	PRIMARY KEY (Nsucursal, Tienda, Codigo_producto)
 );
 
@@ -148,7 +151,7 @@ CREATE TABLE VENTA_PRODUCTO (
 CREATE TABLE TRATAMIENTO_SPA (
 	Nsucursal NVARCHAR(50) NOT NULL,
 	Spa INT NOT NULL,
-	Id_tratamiento INT NOT NULL,
+	Id_tratamiento INT,
 	PRIMARY KEY (Nsucursal, Spa, Id_tratamiento)
 );
 
@@ -157,6 +160,7 @@ CREATE TABLE TRATAMIENTO_SPA (
 CREATE TABLE INVENTARIO_EN_SUCURSAL (
 	Nombre_sucursal NVARCHAR(50) NOT NULL,
 	Num_serie_maquina INT NOT NULL,
+	Costo_sucursal FLOAT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Num_serie_maquina)
 );
 
