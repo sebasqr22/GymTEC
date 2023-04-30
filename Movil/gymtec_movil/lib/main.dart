@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gymtec_movil/database_handler.dart';
 import 'package:gymtec_movil/sqlite_service.dart';
 import 'package:intl/intl.dart';
 import 'package:validators/validators.dart';
@@ -111,19 +112,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   style: style,
-                  onPressed: () {
+                  onPressed: () async {
                     if(isEmail(emailAddress.text) && _controllerPassword.text.isNotEmpty){
                             texterror = false;
-                            /*
-                            var requestBody = {
-                              'parametro1': 'valor1',
-                              'parametro2': 'valor2',
-                            };
-                            Future<http.Response> LoginCliente() {
-                                return http.get(Uri.parse('this.http.get("https://localhost:7194/usuarios/cliente/LoginCliente'));
-                            }
-                            */
-                            _navigateToWelcome(context);
+                            _verCliente(emailAddress.text,_controllerPassword.text).then((clienteEncontrado) {
+                              if(clienteEncontrado){
+                                _navigateToWelcome(context);
+                              }
+                            });
                         }else{
                             texterror = true;
                     }
@@ -160,15 +156,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void _navigateToRegister(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
   }
+
+  Future<bool> _verCliente(String correo, String password) {
+    Future<bool> miCliente = _sqliteService.iniciarSesion(correo,password);
+    return miCliente;
+  }
 }
 
 
 class RegisterScreen  extends StatefulWidget {
   const RegisterScreen ({super.key});
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-  // This class is the configuration for the state.
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -176,14 +173,15 @@ class RegisterScreen  extends StatefulWidget {
 
 
 class _RegisterScreenState extends State<RegisterScreen>{
-  late TextEditingController _controller,_controller2,controller3,controller4,controller5,controller6,controller7,controller8,controller9;
+  late SqliteService _sqliteService;
+  late TextEditingController _cedulaController,_controller2,controller3,controller4,controller5,controller6,controller7,controller8,controller9;
   TextEditingController dateInput = TextEditingController();
   bool passwordVisible=false;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _cedulaController = TextEditingController();
     _controller2 = TextEditingController();
     controller3 = TextEditingController();
     controller4 = TextEditingController();
@@ -193,6 +191,8 @@ class _RegisterScreenState extends State<RegisterScreen>{
     controller8 = TextEditingController();
     controller9 = TextEditingController();
     passwordVisible = true;
+    this._sqliteService= SqliteService();
+    this._sqliteService.initializeDB();
   }
 
   @override
@@ -216,7 +216,8 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller,
+                  keyboardType: TextInputType.number,
+                  controller: _cedulaController,
                 ),
                 Text(
                   "Nombre: ",
@@ -343,7 +344,11 @@ class _RegisterScreenState extends State<RegisterScreen>{
                 ElevatedButton(
                   style: style,
                   onPressed: () {
-                    _navigateToClass(context);
+                    if(int.parse(_cedulaController.text) !=0){
+                      print(_cedulaController.text);
+                    } 
+                    crearCliente();
+                    //_navigateToClass(context);
                   },
                   child: const Text('Registrarse'),
                 ),
@@ -365,6 +370,24 @@ class _RegisterScreenState extends State<RegisterScreen>{
 
   void _navigateToClass(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen()));
+  }
+
+  void crearCliente(){
+    CLIENTE cliente = CLIENTE(
+  cedula: 123456789, 
+  Nombre: "Juan", 
+  Apellido1: "Pérez", 
+  Apellido2: "García", 
+  Dia_nacimiento: "01",
+  Mes_nacimiento: "01",
+  Year: "1990",
+  peso: 70.5,
+  Direccion: "Calle 123, Ciudad",
+  Correo: "juanperez@example.com",
+  Password: "contraseña123"
+);
+    this._sqliteService.createCliente(cliente);
+
   }
 }
 

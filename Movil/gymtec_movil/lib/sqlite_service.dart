@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 class SqliteService {
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
-    
+
 
     /*
     FALTA ESTO
@@ -34,20 +34,38 @@ class SqliteService {
     final Database db = await initializeDB();
     final id = await db.insert(
       'CLIENTE', cliente.toMap(), 
-      conflictAlgorithm: ConflictAlgorithm.replace);   
-      }
-
-  Future<CLIENTE> obtenerClientePorCedula(int cedula) async {
-  final db = await initializeDB();
-  final List<Map<String, Object?>> queryResult = await db.query(
-    'CLIENTES',
-    where: '${CLIENTE.cedulaColumn} = ?',
-    whereArgs: [cedula],
-  );
-  if (queryResult.isNotEmpty) {
-    return CLIENTE.fromMap(queryResult.first);
+      conflictAlgorithm: ConflictAlgorithm.replace); 
+    print("CLIENTE CREADO EXITOSAMENTE");  
   }
-  return new CLIENTE();
+
+  Future<bool> obtenerClientePorCedula(double cedula) async {
+  final db = await initializeDB();
+  List<Map<String, dynamic>> maps = await db.query('CLIENTE',
+      where: 'cedula = ?',
+      whereArgs: [cedula]);
+
+  if (maps.length > 0) {
+    print(maps.first);
+    CLIENTE c = CLIENTE.fromMap(maps.first);
+    //print(CLIENTE.fromMap(maps.first).Nombre);
+    return true;
+  }
+
+  return false;
+}
+
+  Future<bool> iniciarSesion(String correo, String password) async {
+  final db = await initializeDB();
+  List<Map<String, dynamic>> maps = await db.query('CLIENTE',
+      where: 'Correo = ? AND Contraseña = ?',
+      whereArgs: [correo, password]);
+
+  if (maps.length > 0) {
+    print("here");
+    return true;
+  }
+  print("here2");
+  return false;
 }
 
 }
