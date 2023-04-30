@@ -8,7 +8,6 @@
 CREATE DATABASE [GymTEC-DB];
 
 USE [GymTEC-DB];
-use prueba_funcionalidad
 
 -- Tabla EMPLEADO
 -- Informacion de los empleados del gimnasio.
