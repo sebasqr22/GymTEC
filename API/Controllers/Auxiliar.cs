@@ -14,6 +14,31 @@ namespace funcionesAuxiliares{
     public class AuxiliarFunctions{
         private DatabaseHandler DB_Handler = new DatabaseHandler();  
 
+        public dynamic VerificarExistenciaSucursal_aux(string Nombre_sucursal){
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM SUCURSAL WHERE Nombre_sucursal = @Nombre_sucursal";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Nombre_sucursal", Nombre_sucursal);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+
+                DB_Handler.CerrarConexion();
+                return false;
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaSucursal" };
+            }
+        }
+
+
         public dynamic VerInventario_aux(){
             try{
                 // VER INVENTARIO EXISTENTE
