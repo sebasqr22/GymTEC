@@ -1,5 +1,5 @@
-import { GetApiService } from './../get-api.service';
 import {Component, OnInit} from '@angular/core';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +8,7 @@ import {Component, OnInit} from '@angular/core';
 })
 export class LoginComponent implements OnInit{
   mostrar = false
-  constructor(private getApi:GetApiService) { }
+  constructor(private auth:AuthService) { }
 
   ngOnInit() {
     const signin = document.getElementById("signin") as HTMLInputElement
@@ -57,5 +57,8 @@ export class LoginComponent implements OnInit{
         console.log(data);
       });*/
     }
+  }
+  login(form:any){
+    console.log(form.value)
   }
 }

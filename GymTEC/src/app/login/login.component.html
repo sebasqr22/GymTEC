@@ -16,9 +16,9 @@
 
 
 
-            <form>
+            <form #form="ngForm" (ngSubmit)="login(form)">
               <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" ngModel>
                 <label for="floatingInput">Email address</label>
               </div>
               <div class="form-floating mb-3">
