@@ -59,6 +59,13 @@ export class LoginComponent implements OnInit{
     }
   }
   login(form:any){
-    console.log(form.value)
+    const valor = form.value;
+    this.auth.login(parseInt(valor.cedula, 10), valor.password);
+  }
+
+  register(form:any){
+    const valor = form.value;
+    // @ts-ignore
+    this.auth.register(parseInt(valor.cedula, 10), valor.nombre, valor.apellido1, valor.apellido2, valor.fechaNacimiento, parseInt(valor.peso, 10), valor.direccion, valor.email, valor.password);
   }
 }
