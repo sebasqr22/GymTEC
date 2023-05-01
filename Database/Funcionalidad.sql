@@ -59,8 +59,8 @@ DBCC CHECKIDENT('CLASE', RESEED, 0)
 
 INSERT INTO TRATAMIENTO_SPA
 
-SELECT Nombre_sucursal, Num_spa
-FROM SPA
+SELECT SPA.Nombre_sucursal, SPA.Num_spa, TRATAMIENTO_SPA.Id_tratamiento
+FROM SPA FULL OUTER JOIN TRATAMIENTO_SPA ON Num_spa = Spa
 WHERE Nombre_sucursal = 'GymTEC Campus Heredia'
 
 SELECT Id_tratamiento
