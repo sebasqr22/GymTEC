@@ -69,7 +69,7 @@ toNum(dato:string):number{
 }
 
 agregarSedes(){
-  
+
 }
 
 //pantalla AGREGAR SPA
@@ -83,7 +83,7 @@ activacionSpa(){
   const capacidad = document.getElementById('gestSucSpaCAPACIDAD') as HTMLInputElement;
   const numerosTelefono = document.getElementById('gestSucTiendaNUMEROS2') as HTMLInputElement;
   const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO2') as HTMLInputElement;
-  
+
   //this.auth.agregarSpa
 }
 
@@ -121,7 +121,7 @@ guardarPuesto(){
   const puesto = document.getElementById('gestPuestPSELECT') as HTMLInputElement;
   const ID = document.getElementById('gestPuestPID') as HTMLInputElement;
   const descripcion = document.getElementById('gestPuestPDESCRIPCION') as HTMLInputElement;
-  
+
 }
 
 eliminarPuesto(){
@@ -148,8 +148,8 @@ gestionDePlanilla(){
 //pantalla de gestion de empleados!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 gestionEmpleados(){
   const empleado = document.getElementById('gestEmplPSELECT') as HTMLInputElement;
-  const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement; 
-  const nombre = document.getElementById('gestEmplPNOMBRE') as HTMLInputElement; 
+  const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
+  const nombre = document.getElementById('gestEmplPNOMBRE') as HTMLInputElement;
   const direccion = document.getElementById('gestEmplPDIRECCION') as HTMLInputElement;
   const puestoQueDesem = document.getElementById('gestEmplPPUESTO') as HTMLInputElement;
   const sucursalQueTrabaja = document.getElementById('gestEmplPSUCURSAL') as HTMLInputElement;
@@ -168,14 +168,14 @@ gestionEmpleados(){
 }
 
 eliminarEmpleado(){
-  const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement; 
+  const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
   //@ts-ignore
   this.auth.eliminarEmpleados(this.toNum(cedula.value));
 }
 
 agregarEmpleado(){
-  const cedula = document.getElementById('gestEmplPNUMEROCEDULA22') as HTMLInputElement; 
-  const nombre = document.getElementById('gestEmplPNOMBRE2') as HTMLInputElement; 
+  const cedula = document.getElementById('gestEmplPNUMEROCEDULA22') as HTMLInputElement;
+  const nombre = document.getElementById('gestEmplPNOMBRE2') as HTMLInputElement;
   const direccion = document.getElementById('gestEmplPDIRECCION2') as HTMLInputElement;
   const puestoQueDesem = document.getElementById('gestEmplPPUESTO2') as HTMLInputElement;
   const sucursalQueTrabaja = document.getElementById('gestEmplPSUCURSAL2') as HTMLInputElement;
@@ -214,7 +214,7 @@ eliminarServicio(){
 agregarNuevoServicio(){
   const nombre = document.getElementById('gestServPNOMBRE2') as HTMLInputElement;
   const descripcion = document.getElementById('gestServPDESCRIPCION2') as HTMLInputElement;
-  
+
 }
 
 //pantalla de gestion de tipos de equipos!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -238,8 +238,8 @@ agregarNuevoEquipo(){
 
 guardarInventario(){
   const gym = document.getElementById('gestInvetPGYM') as HTMLInputElement;
-  const maquina = document.getElementById('gestInvetPMAQUINA') as HTMLInputElement; 
-  const tipoDeEquipo = document.getElementById('gestInvetPTIPO') as HTMLInputElement; 
+  const maquina = document.getElementById('gestInvetPMAQUINA') as HTMLInputElement;
+  const tipoDeEquipo = document.getElementById('gestInvetPTIPO') as HTMLInputElement;
   const marca = document.getElementById('gestInvetPMARCA') as HTMLInputElement;
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE') as HTMLInputElement;
   const costo = document.getElementById('gestInvetPCOSTOSUCURSAL') as HTMLInputElement;
@@ -251,14 +251,73 @@ eliminarInventario(){
 }
 
 agregarNuevoInventario(){
-  const tipoDeEquipo = document.getElementById('gestInvetPTIPO2') as HTMLInputElement; 
+  const tipoDeEquipo = document.getElementById('gestInvetPTIPO2') as HTMLInputElement;
   const marca = document.getElementById('gestInvetPMARCA2') as HTMLInputElement;
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE2') as HTMLInputElement;
   const costo = document.getElementById('gestInvetPCOSTOSUCURSAL2') as HTMLInputElement;
   const asignadaAGym = document.getElementById('gestInvetPASIGNADA2') as HTMLInputElement;
+
+  //agregarInventario
 }
 
+//pantalla GESTION DE PRODUCTOS
+  modificarProducto(){
+    const gym = document.getElementById('gestProductPGYM') as HTMLInputElement;
+    const producto = document.getElementById('gestProductPPRODUCTO') as HTMLInputElement;
+    const nombre = document.getElementById('gestProductPNOMBRE') as HTMLInputElement;
+    const numeroBarras = document.getElementById('gestProductPCODIGO') as HTMLInputElement;
+    const descripcion = document.getElementById('gestProductPDESCRIPCION') as HTMLInputElement;
+    const costo = document.getElementById('gestProductPCOSTO') as HTMLInputElement;
 
+    //modificar producto api
+  }
+
+  eliminarProducto(){
+    //eliminar producto
+  }
+
+  agregarProducto(){
+    const gym = document.getElementById('gestProductPGYMNUEVO') as HTMLInputElement;
+    const nombre = document.getElementById('gestProductPNOMBRENUEVO') as HTMLInputElement;
+    const numeroBarras = document.getElementById('gestProductPCODIGONUEVO') as HTMLInputElement;
+    const descripcion = document.getElementById('gestProductPDESCRIPCIONNUEVO') as HTMLInputElement;
+    const costo = document.getElementById('gestProductPCOSTONUEVO') as HTMLInputElement;
+  }
+
+//pantalla CONFIGURACION GIMNASIO
+  asociarTratamientoASpa(){
+    const spa = document.getElementById('confGymPSpaSPA') as HTMLInputElement;
+    const tratamiento = document.getElementById('confGymPSpaTratamiento') as HTMLInputElement;
+
+    this.auth.agregarTratamientosSPA(spa.value, tratamiento.valueAsNumber);
+  }
+
+  asociarProductosATienda(){
+    const gym = document.getElementById('confGymPProducSELECT') as HTMLInputElement;
+    const producto = document.getElementById('confGymPProducASOCIAR') as HTMLInputElement;
+
+    //agregarProducto
+  }
+
+  asociarInventario(){
+    const gym = document.getElementById('confGymPInventarioGYM') as HTMLInputElement;
+    const equipo = document.getElementById('confGymPInventarioEQUIPO') as HTMLInputElement;
+
+    //agregarProducto
+  }
+
+  crearClase(){
+    const clase = document.getElementById('confGymPCrearSELECT') as HTMLInputElement;
+    const tipo = document.getElementById('confGymPCrearTIPO') as HTMLInputElement;
+    const instructor = document.getElementById('confGymPCrearINSTRUCTOR') as HTMLInputElement;
+    const grupalOno = document.getElementById('confGymPCrearGRUPOIND') as HTMLInputElement;
+    const capacidad = document.getElementById('confGymPCrearCAPACIDAD') as HTMLInputElement;
+    const fecha = document.getElementById('confGymPCrearFECHA') as HTMLInputElement;
+    const horaInicio = document.getElementById('confGymPCrearHORAINICIO') as HTMLInputElement;
+    const horaFinalizacion = document.getElementById('confGymPCrearHORAFINAL') as HTMLInputElement;
+
+    //crearClase
+  }
 
 }//bracket que cierra
 

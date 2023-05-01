@@ -906,10 +906,10 @@
                 <label for="gestProductPCOSTO">Costo</label>
               </div>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="modificarProducto()">
               Guardar
             </a>
-            <a class="btn btn-outline-danger btn-user btn-block">
+            <a class="btn btn-outline-danger btn-user btn-block"(click)="eliminarProducto()">
               Eliminar
             </a>
 
@@ -945,7 +945,7 @@
               </div>
 
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarProducto()">
               Guardar
             </a><br>
 
@@ -962,7 +962,7 @@
               <select class="form-control form-control-user" id="confGymPSpaTratamiento"></select>
               <label for="confGymPSpaTratamiento">Tratamiento</label>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="asociarTratamientoASpa()">
               Asociar
             </a><br>
             <hr class="sidebar-divider my-0">
@@ -999,7 +999,7 @@
               <select class="form-control form-control-user" id="confGymPProducASOCIAR"></select>
               <label for="confGymPProducASOCIAR">Producto</label>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="asociarProductosATienda()">
               Asociar
             </a><br>
             <hr class="sidebar-divider my-0">
@@ -1022,7 +1022,7 @@
           </div>
 
           <div id="confGymPInventario" class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800">Asociación de tratamientos al SPA del Gimnacio</h1>
+            <h1 class="h3 mb-4 text-gray-800">Asociación de Inventario</h1>
             <div class="col-sm">
               <select class="form-control form-control-user" id="confGymPInventarioGYM"></select>
               <label for="confGymPInventarioGYM">GYM</label>
@@ -1032,7 +1032,7 @@
               <select class="form-control form-control-user" id="confGymPInventarioEQUIPO"></select>
               <label for="confGymPInventarioEQUIPO">Equipo</label>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="asociarInventario()">
               Asociar
             </a><br>
             <hr class="sidebar-divider my-0">
