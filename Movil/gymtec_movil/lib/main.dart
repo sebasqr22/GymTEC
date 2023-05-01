@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:gymtec_movil/database_handler.dart';
+import 'package:gymtec_movil/sqlite_service.dart';
 import 'package:intl/intl.dart';
+import 'package:validators/validators.dart';
+import 'package:http/http.dart' as http;
 
-void main() => runApp(MyApp());
+const double font_size = 20;
+const double title_size = 32;
+
+void main() => runApp(
+  MyApp()
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  static const String _title = 'Flutter Stateful Clicker Counter';
+  static const String _title = 'GymTec';
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -21,50 +30,45 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-  // This class is the configuration for the state.
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late TextEditingController _controller;
-  late TextEditingController _controller2;
+  late SqliteService _sqliteService;
+  late TextEditingController _controllerPassword;
+  TextEditingController emailAddress = TextEditingController();
+  bool texterror = false;
   bool passwordVisible=false;
+  
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
-    _controller2 = TextEditingController();
+    _controllerPassword = TextEditingController();
     passwordVisible=true;
+    emailAddress.text = "";
+    this._sqliteService= SqliteService();
+    this._sqliteService.initializeDB();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     final ButtonStyle style =
-        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: font_size));
     return Scaffold(
+        backgroundColor: Colors.cyan[100],
         appBar: AppBar(
             title: Text(
           "Bienvenido a GymTEC",
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.normal),
+          style: TextStyle(fontSize: title_size, fontWeight: FontWeight.normal),
         )),
         body: Center(
           child: Container(
             child: Column(
               children: <Widget>[
-                Text(
-                  "LOGO",
-                  style: TextStyle(fontSize: 25),
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
                 ),
                 Icon(IconData(0xe043, fontFamily: 'MaterialIcons'),size:60),
                 Text(
@@ -72,20 +76,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller,
-                ),
+                       controller: emailAddress ,
+                       decoration: InputDecoration( 
+                        hintText: "Correo electrónico",
+                         errorText: texterror?"Email no válido":null,
+                       )
+                     ),
                 Text(
                   "Contraseña: ",
                   style: TextStyle(fontSize: 25),
                 ),
                  TextField(
+                  controller: _controllerPassword,
                   obscureText: passwordVisible,
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
-                    hintText: "Password",
-                    labelText: "Password",
-                    helperText:"Password must contain special character",
-                    helperStyle:TextStyle(color:Colors.green),
+                    hintText: "Contraseña",
                     suffixIcon: IconButton(
                       icon: Icon(passwordVisible
                           ? Icons.visibility
@@ -106,8 +112,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   style: style,
-                  onPressed: () {
-                    _navigateToWelcome(context);
+                  onPressed: () async {
+                    if(isEmail(emailAddress.text) && _controllerPassword.text.isNotEmpty){
+                            texterror = false;
+                            _verCliente(emailAddress.text,_controllerPassword.text).then((clienteEncontrado) {
+                              if(clienteEncontrado){
+                                _navigateToWelcome(context);
+                              }
+                            });
+                        }else{
+                            texterror = true;
+                    }
                   },
                   child: const Text('Iniciar sesión'),
                 ),
@@ -125,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 600.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
-              color: Colors.white,
+              color: Colors.cyan[100],
               boxShadow: [
                 BoxShadow(color: Colors.blue, spreadRadius: 3),
               ],
@@ -141,15 +156,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void _navigateToRegister(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
   }
+
+  Future<bool> _verCliente(String correo, String password) {
+    Future<bool> miCliente = _sqliteService.iniciarSesion(correo,password);
+    return miCliente;
+  }
 }
 
 
 class RegisterScreen  extends StatefulWidget {
   const RegisterScreen ({super.key});
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-  // This class is the configuration for the state.
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -157,23 +173,27 @@ class RegisterScreen  extends StatefulWidget {
 
 
 class _RegisterScreenState extends State<RegisterScreen>{
-  late TextEditingController _controller,_controller2,controller3,controller4,controller5,controller6,controller7,controller8,controller9;
+  late SqliteService _sqliteService;
+  late TextEditingController _cedulaController,_nombreController,_primerApellidoController,_segundoApellidoController,_edadController,_pesoController,_imcController,_direccionController,_correoController,_passwordController;
   TextEditingController dateInput = TextEditingController();
   bool passwordVisible=false;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
-    _controller2 = TextEditingController();
-    controller3 = TextEditingController();
-    controller4 = TextEditingController();
-    controller5 = TextEditingController();
-    controller6 = TextEditingController();
-    controller7 = TextEditingController();
-    controller8 = TextEditingController();
-    controller9 = TextEditingController();
+    _cedulaController = TextEditingController();
+    _nombreController = TextEditingController();
+    _primerApellidoController = TextEditingController();
+    _segundoApellidoController = TextEditingController();
+    _edadController = TextEditingController();
+    _pesoController = TextEditingController();
+    _imcController = TextEditingController();
+    _direccionController = TextEditingController();
+    _correoController = TextEditingController();
+    _passwordController = TextEditingController();
     passwordVisible = true;
+    this._sqliteService= SqliteService();
+    this._sqliteService.initializeDB();
   }
 
   @override
@@ -181,15 +201,15 @@ class _RegisterScreenState extends State<RegisterScreen>{
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Scaffold(
+      backgroundColor: Colors.cyan[100],
       appBar: AppBar(title: const Text('Bienvenido a GymTec')),
       body: Center(
           child: Container(
             child: ListView(
               padding: EdgeInsets.all(20),
               children: <Widget>[
-                Text(
-                  "LOGO",
-                  style: TextStyle(fontSize: 25),
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
                 ),
                 Icon(IconData(0xe043, fontFamily: 'MaterialIcons'),size:60),
                 Text(
@@ -197,37 +217,36 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller,
+                  keyboardType: TextInputType.number,
+                  controller: _cedulaController,
                 ),
                 Text(
                   "Nombre: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: _controller2,
-                  obscureText: true,
+                  controller: _nombreController,
                 ),
                 Text(
-                  "Primer Aepllido: ",
+                  "Primer Apellido: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller3,
+                  controller: _primerApellidoController,
                 ),
                 Text(
                   "Segundo Apellido: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller4,
-                  obscureText: true,
+                  controller: _segundoApellidoController,
                 ),
                 Text(
                   "Edad: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller5,
+                  controller: _edadController,
                 ),
                 Text(
                   "Fecha de Nacimiento: ",
@@ -268,40 +287,38 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller6,
+                  controller: _pesoController,
                 ),
                 Text(
                   "IMC: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller7,
+                  controller: _imcController,
                 ),
                 Text(
                   "Dirección: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller8,
+                  controller: _direccionController,
                 ),
                 Text(
                   "Correo Electrónico: ",
                   style: TextStyle(fontSize: 25),
                 ),
                 TextField(
-                  controller: controller9,
+                  controller: _correoController,
                 ),
                 Text(
                   "Contraseña: ",
                   style: TextStyle(fontSize: 25),
                 ),
                  TextField(
+                  controller: _passwordController,
                   obscureText: passwordVisible,
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
-                    hintText: "Password",
-                    labelText: "Password",
-                    helperText:"Password must contain special character",
                     helperStyle:TextStyle(color:Colors.green),
                     suffixIcon: IconButton(
                       icon: Icon(passwordVisible
@@ -324,7 +341,10 @@ class _RegisterScreenState extends State<RegisterScreen>{
                 ElevatedButton(
                   style: style,
                   onPressed: () {
-                    _navigateToClass(context);
+                    if(int.parse(_cedulaController.text) !=0 && _nombreController.text != "" && int.parse(_edadController.text) >0 && isDate(dateInput.text) && double.parse(_pesoController.text) != 0 && double.parse(_imcController.text) > 0 &&_direccionController.text != "" && isEmail(_correoController.text) && _passwordController.text != ""){
+                      crearCliente(int.parse(_cedulaController.text), _nombreController.text, _primerApellidoController.text, _segundoApellidoController.text, int.parse(_edadController.text), dateInput.text,double.parse(_pesoController.text), double.parse(_imcController.text), _direccionController.text, _correoController.text, _passwordController.text);
+                      _navigateToClass(context);
+                    } 
                   },
                   child: const Text('Registrarse'),
                 ),
@@ -335,7 +355,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
             height: 600.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
-              color: Colors.white,
+              color: Colors.cyan[100],
               boxShadow: [
                 BoxShadow(color: Colors.blue, spreadRadius: 3),
               ],
@@ -346,6 +366,25 @@ class _RegisterScreenState extends State<RegisterScreen>{
 
   void _navigateToClass(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen()));
+  }
+
+  void crearCliente(int cedula, String nombre, String apellido1, String apellido2, int edad,String fecha_nacimiento, double peso, double imc,String direccion, String correo, String password){
+  DateTime fecha = DateTime.parse(fecha_nacimiento);
+    CLIENTE cliente = CLIENTE(
+  cedula: cedula, 
+  Nombre: nombre, 
+  Apellido1: apellido1, 
+  Apellido2: apellido2, 
+  Dia_nacimiento: fecha.day.toString(),
+  Mes_nacimiento:fecha.month.toString(),
+  Year: fecha.year.toString(),
+  peso: peso,
+  Direccion: direccion,
+  Correo: correo,
+  Password: password
+);
+    this._sqliteService.createCliente(cliente);
+
   }
 }
 
@@ -378,14 +417,14 @@ class _ClassScreenState extends State<ClassScreen>{
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Scaffold(
+      backgroundColor: Colors.cyan[100],
       body: Center(
           child: Container(
             child: ListView(
               padding: EdgeInsets.all(40),
               children: <Widget>[
-                Text(
-                  "LOGO",
-                  style: TextStyle(fontSize: 25),
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
                 ),
                 Text(
                   "Búsqueda de una clase",
@@ -454,7 +493,7 @@ class _ClassScreenState extends State<ClassScreen>{
             height: 600.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
-              color: Colors.white,
+              color: Colors.cyan[100],
               boxShadow: [
                 BoxShadow(color: Colors.blue, spreadRadius: 3),
               ],
@@ -516,13 +555,13 @@ class _RegisterClassState extends State<RegisterClass> {
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Scaffold(
+      backgroundColor: Colors.cyan[100],
         body: Center(
           child: Container(
             child: Column(
               children: <Widget>[
-                Text(
-                  "LOGO",
-                  style: TextStyle(fontSize: 25),
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
                 ),
                 Text(
                   "Registro de Clase en SUCURSAL NOMBRE: ",
@@ -533,7 +572,6 @@ class _RegisterClassState extends State<RegisterClass> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const ListTile(
-                        leading: Icon(Icons.album),
                         title: Text('The Enchanted Nightingale'),
                         subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
                       ),
@@ -541,12 +579,7 @@ class _RegisterClassState extends State<RegisterClass> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           TextButton(
-                            child: const Text('BUY TICKETS'),
-                            onPressed: () {/* ... */},
-                          ),
-                          const SizedBox(width: 8),
-                          TextButton(
-                            child: const Text('LISTEN'),
+                            child: const Text('Registrar clase'),
                             onPressed: () {/* ... */},
                           ),
                           const SizedBox(width: 8),
@@ -569,7 +602,7 @@ class _RegisterClassState extends State<RegisterClass> {
             height: 600.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
-              color: Colors.white,
+              color: Colors.cyan[100],
               boxShadow: [
                 BoxShadow(color: Colors.blue, spreadRadius: 3),
               ],
