@@ -122,7 +122,7 @@ CREATE TABLE PRODUCTO (
 -- Tiendas dentro de las sucursales.
 CREATE TABLE TIENDA (
 	Nombre_sucursal NVARCHAR(50) NOT NULL,
-	Num_tienda INT IDENTITY(1,1) NOT NULL,
+	Num_tienda INT NOT NULL,
 	Estado BIT NOT NULL -- 0: Inactivo. 1: Activo.
 	PRIMARY KEY (Nombre_sucursal, Num_tienda)
 );
@@ -131,7 +131,7 @@ CREATE TABLE TIENDA (
 -- Spas dentro de las sucursales.
 CREATE TABLE SPA (
 	Nombre_sucursal NVARCHAR(50) NOT NULL,
-	Num_spa INT IDENTITY(1,1) NOT NULL,
+	Num_spa INT NOT NULL,
 	Estado BIT NOT NULL -- 0: Inactivo. 1: Activo.
 	PRIMARY KEY (Nombre_sucursal, Num_spa)
 );
@@ -191,13 +191,13 @@ CREATE TABLE TIPO_DE_MAQUINA (
 -- Informacion de una clase impartida en una sucursal.
 CREATE TABLE CLASE (
 	Id_servicio INT NOT NULL,
-	Num_clase INT IDENTITY(1,1) NOT NULL,
+	Num_clase INT NOT NULL,
 	Fecha DATE,
 	Hora_inicio TIME,
 	Hora_fin TIME,
 	Modalidad NVARCHAR(50),
 	Capacidad INT,
-	Cedula_instructor INT NOT NULL,
+	Cedula_instructor INT,
 	PRIMARY KEY (Id_servicio, Num_clase)
 );
 

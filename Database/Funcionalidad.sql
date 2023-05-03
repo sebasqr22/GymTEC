@@ -5,11 +5,6 @@
 -- Estudiante: Eduardo Bolívar Minguet
 -- Carné: 2020158103
 
-CREATE DATABASE [prueba_funcionalidad]
-DROP DATABASE prueba_funcionalidad
-
-USE [prueba_funcionalidad];
-
 -- ///////////////////////////////////////// CONFIGURACION DE GIMNASIO /////////////////////////////////////////////////
 
 -- Aqui se agregarian valores a las tablas:
@@ -47,35 +42,27 @@ SELECT Id_servicio, DATEADD(WEEK, 1, Fecha), Hora_inicio, Hora_fin, Modalidad, C
 FROM CLASE WHERE '2023-04-01' < Fecha AND Fecha < '2023-04-30'
 GROUP BY Id_servicio, Num_clase, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor
 
-insert into CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor) values (5, '2023-04-27', '10:00', '11:00', 'Virtual', '50', 123456789)
-insert into CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor) values (1, '2023-04-28', '14:00', '15:50', 'Presencial', '20', 123456789)
-
-select * from clase;
-
-delete from clase
-DBCC CHECKIDENT('CLASE', RESEED, 0)
-
 -- //////////////////////////////////////////////// COPIAR GIMNASIO /////////////////////////////////////////////////////////////////
 
+DECLARE @GymNuevo AS VARCHAR = 'GymTEC Campus Heredia'
+DECLARE @NumTiendaNueva AS INT = 4
+DECLARE @GymCopiado AS VARCHAR = 'GymTEC Campus Central Cartago'
+
 INSERT INTO TRATAMIENTO_SPA
-
-SELECT SPA.Nombre_sucursal, SPA.Num_spa, TRATAMIENTO_SPA.Id_tratamiento
-FROM SPA FULL OUTER JOIN TRATAMIENTO_SPA ON Num_spa = Spa
-WHERE Nombre_sucursal = 'GymTEC Campus Heredia'
-
-SELECT Id_tratamiento
+SELECT @GymNuevo, @NumTiendaNueva, Id_tratamiento
 FROM TRATAMIENTO_SPA 
-WHERE Nsucursal = 'GymTEC Campus Central Cartago'
+WHERE Nsucursal = @GymCopiado
 
-select * from sucursal
-select * from SPA
-select * from TRATAMIENTO_SPA
-select * from TRATAMIENTO
+INSERT INTO VENTA_PRODUCTO
+SELECT @GymNuevo, @NumTiendaNueva, Codigo_producto 
+FROM VENTA_PRODUCTO 
+WHERE Nsucursal = @GymCopiado
 
-insert into sucursal values ('GymTEC Campus Heredia', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789)
-insert into spa (Nombre_sucursal, Estado) values ('GymTEC Campus Heredia', 0)
-insert into TRATAMIENTO_SPA values ('GymTEC Campus Central Cartago', 1, 3)
-insert into TRATAMIENTO_SPA values ('GymTEC Campus Central Cartago', 1, 1)
+INSERT INTO CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad)
+SELECT Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad
+FROM CLASE JOIN EMPLEADO ON Cedula_instructor = Cedula
+WHERE Nombre_suc = 'GymTEC Campus Central Cartago'
+
 
 -- //////////////////////////////////////////////// BUSQUEDA DE UNA CLASE ////////////////////////////////////////////////////////////////
 
@@ -83,8 +70,6 @@ SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + A
 FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
 WHERE SUCURSAL.Nombre = 'GymTEC Campus Central Cartago' AND CLASE.Id_servicio = 5 AND '2023-04-01' <= Fecha AND Fecha <= '2023-05-31'
 GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad
-
-SELECT * FROM CLASE;
 
 -- ///////////////////////////////////////////////// REGISTRO EN UNA CLASE ///////////////////////////////////////////////////////////////////
 
@@ -94,4 +79,12 @@ INSERT INTO CLIENTE VALUES (9013, 'N', 'H', 'L', '02', '08', '2009', 60.0, 'Aqui
 INSERT INTO ASISTENCIA_CLASE VALUES (9012, 5, 1) -- REGISTRO DE PRUEBA
 INSERT INTO ASISTENCIA_CLASE VALUES (9012, 5, 4)
 INSERT INTO ASISTENCIA_CLASE VALUES (9013, 5, 4)
+
+-- Agregar tienda
+
+INSERT INTO TIENDA
+SELECT Nombre_sucursal, MAX(Num_tienda) + 1, 0
+FROM TIENDA
+WHERE Nombre_sucursal = 'GymTEC Campus Central Cartago'
+GROUP BY Nombre_sucursal
 
