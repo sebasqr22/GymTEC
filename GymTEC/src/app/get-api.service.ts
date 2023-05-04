@@ -91,4 +91,45 @@ export class GetApiService {
     return this.http.get(`https://localhost:7194/usuarios/admin/VerProductos`);
   }
 
+  eliminarProductos(codigoBarras:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarProducto?codigoBarras=${codigoBarras}`, {})
+  }
+
+  crearClase(servicioClase:string, cedulaInstructor:string, modalidad:string, capacidad:string, fecha:string, horaInicio:string, horaFinal:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/CrearClase?servicioClase=${servicioClase}&cedulaInstructor=${cedulaInstructor}&modalidad=${modalidad}&capacidad=${capacidad}&fecha=${fecha}&horaInicio=${horaInicio}&horaFinal=${horaFinal}`, {})
+  }
+  
+  elimnarClase(Id_servicio:string, cedulaInstructor:string, modalidad:string, fecha:string, horaInicio:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarClase?Id_servicio=${Id_servicio}&cedulaInstructor=${cedulaInstructor}&modalidad=${modalidad}&fecha=${fecha}&horaInicio=${horaInicio}`, {});
+  }
+
+  verClases(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerClases`);
+  }
+
+  agregarInventario(numSerie:string, marca:string, nombreSucursal:string,  idTipoEquipo:string,  descripcion:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarInventario?numSerie=${numSerie}&marca=${marca}&nombreSucursal=${nombreSucursal}&idTipoEquipo=${idTipoEquipo}&descripcion=${descripcion}`, {})
+  }
+
+  verInventario(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerInventario`);
+  }
+
+  eliminarInventario(Numero_serie:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarInventario?Numero_serie=${Numero_serie}`, {})
+  }
+
+
+  copiarCalendarioActividades(Id_servicio:string, fechaInicio:string, fechaFin:string, Hora_inicio:string, Hora_fin:string, Modalidad:string, Capacidad:string, Cedula_instructor:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarCalendarioActividades?Id_servicio=${Id_servicio}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&Hora_inicio=${Hora_inicio}&Hora_fin=${Hora_fin}&Modalidad=${Modalidad}&Capacidad=${Capacidad}&Cedula_instructor=${Cedula_instructor}&`, {})
+  }
+
+  buscarCliente(){
+    //falta la ruta para este metodo
+    //return this.http.get()
+  }
+
+  registrarClienteEnClase(){
+    
+  }
 }
