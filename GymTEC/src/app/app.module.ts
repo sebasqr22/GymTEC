@@ -8,6 +8,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ClienteComponent } from './cliente/cliente.component';
 import { AdminComponent } from './admin/admin.component';
 import {HttpClientModule} from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 const appRoutes:Routes=[
   {path:'', component: LoginComponent},
@@ -26,6 +27,7 @@ const appRoutes:Routes=[
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule

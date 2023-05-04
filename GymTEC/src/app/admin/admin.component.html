@@ -359,7 +359,7 @@
 
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="activacionSpa()">
               Guardar
             </a>
 
@@ -416,7 +416,7 @@
               </div>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="activacionTienda()">
               Guardar
             </a>
 
@@ -443,10 +443,10 @@
               </div>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarTratamiento()">
               Guardar
             </a>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="eliminarTratamiento()">
               Eliminar
             </a>
 
@@ -457,7 +457,7 @@
               <input type="text" class="form-control form-control-user" id="gestTratSpaNOOMBRENUEVO">
               <label for="gestTratSpaID">Nombre</label>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarNuevoTratamiento()">
               Guardar Nuevo
             </a>
 
@@ -489,11 +489,11 @@
 
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="guardarPuesto()">
               Guardar
             </a>
 
-            <a class="btn btn-outline-danger btn-user btn-block">
+            <a class="btn btn-outline-danger btn-user btn-block" (click)="eliminarPuesto()">
               Eliminar
             </a>
 
@@ -512,7 +512,7 @@
               </div>
 
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarNuevoPuesto()">
               Guardar Nuevo
             </a>
 
@@ -553,7 +553,7 @@
               <label for="gestTipPlaPDESCRIPCION">Descripción</label>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="gestionDePlanilla()">
               Guardar
             </a>
 
@@ -618,10 +618,10 @@
               </div>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="gestionEmpleados()">
               Guardar
             </a>
-            <a class="btn btn-outline-danger btn-user btn-block">
+            <a class="btn btn-outline-danger btn-user btn-block" (click)="eliminarEmpleado()">
               Eliminar
             </a>
 
@@ -675,7 +675,7 @@
               </div>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarEmpleado()">
               Guardar nuevo
             </a>
             <br>
@@ -706,11 +706,11 @@
               </div>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="guardarServicio()">
               Guardar
             </a>
 
-            <a class="btn btn-outline-danger btn-user btn-block">
+            <a class="btn btn-outline-danger btn-user btn-block" (click)="eliminarServicio()">
               Eliminar
             </a>
 
@@ -730,7 +730,7 @@
                 <label for="gestServPDESCRIPCION2">Descripción</label>
               </div>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarNuevoServicio()">
               Crear
             </a>
           </div> <!--GESTION DE SERVICIOS-->
@@ -758,10 +758,10 @@
               </div>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="guardarTipoEquipo()">
               Guardar
             </a>
-            <a class="btn btn-outline-danger btn-user btn-block">
+            <a class="btn btn-outline-danger btn-user btn-block" (click)="eliminarTipoEquipo()">
               Eliminar
             </a>
 
@@ -780,7 +780,7 @@
               </div>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarNuevoEquipo()">
               Guardar nuevo
             </a>
             <br>
@@ -829,10 +829,10 @@
               </div>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="guardarInventario()">
               Guardar
             </a>
-            <a class="btn btn-outline-danger btn-user btn-block">
+            <a class="btn btn-outline-danger btn-user btn-block" (click)="agregarNuevoEquipo()">
               Eliminar
             </a>
 
@@ -906,10 +906,10 @@
                 <label for="gestProductPCOSTO">Costo</label>
               </div>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="modificarProducto()">
               Guardar
             </a>
-            <a class="btn btn-outline-danger btn-user btn-block">
+            <a class="btn btn-outline-danger btn-user btn-block"(click)="eliminarProducto()">
               Eliminar
             </a>
 
@@ -945,7 +945,7 @@
               </div>
 
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarProducto()">
               Guardar
             </a><br>
 
@@ -962,7 +962,7 @@
               <select class="form-control form-control-user" id="confGymPSpaTratamiento"></select>
               <label for="confGymPSpaTratamiento">Tratamiento</label>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="asociarTratamientoASpa()">
               Asociar
             </a><br>
             <hr class="sidebar-divider my-0">
@@ -999,7 +999,7 @@
               <select class="form-control form-control-user" id="confGymPProducASOCIAR"></select>
               <label for="confGymPProducASOCIAR">Producto</label>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="asociarProductosATienda()">
               Asociar
             </a><br>
             <hr class="sidebar-divider my-0">
@@ -1022,7 +1022,7 @@
           </div>
 
           <div id="confGymPInventario" class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800">Asociación de tratamientos al SPA del Gimnacio</h1>
+            <h1 class="h3 mb-4 text-gray-800">Asociación de Inventario</h1>
             <div class="col-sm">
               <select class="form-control form-control-user" id="confGymPInventarioGYM"></select>
               <label for="confGymPInventarioGYM">GYM</label>
@@ -1032,7 +1032,7 @@
               <select class="form-control form-control-user" id="confGymPInventarioEQUIPO"></select>
               <label for="confGymPInventarioEQUIPO">Equipo</label>
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="asociarInventario()">
               Asociar
             </a><br>
             <hr class="sidebar-divider my-0">
@@ -1102,7 +1102,7 @@
 
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="crearClase()">
               Crear
             </a><br>
 
