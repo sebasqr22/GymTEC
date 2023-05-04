@@ -77,5 +77,4 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
   }
 
-
 }
