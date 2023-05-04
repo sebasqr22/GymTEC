@@ -829,8 +829,6 @@ namespace Metodos{
         }
       }
 
-
-      
       [HttpGet]
       [Route("admin/VerTratamientosSPA")]
       public dynamic VerTratamientosSPA(){
