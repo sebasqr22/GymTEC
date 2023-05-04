@@ -20,6 +20,137 @@ namespace Metodos{
       AuxiliarFunctions aux = new AuxiliarFunctions();
 
       [HttpPost]
+      [Route("admin/AsociarServiciosASucursal")]
+      public dynamic AsociarServiciosASucursal(string nombreSucursal, string idServicio){
+        try{
+          string queryInsert = "INSERT INTO SERVICIOS_EN_SUCURSAL VALUES (@nombreSucursal, @idServicio)";
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+
+          using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@nombreSucursal", nombreSucursal);
+            comando.Parameters.AddWithValue("@idServicio", Int64.Parse(idServicio));
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+          
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpPost]
+      [Route("admin/AsociarInventario")]
+      public dynamic AsociarInventario(string nombre_sucursal, string num_serie, string costo) {
+        try { 
+          string queryInventario = @"INSERT INTO INVENTARIO_EN_SUCURSAL
+                                    VALUES (@NombreSucursal, @NumSerie, @Costo)";
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          using (SqlCommand comando = new SqlCommand(queryInventario, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@NombreSucursal", nombre_sucursal);
+            comando.Parameters.AddWithValue("@NumSerie", num_serie);
+            comando.Parameters.AddWithValue("@Costo", Math.Round(Convert.ToDouble(costo, CultureInfo.InvariantCulture), 2));
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok"};
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+      
+      [HttpPost]
+      [Route("admin/AsociarProductosATienda")]
+      public dynamic AsociarProductosATienda(string nombreSucursal, string numTienda, string codigoProducto){
+        try{
+          string queryInsert = "INSERT INTO VENTA_PRODUCTO VALUES (@nombreSucursal, @numTienda, @codigoProducto)";
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          
+          using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@nombreSucursal", nombreSucursal);
+            comando.Parameters.AddWithValue("@numTienda", Int64.Parse(numTienda));
+            comando.Parameters.AddWithValue("@codigoProducto", Int64.Parse(codigoProducto));
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+          
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpPost]
+      [Route("admin/AsociarTratamientoASpa")]
+      public dynamic AsociarTratamientosASPA(string numSpa, string nombreSucursal, string idTratamiento){
+        try{
+          // ACTUALIZAR TRATAMIENTO_SPA
+          string query = "INSERT INTO TRATAMIENTO_SPA VALUES (@nombreSucursal, @numSpa, @idTratamiento)";
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@nombreSucursal", nombreSucursal);
+            comando.Parameters.AddWithValue("@numSpa", Int64.Parse(numSpa));
+            comando.Parameters.AddWithValue("@idTratamiento", Int64.Parse(idTratamiento));
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+
+        }catch  (Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpPost]
+      [Route("admin/CopiarGimnasio")]
+      public dynamic CopiarGimnasio(string gym_nuevo, string gym_viejo, string num_spa, string num_tienda) {
+        try {
+          dynamic existeGym1 = aux.VerificarExistenciaSucursal_aux(gym_viejo);
+          dynamic existeGym2 = aux.VerificarExistenciaSucursal_aux(gym_nuevo);
+          if (!existeGym1 || !existeGym2) {
+            return new { message = "No existe esta sucursal" };
+          }
+          string queryCopiar = @"INSERT INTO TRATAMIENTO_SPA
+                              SELECT @GymNuevo, @NumSpaNuevo, Id_tratamiento
+                              FROM TRATAMIENTO_SPA 
+                              WHERE Nsucursal = @GymCopiado
+
+                              INSERT INTO VENTA_PRODUCTO
+                              SELECT @GymNuevo, @NumTiendaNueva, Codigo_producto 
+                              FROM VENTA_PRODUCTO 
+                              WHERE Nsucursal = @GymCopiado
+
+                              INSERT INTO CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad)
+                              SELECT Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad
+                              FROM CLASE JOIN EMPLEADO ON Cedula_instructor = Cedula
+                              WHERE Nombre_suc = @GymCopiado";
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          using (SqlCommand comando = new SqlCommand(queryCopiar, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@GymNuevo", gym_nuevo);
+            comando.Parameters.AddWithValue("@NumSpaNuevo", Int64.Parse(num_spa));
+            comando.Parameters.AddWithValue("@NumTiendaNueva", Int64.Parse(num_tienda));
+            comando.Parameters.AddWithValue("@GymCopiado", gym_viejo);
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+
+      }
+
+      [HttpPost]
       [Route("cliente/RegistrarClienteEnClase")]
       public dynamic RegistrarClienteEnClase(string cedulaClient, string Num_clase, string Id_servicio, string Fecha, string Hora_inicio,string Modalidad, string Cedula_instructor){
         try{
@@ -923,7 +1054,7 @@ namespace Metodos{
               // INSERTAR DATOS EN LA BASE DE DATOS
               DB_Handler.ConectarServer();
               DB_Handler.AbrirConexion();
-              string queryInsert = "INSERT INTO CLIENTE VALUES (@Cedula, @Nombre, @Apellido1, @Apellido2, @Dia_nacimiento, @Mes_nacimiento, @Año_nacimiento, @Peso, @Direccion, @Correo, @Contraseña)";
+              string queryInsert = "INSERT INTO CLIENTE VALUES (@Cedula, @Nombre, @Apellido1, @Apellido2, @Dia_nacimiento, @Mes_nacimiento, @Ano_nacimiento, @Peso, @Direccion, @Correo, @Contrasena)";
               using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
                   comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
                   comando.Parameters.AddWithValue("@Nombre", nombre);
@@ -931,11 +1062,11 @@ namespace Metodos{
                   comando.Parameters.AddWithValue("@Apellido2", apellido2);
                   comando.Parameters.AddWithValue("@Dia_nacimiento", dia);
                   comando.Parameters.AddWithValue("@Mes_nacimiento", mes);
-                  comando.Parameters.AddWithValue("@Año_nacimiento", anio);
+                  comando.Parameters.AddWithValue("@Ano_nacimiento", anio);
                   comando.Parameters.AddWithValue("@Peso", Math.Round(Convert.ToDouble(peso, CultureInfo.InvariantCulture), 2));
                   comando.Parameters.AddWithValue("@Direccion", direccion);
                   comando.Parameters.AddWithValue("@Correo", correoElectronico);
-                  comando.Parameters.AddWithValue("@Contraseña", aux.EncriptarContrasenaMD5_aux(contrasena));
+                  comando.Parameters.AddWithValue("@Contrasena", aux.EncriptarContrasenaMD5_aux(contrasena));
                   comando.ExecuteNonQuery();
               }
               DB_Handler.CerrarConexion();
@@ -958,27 +1089,50 @@ namespace Metodos{
           if (cedula.Length != 9 || cedula[0] == '0') {
               return new { message = "error" };}
 
-          // VERIFICAR QUE EL CLIENTE EXISTA EN LA BASE DE DATOS
-          DB_Handler.ConectarServer();
-          DB_Handler.AbrirConexion();
-          string querySelect = "SELECT * FROM CLIENTE WHERE Cedula = @Cedula AND Contraseña = @Contraseña";
-          using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-              comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
-              comando.Parameters.AddWithValue("@Contraseña", aux.EncriptarContrasenaMD5_aux(contrasena));
-              SqlDataReader reader = comando.ExecuteReader();
-              if (reader.HasRows) {
-                  DB_Handler.CerrarConexion();
-                  return new { message = "ok" };
-              } else {
-                  DB_Handler.CerrarConexion();
-                  return new { message = "error" };
-              }
+          // VERIFICAR QUE NO SEA UN EMPLEADO
+          dynamic esEmpleado = aux.VerificarExistenciaEmpleado_aux(cedula);
+          if (esEmpleado) {
+             DB_Handler.ConectarServer();
+            DB_Handler.AbrirConexion();
+            string querySelect = "SELECT * FROM EMPLEADO WHERE Cedula = @Cedula AND Contrasena = @Contrasena";
+            using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+                comando.Parameters.AddWithValue("@Contrasena", aux.EncriptarContrasenaMD5_aux(contrasena));
+                SqlDataReader reader = comando.ExecuteReader();
+                if (reader.HasRows) {
+                    DB_Handler.CerrarConexion();
+                    return new { message = "empleado" };
+                } else {
+                    DB_Handler.CerrarConexion();
+                    return new { message = "error" };
+                }
+            }
+          }
+          else{
+            // VERIFICAR QUE EL CLIENTE EXISTA EN LA BASE DE DATOS
+            DB_Handler.ConectarServer();
+            DB_Handler.AbrirConexion();
+            string querySelect2 = "SELECT * FROM CLIENTE WHERE Cedula = @Cedula AND Contrasena = @Contrasena";
+            using (SqlCommand comando = new SqlCommand(querySelect2, DB_Handler.conectarDB)) {
+                comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+                comando.Parameters.AddWithValue("@Contrasena", aux.EncriptarContrasenaMD5_aux(contrasena));
+                SqlDataReader reader = comando.ExecuteReader();
+                if (reader.HasRows) {
+                    DB_Handler.CerrarConexion();
+                    return new { message = "cliente" };
+                } else {
+                    DB_Handler.CerrarConexion();
+                    return new { message = "error" };
+                }
+            }
           }
 
         }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };
         }
+
+          
       }
 
     }

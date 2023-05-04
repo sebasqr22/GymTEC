@@ -20,7 +20,7 @@ CREATE TABLE EMPLEADO (
 	Canton NVARCHAR(30),
 	Provincia NVARCHAR(30) NOT NULL,
 	Correo NVARCHAR(30) NOT NULL,
-	Contraseña NVARCHAR(30) NOT NULL,
+	Contrasena NVARCHAR(30) NOT NULL,
 	Salario FLOAT NOT NULL,
 	Id_puesto INT NOT NULL,
 	Id_planilla INT NOT NULL,
@@ -52,11 +52,11 @@ CREATE TABLE CLIENTE (
 	Apellido2 NVARCHAR(50),
 	Dia_nacimiento VARCHAR(2) NOT NULL,
 	Mes_nacimiento VARCHAR(2) NOT NULL,
-	Año_nacimiento VARCHAR(4) NOT NULL,
+	Ano_nacimiento VARCHAR(4) NOT NULL,
 	Peso FLOAT NOT NULL,
 	Direccion NVARCHAR(50),
 	Correo NVARCHAR(50) NOT NULL,
-	Contraseña NVARCHAR(50) NOT NULL,
+	Contrasena NVARCHAR(50) NOT NULL,
 	PRIMARY KEY (Cedula)
 );
 
@@ -167,7 +167,7 @@ CREATE TABLE INVENTARIO_EN_SUCURSAL (
 -- Relaciona la sucursal con los servicios que ofrece.
 CREATE TABLE SERVICIOS_EN_SUCURSAL (
 	Nombre_sucursal NVARCHAR(50) NOT NULL,
-	Id_servicio INT IDENTITY(1,1) NOT NULL,
+	Id_servicio INT NOT NULL,
 	PRIMARY KEY (Nombre_sucursal, Id_servicio)
 );
 

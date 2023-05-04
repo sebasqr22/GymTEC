@@ -1,9 +1,9 @@
--- Instituto Tecnológico de Costa Rica
+-- Instituto Tecnolï¿½gico de Costa Rica
 -- Curso: Bases de Datos
 -- Proyecto I - GymTEC
 -- Script funcionalidad
--- Estudiante: Eduardo Bolívar Minguet
--- Carné: 2020158103
+-- Estudiante: Eduardo Bolï¿½var Minguet
+-- Carnï¿½: 2020158103
 
 CREATE DATABASE [prueba_funcionalidad]
 DROP DATABASE prueba_funcionalidad
@@ -57,25 +57,24 @@ DBCC CHECKIDENT('CLASE', RESEED, 0)
 
 -- //////////////////////////////////////////////// COPIAR GIMNASIO /////////////////////////////////////////////////////////////////
 
+DECLARE @GymNuevo AS VARCHAR = 'GymTEC Campus Heredia'
+DECLARE @NumTiendaNueva AS INT = 4
+DECLARE @GymCopiado AS VARCHAR = 'GymTEC Campus Central Cartago'
+
 INSERT INTO TRATAMIENTO_SPA
-
-SELECT Nombre_sucursal, Num_spa
-FROM SPA
-WHERE Nombre_sucursal = 'GymTEC Campus Heredia'
-
-SELECT Id_tratamiento
+SELECT @GymNuevo, @NumTiendaNueva, Id_tratamiento
 FROM TRATAMIENTO_SPA 
-WHERE Nsucursal = 'GymTEC Campus Central Cartago'
+WHERE Nsucursal = @GymCopiado
 
-select * from sucursal
-select * from SPA
-select * from TRATAMIENTO_SPA
-select * from TRATAMIENTO
+INSERT INTO VENTA_PRODUCTO
+SELECT @GymNuevo, @NumTiendaNueva, Codigo_producto 
+FROM VENTA_PRODUCTO 
+WHERE Nsucursal = @GymCopiado
 
-insert into sucursal values ('GymTEC Campus Heredia', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789)
-insert into spa (Nombre_sucursal, Estado) values ('GymTEC Campus Heredia', 0)
-insert into TRATAMIENTO_SPA values ('GymTEC Campus Central Cartago', 1, 3)
-insert into TRATAMIENTO_SPA values ('GymTEC Campus Central Cartago', 1, 1)
+INSERT INTO CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad)
+SELECT Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad
+FROM CLASE JOIN EMPLEADO ON Cedula_instructor = Cedula
+WHERE Nombre_suc = 'GymTEC Campus Central Cartago'
 
 -- //////////////////////////////////////////////// BUSQUEDA DE UNA CLASE ////////////////////////////////////////////////////////////////
 
