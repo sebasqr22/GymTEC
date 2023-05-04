@@ -77,5 +77,16 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
   }
 
+  activarSpa(nombreSucursal:string, numSpa:number){
+    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarSPA?nombreSucursal=${nombreSucursal}&numSpa=${numSpa}`, {});
+  }
+
+  activarTienda(nombreSucursal:string, numTienda:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarTienda?nombreSucursal=${nombreSucursal}&numTienda=${numTienda}`, {});
+  }
+
+  verProductos(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerProductos`);
+  }
 
 }

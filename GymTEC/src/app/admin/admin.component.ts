@@ -84,7 +84,7 @@ activacionSpa(){
   const numerosTelefono = document.getElementById('gestSucTiendaNUMEROS2') as HTMLInputElement;
   const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO2') as HTMLInputElement;
 
-  //this.auth.agregarSpa
+  //
 }
 
 //pantalla activar tienda!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

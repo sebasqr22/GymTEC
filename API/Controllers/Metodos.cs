@@ -352,7 +352,7 @@ namespace Metodos{
           }
       }
 
-      [HttpPost]
+      [HttpGet]
       [Route("admin/VerProductos")]
       public dynamic VerProductos(){
         try{
