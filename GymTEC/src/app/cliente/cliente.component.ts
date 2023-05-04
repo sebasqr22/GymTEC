@@ -1,4 +1,7 @@
 import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cliente',
@@ -6,7 +9,7 @@ import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
   styleUrls: ['./cliente.component.css']
 })
 export class ClienteComponent implements OnInit{
-  constructor(private renderer: Renderer2, private el: ElementRef) { }
+  constructor(private renderer: Renderer2, private el: ElementRef, private auth: AuthService,private router:Router,private route: ActivatedRoute ) { }
 
   dropdown = 0
 
@@ -17,7 +20,18 @@ export class ClienteComponent implements OnInit{
     const registro = document.getElementById("registro") as HTMLInputElement
     busqueda.style.display = 'none'
     registro.style.display = 'none'
+
+    this.auth.capaSeguridad(this.extraerCedula())
   }
+  
+  extraerCedula():string{
+    var cedula = ""
+    this.route.params.subscribe(params => {
+      cedula = params['cedula'];
+    })
+    return cedula;
+  }
+
 
   desbloquear(vista:string){
     const activo = document.getElementById(this.activo) as HTMLInputElement
