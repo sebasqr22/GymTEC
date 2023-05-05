@@ -20,6 +20,68 @@ namespace Metodos{
       AuxiliarFunctions aux = new AuxiliarFunctions();
 
       [HttpPost]
+      [Route("admin/EliminarSucursal")]
+      public dynamic EliminarSucursal(string ){
+        try{
+          return new { message = "ok" };
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpPost]
+      [Route("admin/VerSucursal")]
+      public dynamic VerSucursales(){
+        try{
+          return aux.VerSucursales_aux();
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpPost]
+      [Route("admin/AgregarSucursal")]
+      public dynamic AgregarSucursal(string Nombre, string Distrito, string Provincia, string Fecha_apertura, string Hora_apertura, string Hora_cierre, string Max_capacidad, string Cedula_administrador){
+        try{
+
+          string queryInsert = "INSERT INTO SUCURSAL VALUES (@Nombre, @Distrito, @Provincia, @Fecha_apertura, @Hora_apertura, @Hora_cierre, @Max_capacidad, @Cedula_administrador)";
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+
+          // Verificar que el administrador exista y la sucursal no
+          dynamic existeEmpleado = aux.VerificarExistenciaEmpleado_aux(Cedula_administrador);
+          if (!existeEmpleado) {
+            return new { message = "No existe este empleado" };
+          }
+          dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(Nombre);
+          if (existeSucursal) {
+            return new { message = "Ya existe esta sucursal" };
+          }
+
+          // Insertar sucursal
+          using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Nombre", Nombre);
+            comando.Parameters.AddWithValue("@Distrito", Distrito);
+            comando.Parameters.AddWithValue("@Provincia", Provincia);
+            comando.Parameters.AddWithValue("@Fecha_apertura", DateTime.ParseExact(Hora_apertura, "yyyy-MM-dd", CultureInfo.InvariantCulture));
+            comando.Parameters.AddWithValue("@Hora_apertura", DateTime.ParseExact(Hora_apertura, "HH:mm:ss", CultureInfo.InvariantCulture));
+            comando.Parameters.AddWithValue("@Hora_cierre", DateTime.ParseExact(Hora_cierre, "HH:mm:ss", CultureInfo.InvariantCulture));
+            comando.Parameters.AddWithValue("@Max_capacidad", Int64.Parse(Max_capacidad));
+            comando.Parameters.AddWithValue("@Cedula_administrador", Int64.Parse(Cedula_administrador));
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+
+        }catch( Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpPost]
       [Route("admin/AsociarServiciosASucursal")]
       public dynamic AsociarServiciosASucursal(string nombreSucursal, string idServicio){
         try{
