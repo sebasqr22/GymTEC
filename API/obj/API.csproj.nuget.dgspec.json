@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj": {}
+    "/home/justin/Documentos/TEC/I Semestre 2023/Bases de datos/GymTEC/API/API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj": {
+    "/home/justin/Documentos/TEC/I Semestre 2023/Bases de datos/GymTEC/API/API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
+        "projectUniqueName": "/home/justin/Documentos/TEC/I Semestre 2023/Bases de datos/GymTEC/API/API.csproj",
         "projectName": "API",
-        "projectPath": "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
-        "packagesPath": "C:\\Users\\jimen\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jimen\\OneDrive\\Escritorio\\GymTEC\\API\\obj\\",
+        "projectPath": "/home/justin/Documentos/TEC/I Semestre 2023/Bases de datos/GymTEC/API/API.csproj",
+        "packagesPath": "/home/justin/.nuget/packages/",
+        "outputPath": "/home/justin/Documentos/TEC/I Semestre 2023/Bases de datos/GymTEC/API/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\jimen\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/justin/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -80,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.408/RuntimeIdentifierGraph.json"
         }
       }
     }
