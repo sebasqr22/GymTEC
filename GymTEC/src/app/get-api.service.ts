@@ -124,6 +124,14 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/CopiarCalendarioActividades?Id_servicio=${Id_servicio}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&Hora_inicio=${Hora_inicio}&Hora_fin=${Hora_fin}&Modalidad=${Modalidad}&Capacidad=${Capacidad}&Cedula_instructor=${Cedula_instructor}&`, {})
   }
 
+  asociarServicioSpaASucursal(nombreSucursal:string, idServicio:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarServiciosASucursal?nombreSucursal=${nombreSucursal}&idServicio=${idServicio}`, {})
+  }
+
+  asociarTratamientoASpa(numSpa:string, nombreSucursal:string, idTratamiento:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarTratamientoASpa?numSpa=${numSpa}&nombreSucursal=${nombreSucursal}&idTratamiento=${idTratamiento}`, {})
+  }
+
   buscarCliente(){
     //falta la ruta para este metodo
     //return this.http.get()

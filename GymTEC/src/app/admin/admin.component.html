@@ -34,20 +34,13 @@
           Funciones Mixtas
         </div>
 
-        <!-- Nav Item - Pages Collapse Menu -->
+
         <li class="nav-item">
-          <a id='gestSuc' class="nav-link collapsed" data-toggle="collapse" data-target="#gestSucC"
-             aria-expanded="false" aria-controls="gestSucC" (click)="mostrar('gestSuc', 'gestSucC')">
-            <i class="fa-regular fa-building"></i>
-            <span>Gestión de sucursales </span>
+          <a id='gestTratSpa' class="nav-link collapsed" data-toggle="collapse"
+             (click)="mostrarPantalla('gestSucSpa')">
+             <i class="fa-regular fa-building"></i>
+            <span>Gestión de sucursales</span>
           </a>
-          <div id="gestSucC" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Funcionalidades</h6>
-              <a class="collapse-item" (click)="mostrarPantalla('gestSucSpa')">Activación de Spa</a>
-              <a class="collapse-item" (click)="mostrarPantalla('gestSucTienda')">Activación de Tienda</a>
-            </div>
-          </div>
         </li>
 
         <!-- Nav Item - Pages Collapse Menu -->
@@ -305,15 +298,7 @@
           </div>
 
           <div id="gestSucSpa" class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800">Activación de Spa</h1>
-
-            <div class="col-sm">
-              <select class="form-control form-control-user" id="sedegestSucSpaSELECT"></select>
-              <label for="gestSucTiendaSELECT">Sede</label>
-            </div>
-
-            <hr class="sidebar-divider my-0">
-            <br><br>
+            <h1 class="h3 mb-4 text-gray-800">Activación de Sucursal</h1>
 
             <div class="form-group row">
               <div class="col-sm-6 mb-3 mb-sm-0">
@@ -322,13 +307,23 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestSucSpaDIRECCION">
-                <label for="gestSucSpaDIRECCION">Dirección</label>
+                <select type="text" class="form-control form-control-user" id="gestSucSpaPROVINCIA"></select>
+                <label for="gestSucSpaPROVINCIA">Provincia</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestSucSpaCANTON">
+                <label for="gestSucSpaCANTON">Canton</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestSucSpaDISTRITO">
+                <label for="gestSucSpaDISTRITO">Distrito</label>
               </div>
 
               <div class="col-sm-6">
                 <input type="date" class="form-control form-control-user" id="gestSucSpaFECHAAPERTURA">
-                <label for="gestSucSpaFECHAAPERTURA">Fecha de Apertu</label>
+                <label for="gestSucSpaFECHAAPERTURA">Fecha de Apertura</label>
               </div>
 
               <div class="col-sm-6">
@@ -352,16 +347,29 @@
                 <label for="gestSucTiendaNUMEROS2">Números de Teléfono</label>
               </div>
 
-              <div class="col-sm">
-                <input type="checkbox" class="form-control form-control-user" id="gestSucTiendaESTADOACTIVO2">
-                <label for="gestSucTiendaESTADOACTIVO2">Estado Activo</label>
-              </div>
-
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block" (click)="activacionSpa()">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="activarSucursal()">
               Guardar
             </a>
+
+            <hr class="sidebar-divider my-0">
+            <br><br>
+            <h1 class="h3 mb-4 text-gray-800">Activación de SPA</h1>  
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="gestSucTiendaSELECT"></select>
+              <label for="gestSucTiendaNUMEROSSEDESPA">Sede</label>
+            </div>
+
+            
+            <hr class="sidebar-divider my-0">
+            <br><br>
+            <h1 class="h3 mb-4 text-gray-800">Activación de Tienda</h1>
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="gestSucTiendaSELECT"></select>
+              <label for="gestSucTiendaNUMEROSSEDETIENDA">Sede</label>
+            </div>
+
 
 
           </div>
@@ -583,8 +591,28 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestEmplPDIRECCION">
-                <label for="gestEmplPDIRECCION">Dirección</label>
+                <input type="text" class="form-control form-control-user" id="gestEmplPPRIMERAPELLIDO">
+                <label for="gestEmplPPRIMERAPELLIDO">Primer apellido</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestEmplPSEGUNDOAPELLIDO">
+                <label for="gestEmplPSEGUNDOAPELLIDO">Segundo Apellido</label>
+              </div>
+
+              <div class="col-sm-6">
+                <select type="text" class="form-control form-control-user" id="gestEmplPPROVINCIA"></select>
+                <label for="gestEmplPPROVINCIA">Provincia</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestEmplPCANTON">
+                <label for="gestEmplPCANTON">Canton</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestEmplPDISTRITO">
+                <label for="gestEmplPDISTRITO">Distrito</label>
               </div>
 
               <div class="col-sm-6">
@@ -640,8 +668,28 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestEmplPDIRECCION2">
-                <label for="gestEmplPDIRECCION2">Dirección</label>
+                <input type="text" class="form-control form-control-user" id="gestEmplPPRIMERAPELLIDO2">
+                <label for="gestEmplPPRIMERAPELLIDO2">Primer apellido</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestEmplPSEGUNDOAPELLIDO2">
+                <label for="gestEmplPSEGUNDOAPELLIDO2">Segundo Apellido</label>
+              </div>
+
+              <div class="col-sm-6">
+                <select type="text" class="form-control form-control-user" id="gestEmplPPROVINCIA2"></select>
+                <label for="gestEmplPPROVINCIA2">Provincia</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestEmplPCANTON2">
+                <label for="gestEmplPCANTON2">Canton</label>
+              </div>
+
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-user" id="gestEmplPDISTRITO2">
+                <label for="gestEmplPDISTRITO2">Distrito</label>
               </div>
 
               <div class="col-sm-6">
