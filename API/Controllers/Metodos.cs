@@ -102,14 +102,14 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AsociarServiciosASucursal")]
-      public dynamic AsociarServiciosASucursal(string codigo_sucursal, string idServicio){
+      public dynamic AsociarServiciosASucursal(string Codigo_sucursal, string idServicio){
         try{
           string queryInsert = "INSERT INTO SERVICIOS_EN_SUCURSAL VALUES (@codigoSucursal, @idServicio)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
 
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@codigoSucursal", Int64.Parse(codigo_sucursal));
+            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
             comando.Parameters.AddWithValue("@idServicio", Int64.Parse(idServicio));
             comando.ExecuteNonQuery();
           }
@@ -124,14 +124,14 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AsociarInventario")]
-      public dynamic AsociarInventario(string codigo_sucursal, string num_serie, string costo) {
+      public dynamic AsociarInventario(string Codigo_sucursal, string num_serie, string costo) {
         try { 
           string queryInventario = @"INSERT INTO INVENTARIO_EN_SUCURSAL
-                                    VALUES (@codigo_sucursal, @NumSerie, @Costo)";
+                                    VALUES (@Codigo_sucursal, @NumSerie, @Costo)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           using (SqlCommand comando = new SqlCommand(queryInventario, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@codigo_sucursal", Int64.Parse(codigo_sucursal));
+            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
             comando.Parameters.AddWithValue("@NumSerie", num_serie);
             comando.Parameters.AddWithValue("@Costo", Math.Round(Convert.ToDouble(costo, CultureInfo.InvariantCulture), 2));
             comando.ExecuteNonQuery();
@@ -146,15 +146,15 @@ namespace Metodos{
       
       [HttpPost]
       [Route("admin/AsociarProductosATienda")]
-      public dynamic AsociarProductosATienda(string codigo_sucursal, string codigoProducto){
+      public dynamic AsociarProductosATienda(string Codigo_sucursal, string Codigo_producto){
         try{
           string queryInsert = "INSERT INTO VENTA_PRODUCTO VALUES (@codigoSucursal, @codigoProducto)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@codigoSucursal", Int64.Parse(codigo_sucursal));
-            comando.Parameters.AddWithValue("@codigoProducto", Int64.Parse(codigoProducto));
+            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
+            comando.Parameters.AddWithValue("@Codigo_producto", Int64.Parse(Codigo_producto));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -168,15 +168,15 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AsociarTratamientoASpa")]
-      public dynamic AsociarTratamientosASPA(string codigo_sucursal, string idTratamiento){
+      public dynamic AsociarTratamientosASPA(string Codigo_sucursal, string Id_tratamiento){
         try{
           // ACTUALIZAR TRATAMIENTO_SPA
-          string query = "INSERT INTO TRATAMIENTO_SPA VALUES (@codigoSucursal, @idTratamiento)";
+          string query = "INSERT INTO TRATAMIENTO_SPA VALUES (@Codigo_sucursal, @idTratamiento)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@codigoSucursal", Int64.Parse(codigo_sucursal));
-            comando.Parameters.AddWithValue("@idTratamiento", Int64.Parse(idTratamiento));
+            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
+            comando.Parameters.AddWithValue("@idTratamiento", Int64.Parse(Id_tratamiento));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -256,16 +256,16 @@ namespace Metodos{
 
       [HttpGet]
       [Route("cliente/BuscarClase")]
-      public dynamic BuscarClase(string Nombre_sucursal,string Id_servicio, string fechaInicio, string fecha_fin){
+      public dynamic BuscarClase(string Codigo_sucursal,string Id_servicio, string fechaInicio, string fecha_fin){
         try{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
                            FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
-                           WHERE SUCURSAL.Nombre = @Nombre_sucursal AND CLASE.Id_servicio = Id_servicio AND @fecha_inicio <= Fecha AND Fecha <= fecha_fin
+                           WHERE SUCURSAL.Codigo_sucursal = @Codigo_sucursal AND CLASE.Id_servicio = Id_servicio AND @fecha_inicio <= Fecha AND Fecha <= fecha_fin
                            GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Nombre_sucursal", Nombre_sucursal);
+            comando.Parameters.AddWithValue("@Codigo_sucursal", Codigo_sucursal);
             comando.Parameters.AddWithValue("@Id_servicio", Id_servicio);
             comando.Parameters.AddWithValue("@fecha_inicio", fechaInicio);
             comando.Parameters.AddWithValue("@fecha_fin", fecha_fin);
@@ -385,7 +385,7 @@ namespace Metodos{
             return new { message = "No existe este tipo de equipo en la BD" };
           }
           // SI SE ASOCIA A UNA SUCURSAL
-          if(!string.IsNullOrEmpty(nombreSucursal)){
+          if(codigoSucursal != null){
             //asociar el inventario a una sucursal
             dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(codigoSucursal);
             if(!existeSucursal){
@@ -404,7 +404,7 @@ namespace Metodos{
               }
               string queryInsert2 = "INSERT INTO INVENTARIO_EN_SUCURSAL VALUES (@Nombre_sucursal, @Num_serie)";
               using (SqlCommand comando = new SqlCommand(queryInsert2, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Nombre_sucursal", nombreSucursal);
+                comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(codigoSucursal));
                 comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
                 comando.ExecuteNonQuery();
               
@@ -470,11 +470,10 @@ namespace Metodos{
           string queryInsert = "DELETE FROM SERVICIO WHERE Id_servicio = @Id_servicio AND Cedula_instructor = @Cedula_instructor AND Modalidad = @Modalidad AND Fecha = @Fecha AND Hora_inicio = @Hora_inicio";
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
             comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(Id_servicio));
-              comando.Parameters.AddWithValue("@Id_servicio", Id_servicio);
-              comando.Parameters.AddWithValue("@Fecha", DateTime.ParseExact(fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
-              comando.Parameters.AddWithValue("@Hora_inicio", TimeSpan.ParseExact(horaInicio, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
-              comando.Parameters.AddWithValue("@Modalidad", modalidad);
-              comando.Parameters.AddWithValue("@Cedula_instructor", Int64.Parse(cedulaInstructor));
+            comando.Parameters.AddWithValue("@Fecha", DateTime.ParseExact(fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
+            comando.Parameters.AddWithValue("@Hora_inicio", TimeSpan.ParseExact(horaInicio, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
+            comando.Parameters.AddWithValue("@Modalidad", modalidad);
+            comando.Parameters.AddWithValue("@Cedula_instructor", Int64.Parse(cedulaInstructor));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();

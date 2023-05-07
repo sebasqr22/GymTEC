@@ -126,7 +126,7 @@ namespace funcionesAuxiliares{
                 // VER INVENTARIO EXISTENTE
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = @"SELECT INVENTARIO.Numero_serie, INVENTARIO.Marca, INVENTARIO_EN_SUCURSAL.Nombre_sucursal, TIPO_DE_MAQUINA.Id_tipo_equipo, TIPO_EQUIPO.Descripcion\
+                string querySelect = @"SELECT INVENTARIO.Numero_serie, INVENTARIO.Marca, INVENTARIO_EN_SUCURSAL.Codigo_sucursal, TIPO_DE_MAQUINA.Id_tipo_equipo, TIPO_EQUIPO.Descripcion
                                      FROM INVENTARIO LEFT OUTER JOIN INVENTARIO_EN_SUCURSAL
                                      ON INVENTARIO.Numero_serie = INVENTARIO_EN_SUCURSAL.Num_serie_maquina
                                      LEFT OUTER JOIN TIPO_DE_MAQUINA 
@@ -141,7 +141,7 @@ namespace funcionesAuxiliares{
                                 inventarioExistentes.Add(new {
                                     NumeroSerie = reader.GetInt32(0),
                                     Marca = reader.GetString(1),
-                                    Nombre_sucursal = reader.GetString(2),
+                                    Codigo_sucursal = reader.GetInt32(2),
                                     Id_tipo_equipo = reader.GetInt32(3),
                                     Descripcion = reader.GetString(4)
                                 });
@@ -296,8 +296,16 @@ namespace funcionesAuxiliares{
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { 
+                            // JSON estructura: { "Descripcion": "Gerente" }
+                            var serviciosExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                serviciosExistentes.Add(new {
+                                    Identificador = reader.GetInt32(0),
+                                    Descripcion = reader.GetString(1)
+                                });
+                            }
                             DB_Handler.CerrarConexion();
-                            return true;
+                            return new JsonResult(serviciosExistentes);
                         }
                         else {
                             DB_Handler.CerrarConexion();
@@ -587,12 +595,11 @@ namespace funcionesAuxiliares{
                             var puestosExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 puestosExistentes.Add(new {
+                                    Identificador = reader.GetInt32(0),
                                     Descripcion = reader.GetString(1)
                                 });
                             }
                             DB_Handler.CerrarConexion();
-
-                            //string json_puestosExistentes = JsonSerializer.Serialize(puestosExistentes);
                             return new JsonResult(puestosExistentes);
                         }
                         else {
@@ -641,7 +648,7 @@ namespace funcionesAuxiliares{
                             while (reader.Read()) {
                                 tratamientosExistentes.Add(new {
                                     Codigo_sucursal = reader.GetInt32(0),
-                                    idTratamiento = reader.GetInt32(2)
+                                    Id_tratamiento = reader.GetInt32(2)
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -696,7 +703,7 @@ namespace funcionesAuxiliares{
                     sb.Append(b.ToString("x2"));
                 }
                 contrasenaEncriptada = sb.ToString();
-                Console.WriteLine(sb.ToString()); // borrar luego
+                Console.WriteLine(sb.ToString()); 
             }            
             return contrasenaEncriptada;
         }
