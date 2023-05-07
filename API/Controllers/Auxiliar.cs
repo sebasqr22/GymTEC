@@ -26,15 +26,16 @@ namespace funcionesAuxiliares{
                             var sucursalesExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 sucursalesExistentes.Add(new {
-                                    Nombre = reader.GetString(0),
-                                    Distrito = reader.GetString(1),
-                                    Canton = reader.GetString(2),
-                                    Provincia = reader.GetString(3),
-                                    Fecha_apertura = reader.GetDateTime(4),
-                                    Hora_apertura = reader.GetTimeSpan(5),
-                                    Hora_cierre = reader.GetTimeSpan(6),
-                                    Max_capacidad = reader.GetInt32(7),
-                                    Cedula_administrador = reader.GetInt32(8)
+                                    Codigo_sucursal = reader.GetInt32(0),
+                                    Nombre = reader.GetString(1),
+                                    Distrito = reader.GetString(2),
+                                    Canton = reader.GetString(3),
+                                    Provincia = reader.GetString(4),
+                                    Fecha_apertura = reader.GetDateTime(5),
+                                    Hora_apertura = reader.GetTimeSpan(6),
+                                    Hora_cierre = reader.GetTimeSpan(7),
+                                    Max_capacidad = reader.GetInt32(8),
+                                    Cedula_administrador = reader.GetInt32(9)
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -53,13 +54,13 @@ namespace funcionesAuxiliares{
             }
         }  
 
-        public dynamic VerificarExistenciaSucursal_aux(string Nombre){
+        public dynamic VerificarExistenciaSucursal_aux(string Codigo_sucursal){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM SUCURSAL WHERE Nombre = @Nombre";
+                string querySelect = "SELECT * FROM SUCURSAL WHERE Codigo_sucursal = @Codigo";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Nombre", Nombre);
+                    comando.Parameters.AddWithValue("@Codigo", Int64.Parse(Codigo_sucursal));
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
@@ -521,7 +522,8 @@ namespace funcionesAuxiliares{
                                     Contraseña = reader.GetString(8),
                                     Salario = reader.GetDouble(9),
                                     Id_puesto = reader.GetInt32(10),
-                                    Id_planilla = reader.GetInt32(11)
+                                    Id_planilla = reader.GetInt32(11),
+                                    Codigo_suc = reader.GetInt32(12)
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -638,8 +640,7 @@ namespace funcionesAuxiliares{
                             var tratamientosExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 tratamientosExistentes.Add(new {
-                                    Nsucursal = reader.GetString(0),
-                                    idSpa = reader.GetInt32(1),
+                                    Codigo_sucursal = reader.GetInt32(0),
                                     idTratamiento = reader.GetInt32(2)
                                 });
                             }
@@ -660,14 +661,13 @@ namespace funcionesAuxiliares{
             }
         }
 
-        public dynamic VerificarExistenciaTratamientoSPA_aux(string nombreSucursal, int numSpa, int idTratamiento){
+        public dynamic VerificarExistenciaTratamientoSPA_aux(string Codigo_sucursal, int idTratamiento){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM TRATAMIENTO_SPA WHERE Nsucursal = @Nsucursal AND Spa = @Spa AND Id_tratamiento = @Id_tratamiento";
+                string querySelect = "SELECT * FROM TRATAMIENTO_SPA WHERE Codigo_sucursal = @Codigo AND Id_tratamiento = @Id_tratamiento";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Nsucursal", nombreSucursal);
-                    comando.Parameters.AddWithValue("@Spa", numSpa);
+                    comando.Parameters.AddWithValue("@Codigo", Int64.Parse(Codigo_sucursal));
                     comando.Parameters.AddWithValue("@Id_tratamiento", idTratamiento);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {

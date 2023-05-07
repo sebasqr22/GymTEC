@@ -21,21 +21,21 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/EliminarSucursal")]
-      public dynamic EliminarSucursal(string nombreSucursal){
+      public dynamic EliminarSucursal(string codigo_suc){
         try{
           // Verificar que la sucursal exista
-          dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(nombreSucursal);
+          dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(codigo_suc);
           if (!existeSucursal) {
             return new { message = "No existe esta sucursal" };
           }
 
           // Eliminar sucursal
-          string queryDelete = "DELETE FROM SUCURSAL WHERE Nombre = @nombreSucursal";
+          string queryDelete = "DELETE FROM SUCURSAL WHERE Codigo_sucursal = @codigo";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
 
           using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Nombre_sucursal", nombreSucursal);
+            comando.Parameters.AddWithValue("@codigo", Int64.Parse(codigo_suc));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -61,10 +61,10 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AgregarSucursal")]
-      public dynamic AgregarSucursal(string Nombre, string Distrito, string Provincia, string Fecha_apertura, string Hora_apertura, string Hora_cierre, string Max_capacidad, string Cedula_administrador){
+      public dynamic AgregarSucursal(string Codigo_sucursal, string Nombre, string Distrito, string Provincia, string Fecha_apertura, string Hora_apertura, string Hora_cierre, string Max_capacidad, string Cedula_administrador){
         try{
 
-          string queryInsert = "INSERT INTO SUCURSAL VALUES (@Nombre, @Distrito, @Provincia, @Fecha_apertura, @Hora_apertura, @Hora_cierre, @Max_capacidad, @Cedula_administrador)";
+          string queryInsert = "INSERT INTO SUCURSAL VALUES (@Codigo_sucursal, @Nombre, @Distrito, @Provincia, @Fecha_apertura, @Hora_apertura, @Hora_cierre, @Max_capacidad, @Cedula_administrador)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
 
@@ -73,13 +73,14 @@ namespace Metodos{
           if (!existeEmpleado) {
             return new { message = "No existe este empleado" };
           }
-          dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(Nombre);
+          dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(Codigo_sucursal);
           if (existeSucursal) {
             return new { message = "Ya existe esta sucursal" };
           }
 
           // Insertar sucursal
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
             comando.Parameters.AddWithValue("@Nombre", Nombre);
             comando.Parameters.AddWithValue("@Distrito", Distrito);
             comando.Parameters.AddWithValue("@Provincia", Provincia);
@@ -101,14 +102,14 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AsociarServiciosASucursal")]
-      public dynamic AsociarServiciosASucursal(string nombreSucursal, string idServicio){
+      public dynamic AsociarServiciosASucursal(string codigo_sucursal, string idServicio){
         try{
-          string queryInsert = "INSERT INTO SERVICIOS_EN_SUCURSAL VALUES (@nombreSucursal, @idServicio)";
+          string queryInsert = "INSERT INTO SERVICIOS_EN_SUCURSAL VALUES (@codigoSucursal, @idServicio)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
 
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@nombreSucursal", nombreSucursal);
+            comando.Parameters.AddWithValue("@codigoSucursal", Int64.Parse(codigo_sucursal));
             comando.Parameters.AddWithValue("@idServicio", Int64.Parse(idServicio));
             comando.ExecuteNonQuery();
           }
@@ -123,14 +124,14 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AsociarInventario")]
-      public dynamic AsociarInventario(string nombre_sucursal, string num_serie, string costo) {
+      public dynamic AsociarInventario(string codigo_sucursal, string num_serie, string costo) {
         try { 
           string queryInventario = @"INSERT INTO INVENTARIO_EN_SUCURSAL
-                                    VALUES (@NombreSucursal, @NumSerie, @Costo)";
+                                    VALUES (@codigo_sucursal, @NumSerie, @Costo)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           using (SqlCommand comando = new SqlCommand(queryInventario, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@NombreSucursal", nombre_sucursal);
+            comando.Parameters.AddWithValue("@codigo_sucursal", Int64.Parse(codigo_sucursal));
             comando.Parameters.AddWithValue("@NumSerie", num_serie);
             comando.Parameters.AddWithValue("@Costo", Math.Round(Convert.ToDouble(costo, CultureInfo.InvariantCulture), 2));
             comando.ExecuteNonQuery();
@@ -145,15 +146,14 @@ namespace Metodos{
       
       [HttpPost]
       [Route("admin/AsociarProductosATienda")]
-      public dynamic AsociarProductosATienda(string nombreSucursal, string numTienda, string codigoProducto){
+      public dynamic AsociarProductosATienda(string codigo_sucursal, string codigoProducto){
         try{
-          string queryInsert = "INSERT INTO VENTA_PRODUCTO VALUES (@nombreSucursal, @numTienda, @codigoProducto)";
+          string queryInsert = "INSERT INTO VENTA_PRODUCTO VALUES (@codigoSucursal, @codigoProducto)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@nombreSucursal", nombreSucursal);
-            comando.Parameters.AddWithValue("@numTienda", Int64.Parse(numTienda));
+            comando.Parameters.AddWithValue("@codigoSucursal", Int64.Parse(codigo_sucursal));
             comando.Parameters.AddWithValue("@codigoProducto", Int64.Parse(codigoProducto));
             comando.ExecuteNonQuery();
           }
@@ -168,15 +168,14 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AsociarTratamientoASpa")]
-      public dynamic AsociarTratamientosASPA(string numSpa, string nombreSucursal, string idTratamiento){
+      public dynamic AsociarTratamientosASPA(string codigo_sucursal, string idTratamiento){
         try{
           // ACTUALIZAR TRATAMIENTO_SPA
-          string query = "INSERT INTO TRATAMIENTO_SPA VALUES (@nombreSucursal, @numSpa, @idTratamiento)";
+          string query = "INSERT INTO TRATAMIENTO_SPA VALUES (@codigoSucursal, @idTratamiento)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@nombreSucursal", nombreSucursal);
-            comando.Parameters.AddWithValue("@numSpa", Int64.Parse(numSpa));
+            comando.Parameters.AddWithValue("@codigoSucursal", Int64.Parse(codigo_sucursal));
             comando.Parameters.AddWithValue("@idTratamiento", Int64.Parse(idTratamiento));
             comando.ExecuteNonQuery();
           }
@@ -191,34 +190,32 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/CopiarGimnasio")]
-      public dynamic CopiarGimnasio(string gym_nuevo, string gym_viejo, string num_spa, string num_tienda) {
+      public dynamic CopiarGimnasio(string new_gym, string copied_gym) {
         try {
-          dynamic existeGym1 = aux.VerificarExistenciaSucursal_aux(gym_viejo);
-          dynamic existeGym2 = aux.VerificarExistenciaSucursal_aux(gym_nuevo);
+          dynamic existeGym1 = aux.VerificarExistenciaSucursal_aux(new_gym);
+          dynamic existeGym2 = aux.VerificarExistenciaSucursal_aux(copied_gym);
           if (!existeGym1 || !existeGym2) {
             return new { message = "No existe esta sucursal" };
           }
           string queryCopiar = @"INSERT INTO TRATAMIENTO_SPA
-                              SELECT @GymNuevo, @NumSpaNuevo, Id_tratamiento
+                              SELECT @CodigoGym1, Id_tratamiento
                               FROM TRATAMIENTO_SPA 
-                              WHERE Nsucursal = @GymCopiado
+                              WHERE Codigo_sucursal = @CodigoGym2
 
                               INSERT INTO VENTA_PRODUCTO
-                              SELECT @GymNuevo, @NumTiendaNueva, Codigo_producto 
+                              SELECT @CodigoGym1, Codigo_producto 
                               FROM VENTA_PRODUCTO 
-                              WHERE Nsucursal = @GymCopiado
+                              WHERE Codigo_sucursal = @CodigoGym2
 
                               INSERT INTO CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad)
                               SELECT Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad
                               FROM CLASE JOIN EMPLEADO ON Cedula_instructor = Cedula
-                              WHERE Nombre_suc = @GymCopiado";
+                              WHERE Codigo_suc = @CodigoGym2";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           using (SqlCommand comando = new SqlCommand(queryCopiar, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@GymNuevo", gym_nuevo);
-            comando.Parameters.AddWithValue("@NumSpaNuevo", Int64.Parse(num_spa));
-            comando.Parameters.AddWithValue("@NumTiendaNueva", Int64.Parse(num_tienda));
-            comando.Parameters.AddWithValue("@GymCopiado", gym_viejo);
+            comando.Parameters.AddWithValue("@CodigoGym1", Int64.Parse(new_gym));
+            comando.Parameters.AddWithValue("@CodigoGym2", Int64.Parse(copied_gym));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -381,7 +378,7 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AgregarInventario")]
-      public dynamic AgregarInventario(string numSerie, string marca, string nombreSucursal, string idTipoEquipo, string descripcion){
+      public dynamic AgregarInventario(string codigoSucursal, string numSerie, string marca, string idTipoEquipo){
         try{
           dynamic existeEquipo = aux.VerificarExistenciaTipoEquipo_aux(idTipoEquipo);
           if(!existeEquipo){
@@ -390,7 +387,7 @@ namespace Metodos{
           // SI SE ASOCIA A UNA SUCURSAL
           if(!string.IsNullOrEmpty(nombreSucursal)){
             //asociar el inventario a una sucursal
-            dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(nombreSucursal);
+            dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(codigoSucursal);
             if(!existeSucursal){
               return new { message = "No existe esta sucursal en la BD" };
             }
@@ -398,20 +395,15 @@ namespace Metodos{
             try{
               DB_Handler.ConectarServer();
               DB_Handler.AbrirConexion();
-              string queryInsert = "INSERT INTO INVENTARIO VALUES (@Num_serie, @Marca)";
+              string queryInsert = "INSERT INTO INVENTARIO VALUES (@Num_serie, @Marca, @Tipo)";
               using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
                 comando.Parameters.AddWithValue("@Marca", marca);
+                comando.Parameters.AddWithValue("@Tipo", idTipoEquipo);
                 comando.ExecuteNonQuery();
               }
-              string queryInsert2 = "INSERT INTO TIPO_DE_MAQUINA VALUES (@Num_serie, @Id_tipo_equipo)";
+              string queryInsert2 = "INSERT INTO INVENTARIO_EN_SUCURSAL VALUES (@Nombre_sucursal, @Num_serie)";
               using (SqlCommand comando = new SqlCommand(queryInsert2, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
-                comando.Parameters.AddWithValue("@Id_tipo_equipo", Int64.Parse(idTipoEquipo));
-                comando.ExecuteNonQuery();
-              }
-              string queryInsert3 = "INSERT INTO INVENTARIO_EN_SUCURSAL VALUES (@Nombre_sucursal, @Num_serie)";
-              using (SqlCommand comando = new SqlCommand(queryInsert3, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Nombre_sucursal", nombreSucursal);
                 comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
                 comando.ExecuteNonQuery();
@@ -529,6 +521,25 @@ namespace Metodos{
         }
       }
 
+      [HttpPost]
+      [Route("admin/AgregarServicio")]
+      public dynamic AgregarServicio(string descripcion) {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string queryInsert = "INSERT INTO SERVICIO (Descripcion) VALUES (@desc)";
+          using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@desc", descripcion);
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error"};
+        }
+      }
+
       
       [HttpPost]
       [Route("admin/CrearClase")]
@@ -629,14 +640,13 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/ActivarTienda")]
-      public dynamic ActivarTienda(string nombreSucursal, string numTienda){
+      public dynamic ActivarTienda(string codigo_sucursal){
         try{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string query = "UPDATE TIENDA SET Estado = 1 WHERE Nombre = @Nombre_sucursal AND Num_tienda = @numTienda";
+          string query = "UPDATE TIENDA SET Estado = 1 WHERE Codigo_sucursal = @Codigo";
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Nombre_sucursal", nombreSucursal);
-            comando.Parameters.AddWithValue("@Num_tienda", Int64.Parse(numTienda));
+            comando.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -651,14 +661,13 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/ActivarSPA")]
-      public dynamic ActivarSPA(string nombreSucursal, string numSpa){
+      public dynamic ActivarSPA(string codigo_sucursal){
         try{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string query = "UPDATE SPA SET Estado = 1 WHERE Nombre = @Nombre_sucursal AND Num_spa = @numSpa";
+          string query = "UPDATE SPA SET Estado = 1 WHERE Codigo_sucursal = @Codigo";
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Nombre_sucursal", nombreSucursal);
-            comando.Parameters.AddWithValue("@Num_spa", Int64.Parse(numSpa));
+            comando.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -747,9 +756,9 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AgregarEmpleado")]
-      public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_planilla, string nombre_suc){
+      public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_planilla, string codigo_suc){
         try{
-          if(string.IsNullOrEmpty(cedula) || cedula.Length != 9 ||string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(distrito) || string.IsNullOrEmpty(canton) || string.IsNullOrEmpty(provincia) || string.IsNullOrEmpty(correo) || !correo.Contains('@') || !correo.Contains('.') || string.IsNullOrEmpty(contrasena) || string.IsNullOrEmpty(salario) || id_puesto == 0 || id_planilla == 0 || string.IsNullOrEmpty(nombre_suc)){
+          if(string.IsNullOrEmpty(cedula) || cedula.Length != 9 ||string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(distrito) || string.IsNullOrEmpty(canton) || string.IsNullOrEmpty(provincia) || string.IsNullOrEmpty(correo) || !correo.Contains('@') || !correo.Contains('.') || string.IsNullOrEmpty(contrasena) || string.IsNullOrEmpty(salario) || id_puesto == 0 || id_planilla == 0 || string.IsNullOrEmpty(codigo_suc)){
             return new { message = "error" };}
 
           // INSERTAR EMPLEADO EN LA BASE DE DATOS
@@ -759,7 +768,7 @@ namespace Metodos{
           }
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string queryInsert = "INSERT INTO EMPLEADO VALUES (@Cedula, @Nombre, @Apellido1, @Apellido2, @Distrito, @Canton, @Provincia, @Correo, @Contrasena, @Salario, @Id_Puesto, @Id_Planilla, @Nombre_Suc)";
+          string queryInsert = "INSERT INTO EMPLEADO VALUES (@Cedula, @Nombre, @Apellido1, @Apellido2, @Distrito, @Canton, @Provincia, @Correo, @Contrasena, @Salario, @Id_Puesto, @Id_Planilla, @Codigo_suc)";
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
             comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
             comando.Parameters.AddWithValue("@Nombre", nombre);
@@ -773,7 +782,7 @@ namespace Metodos{
             comando.Parameters.AddWithValue("@Salario", Int64.Parse(salario));
             comando.Parameters.AddWithValue("@Id_Puesto", id_puesto);
             comando.Parameters.AddWithValue("@Id_Planilla", id_planilla);
-            comando.Parameters.AddWithValue("@Nombre_Suc", nombre_suc);
+            comando.Parameters.AddWithValue("@Codigo_suc", Int64.Parse(codigo_suc));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -827,7 +836,7 @@ namespace Metodos{
         try{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string query = @"SELECT Nombre_suc AS Sucursal, Cedula, Nombre, Apellido1 AS Primer_apellido, Apellido2 AS Segundo_apellido, 
+          string query = @"SELECT Codigo_suc AS Sucursal, Cedula, Nombre, Apellido1 AS Primer_apellido, Apellido2 AS Segundo_apellido, 
                           CASE
                             WHEN Id_planilla = 2 THEN CAST(8 AS VARCHAR)
                             ELSE 'N/A'
@@ -842,7 +851,7 @@ namespace Metodos{
                           WHEN Id_planilla = 3 THEN Salario * COUNT(Cedula_instructor)
                         END AS Monto_total
                         FROM EMPLEADO LEFT JOIN CLASE ON Cedula = Cedula_instructor 
-                        GROUP BY Nombre_suc, Cedula, Nombre, Apellido1, Apellido2, Id_planilla, Salario;
+                        GROUP BY Codigo_suc, Cedula, Nombre, Apellido1, Apellido2, Id_planilla, Salario;
                         ";
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
             comando.ExecuteNonQuery();
@@ -852,7 +861,7 @@ namespace Metodos{
                 while (reader.Read()) {
                     planillaDeTodosLosEmpleados.Add(new {
                         Identificador = reader.GetInt32(0),
-                        Sucursal = reader.GetString(1),
+                        Sucursal = reader.GetInt32(1),
                         CedulaEmpleado = reader.GetString(2),
                         Nombre = reader.GetString(3),
                         Primer_apellido = reader.GetString(4),
@@ -1053,23 +1062,22 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AgregarTratamientoSPA")]
-      public dynamic AgregarTratamientoSPA(string nombreSucursal, int numSpa, int idTratamiento){
+      public dynamic AgregarTratamientoSPA(string codigo_sucursal, int idTratamiento){
         try{
           // VERIFICACION DE DATOS
-          if (string.IsNullOrEmpty(nombreSucursal) || numSpa == 0 || idTratamiento == 0) {
+          if (string.IsNullOrEmpty(codigo_sucursal) || idTratamiento == 0) {
               return new { message = "error" };}
 
           // INSERTAR TRATAMIENTO_SPA EN LA BASE DE DATOS
-          dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(nombreSucursal, numSpa, idTratamiento);
+          dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(codigo_sucursal, idTratamiento);
             if (existeTratamientoSPA) {
                 return new { message = "Tratamiento ya existe en la BD. Error" };}
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryInsert = "INSERT INTO TRATAMIENTO_SPA VALUES (@Nsucursal, @Spa, @IdTratamiento)";
+            string queryInsert = "INSERT INTO TRATAMIENTO_SPA VALUES (@Codigo, @IdTratamiento)";
             using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Nsucursal", nombreSucursal);
-                comando.Parameters.AddWithValue("@Spa", numSpa);
+                comando.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
                 comando.Parameters.AddWithValue("@IdTratamiento", idTratamiento);
                 comando.ExecuteNonQuery();
                 DB_Handler.CerrarConexion();
@@ -1085,23 +1093,22 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/EliminarTratamientoSPA")]
-      public dynamic EliminarTratamientoSPA(string nombreSucursal, int numSpa, int idTratamiento){
+      public dynamic EliminarTratamientoSPA(string codigo_sucursal, int idTratamiento){
         try{
             // VERIFICACION DE DATOS
-            if (string.IsNullOrEmpty(nombreSucursal) || numSpa == 0) {
+            if (string.IsNullOrEmpty(codigo_sucursal)) {
                 return new { message = "error" };}
 
             // ELIMINAR TRATAMIENTO_SPA EN LA BASE DE DATOS
-            dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(nombreSucursal, numSpa, idTratamiento);
+            dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(codigo_sucursal, idTratamiento);
             if (!existeTratamientoSPA) {
                 return new { message = "Tratamiento no existe en la BD. Error" };}
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryDelete = "DELETE FROM TRATAMIENTO_SPA WHERE Nsucursal = @Nsucursal AND Spa = @Spa";
+            string queryDelete = "DELETE FROM TRATAMIENTO_SPA WHERE Codigo_sucursal = @Codigo";
             using (SqlCommand comando2 = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
-                comando2.Parameters.AddWithValue("@Nsucursal", nombreSucursal);
-                comando2.Parameters.AddWithValue("@Spa", numSpa);
+                comando2.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
                 comando2.ExecuteNonQuery();
                 Console.WriteLine("Tratamiento eliminado exitosamente");
                 DB_Handler.CerrarConexion();
