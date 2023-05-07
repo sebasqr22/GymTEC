@@ -20,7 +20,47 @@ class CLIENTE{
   }
 }
 
-class CLASE{}
+class CLASE{
+  static final id_servicioColumn= "Id_servicio";
+  static final num_claseColumn= "Num_clase";
+  static final fechaColumn= "Fecha";
+  static final hora_inicioColumn= "Hora_inicio";
+  static final hora_finColumn= "Hora_fin";
+  static final modalidadColumn= "Modalidad";
+  static final capacidadColumn= "Capacidad";
+  static final cedula_instructorColumn= "Cedula_instructor";
+  int id_servicio, num_clase, capacidad, cedula_instructor;
+  String fecha, hora_inicio, hora_fin, modalidad;
 
+  CLASE({this.id_servicio=0,this.num_clase=0,this.fecha="",this.hora_inicio="",this.hora_fin="",this.modalidad="",this.capacidad=0,this.cedula_instructor=0});
 
-class ASISTENCIA_CLASE{}
+  CLASE.fromMap(Map<String,dynamic> item):id_servicio=item["Id_servicio"], num_clase=item["Num_clase"],
+                                            fecha=item["Fecha"], hora_inicio=item["Hora_inicio"],hora_fin=item["Hora_fin"],
+                                            modalidad=item["Modalidad"],capacidad=item["Capacidad"],cedula_instructor=item["Cedula_instructor"];
+
+  Map<String, Object> toMap(){
+    return {'Id_servicio':id_servicio,"Num_clase":num_clase, "Fecha":fecha,"Hora_inicio":hora_inicio, "Hora_fin":hora_fin,
+    "Modalidad":modalidad,"Capacidad":capacidad,"Cedula_instructor":cedula_instructor};
+  }
+}
+
+/**
+          "CREATE TABLE ASISTENCIA_CLASE (Cedula_cliente INTEGER NOT NULL,Id_servicio INTEGER NOT NULL,"+
+          "Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase));",
+ */
+// escribe la clase anterior
+class ASISTENCIA_CLASE{
+  static final cedula_clienteColumn= "Cedula_cliente";
+  static final id_servicioColumn= "Id_servicio";
+  static final num_claseColumn= "Num_clase";
+  int cedula_cliente, id_servicio, num_clase;
+
+  ASISTENCIA_CLASE({this.cedula_cliente=0,this.id_servicio=0,this.num_clase=0});
+
+  ASISTENCIA_CLASE.fromMap(Map<String,dynamic> item):cedula_cliente=item["Cedula_cliente"], id_servicio=item["Id_servicio"],
+                                            num_clase=item["Num_clase"];
+
+  Map<String, Object> toMap(){
+    return {'Cedula_cliente':cedula_cliente,"Id_servicio":id_servicio, "Num_clase":num_clase};
+  }
+}
