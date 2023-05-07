@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gymtec_movil/database_handler.dart';
 import 'package:gymtec_movil/sqlite_service.dart';
@@ -471,7 +473,7 @@ class _ClassScreenState extends State<ClassScreen>{
                     value: selectedClass,
                     onChanged: (String? newValue) {
                         selectedClass = newValue;
-                      
+                        _updateClases();
                     },
                     isDense: true,
                     isExpanded: true,
@@ -525,6 +527,14 @@ class _ClassScreenState extends State<ClassScreen>{
 
   void _navigateToClases(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterClass()));
+  }
+
+  void _updateClases() async{
+    print("hika");
+    final response = await http.get(Uri.parse("https://192.168.100.12:7194/usuarios/admin/VerClases"));
+    final body = utf8.decode(response.bodyBytes);
+    print(response.body);
+    print("hika2");
   }
 }
 
