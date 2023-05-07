@@ -24,13 +24,14 @@ CREATE TABLE EMPLEADO (
 	Salario FLOAT NOT NULL,
 	Id_puesto INT NOT NULL,
 	Id_planilla INT NOT NULL,
-	Nombre_suc NVARCHAR(50),
+	Codigo_suc INT,
 	PRIMARY KEY (Cedula)
 );
 
 -- Tabla SUCURSAL
 -- Informacion de las sucursales del gimnasio.
 CREATE TABLE SUCURSAL (
+	Codigo_sucursal INT NOT NULL,
 	Nombre NVARCHAR(50) NOT NULL,
 	Distrito NVARCHAR(50),
 	Canton NVARCHAR(50) NOT NULL,
@@ -40,7 +41,7 @@ CREATE TABLE SUCURSAL (
 	Hora_cierre TIME,
 	Max_capacidad INT,
 	Cedula_administrador INT NOT NULL,
-	PRIMARY KEY (Nombre)
+	PRIMARY KEY (Codigo_sucursal)
 );
 
 -- Tabla CLIENTE
@@ -121,62 +122,58 @@ CREATE TABLE PRODUCTO (
 -- Tabla TIENDA
 -- Tiendas dentro de las sucursales.
 CREATE TABLE TIENDA (
-	Nombre_sucursal NVARCHAR(50) NOT NULL,
-	Num_tienda INT IDENTITY(1,1) NOT NULL,
+	Codigo_sucursal INT NOT NULL,
 	Estado BIT NOT NULL -- 0: Inactivo. 1: Activo.
-	PRIMARY KEY (Nombre_sucursal, Num_tienda)
+	PRIMARY KEY (Codigo_sucursal)
 );
 
 -- Tabla SPA
 -- Spas dentro de las sucursales.
 CREATE TABLE SPA (
-	Nombre_sucursal NVARCHAR(50) NOT NULL,
-	Num_spa INT IDENTITY(1,1) NOT NULL,
+	Codigo_sucursal INT NOT NULL,
 	Estado BIT NOT NULL -- 0: Inactivo. 1: Activo.
-	PRIMARY KEY (Nombre_sucursal, Num_spa)
+	PRIMARY KEY (Codigo_sucursal)
 );
 
 -- Tabla VENTA_PRODUCTO
 -- Relaciona las tiendas con los productos que venden.
 CREATE TABLE VENTA_PRODUCTO (
-	Nsucursal NVARCHAR(50) NOT NULL,
-	Tienda INT NOT NULL,
-	Codigo_producto INT,
-	PRIMARY KEY (Nsucursal, Tienda, Codigo_producto)
+	Codigo_sucursal INT NOT NULL,
+	Codigo_producto INT NOT NULL,
+	PRIMARY KEY (Codigo_sucursal, Codigo_producto)
 );
 
 -- Tabla TRATAMIENTO_SPA
 -- Relaciona los spas con los tratamientos que ofrecen.
 CREATE TABLE TRATAMIENTO_SPA (
-	Nsucursal NVARCHAR(50) NOT NULL,
-	Spa INT NOT NULL,
-	Id_tratamiento INT,
-	PRIMARY KEY (Nsucursal, Spa, Id_tratamiento)
+	Codigo_sucursal INT NOT NULL,
+	Id_tratamiento INT NOT NULL,
+	PRIMARY KEY (Codigo_sucursal, Id_tratamiento)
 );
 
 -- Tabla INVENTARIO_EN_SUCURSAL
 -- Relaciona la sucursal con las maquinas que tiene disponibles.
 CREATE TABLE INVENTARIO_EN_SUCURSAL (
-	Nombre_sucursal NVARCHAR(50) NOT NULL,
+	Codigo_sucursal INT NOT NULL,
 	Num_serie_maquina INT NOT NULL,
 	Costo_sucursal FLOAT NOT NULL,
-	PRIMARY KEY (Nombre_sucursal, Num_serie_maquina)
+	PRIMARY KEY (Codigo_sucursal, Num_serie_maquina)
 );
 
 -- Tabla SERVICIOS_EN_SUCURSAL
 -- Relaciona la sucursal con los servicios que ofrece.
 CREATE TABLE SERVICIOS_EN_SUCURSAL (
-	Nombre_sucursal NVARCHAR(50) NOT NULL,
+	Codigo_sucursal INT NOT NULL,
 	Id_servicio INT NOT NULL,
-	PRIMARY KEY (Nombre_sucursal, Id_servicio)
+	PRIMARY KEY (Codigo_sucursal, Id_servicio)
 );
 
 -- Tabla TELEFONO_SUCURSAL
 -- Guarda los numeros de telefono de las sucursales
 CREATE TABLE TELEFONO_SUCURSAL (
-	Nombre_sucursal NVARCHAR(50) NOT NULL,
+	Codigo_sucursal INT NOT NULL,
 	Telefono NVARCHAR(13) NOT NULL,
-	PRIMARY KEY (Nombre_sucursal, Telefono)
+	PRIMARY KEY (Codigo_sucursal, Telefono)
 );
 
 -- Tabla TIPO_DE_MAQUINA
@@ -217,43 +214,43 @@ ALTER TABLE EMPLEADO
 ADD CONSTRAINT FK_PLANILLA FOREIGN KEY (Id_planilla) REFERENCES PLANILLA(Identificador);
 
 ALTER TABLE EMPLEADO
-ADD CONSTRAINT FK_SUCURSAL FOREIGN KEY (Nombre_suc) REFERENCES SUCURSAL(Nombre);
+ADD CONSTRAINT FK_SUCURSAL FOREIGN KEY (Codigo_suc) REFERENCES SUCURSAL(Codigo_sucursal);
 
 ALTER TABLE SUCURSAL
 ADD CONSTRAINT FK_ADMIN FOREIGN KEY (Cedula_administrador) REFERENCES EMPLEADO(Cedula);
 
 ALTER TABLE TIENDA
-ADD CONSTRAINT FK_TIENDA FOREIGN KEY (Nombre_sucursal) REFERENCES SUCURSAL(Nombre);
+ADD CONSTRAINT FK_TIENDA FOREIGN KEY (Codigo_sucursal) REFERENCES SUCURSAL(Codigo_sucursal);
 
 ALTER TABLE SPA
-ADD CONSTRAINT PKFK_SPA FOREIGN KEY (Nombre_sucursal) REFERENCES SUCURSAL(Nombre);
+ADD CONSTRAINT PKFK_SPA FOREIGN KEY (Codigo_sucursal) REFERENCES SUCURSAL(Codigo_sucursal);
 
 ALTER TABLE VENTA_PRODUCTO
-ADD CONSTRAINT FK_VP_Store FOREIGN KEY (Nsucursal, Tienda) REFERENCES TIENDA(Nombre_sucursal, Num_tienda);
+ADD CONSTRAINT FK_VP_Store FOREIGN KEY (Codigo_sucursal) REFERENCES TIENDA(Codigo_sucursal);
 
 ALTER TABLE VENTA_PRODUCTO
 ADD CONSTRAINT FK_VP_Product FOREIGN KEY (Codigo_producto) REFERENCES PRODUCTO(Codigo_barras);
 
 ALTER TABLE TRATAMIENTO_SPA
-ADD CONSTRAINT FK_TS_Spa FOREIGN KEY (Nsucursal, Spa) REFERENCES SPA(Nombre_sucursal, Num_spa);
+ADD CONSTRAINT FK_TS_Spa FOREIGN KEY (Codigo_sucursal) REFERENCES SPA(Codigo_sucursal);
 
 ALTER TABLE TRATAMIENTO_SPA
 ADD CONSTRAINT FK_TS_Treatment FOREIGN KEY (Id_tratamiento) REFERENCES TRATAMIENTO(Identificador);
 
 ALTER TABLE INVENTARIO_EN_SUCURSAL
-ADD CONSTRAINT FK_Inventory_Name FOREIGN KEY (Nombre_sucursal) REFERENCES SUCURSAL(Nombre);
+ADD CONSTRAINT FK_Inventory_Name FOREIGN KEY (Codigo_sucursal) REFERENCES SUCURSAL(Codigo_sucursal);
 
 ALTER TABLE INVENTARIO_EN_SUCURSAL
 ADD CONSTRAINT FK_Inventory_Series FOREIGN KEY (Num_serie_maquina) REFERENCES INVENTARIO(Numero_serie);
 
 ALTER TABLE SERVICIOS_EN_SUCURSAL
-ADD CONSTRAINT FK_Services_Name FOREIGN KEY (Nombre_sucursal) REFERENCES SUCURSAL(Nombre);
+ADD CONSTRAINT FK_Services_Name FOREIGN KEY (Codigo_sucursal) REFERENCES SUCURSAL(Codigo_sucursal);
 
 ALTER TABLE SERVICIOS_EN_SUCURSAL
 ADD CONSTRAINT FK_Services_Service FOREIGN KEY (Id_servicio) REFERENCES SERVICIO(Identificador);
 
 ALTER TABLE TELEFONO_SUCURSAL
-ADD CONSTRAINT FK_PHONE FOREIGN KEY (Nombre_sucursal) REFERENCES SUCURSAL(Nombre);
+ADD CONSTRAINT FK_PHONE FOREIGN KEY (Codigo_sucursal) REFERENCES SUCURSAL(Codigo_sucursal);
 
 ALTER TABLE TIPO_DE_MAQUINA
 ADD CONSTRAINT FK_Type_Machine FOREIGN KEY (Num_serie_maquina) REFERENCES INVENTARIO(Numero_serie);
