@@ -152,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _navigateToWelcome(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchClassScreen()));
   }
 
   void _navigateToRegister(BuildContext context) {
@@ -370,7 +370,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
   }
 
   void _navigateToClass(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchClassScreen()));
   }
 
   void crearCliente(int cedula, String nombre, String apellido1, String apellido2, int edad,String fecha_nacimiento, double peso, double imc,String direccion, String correo, String password){
@@ -397,14 +397,92 @@ class _RegisterScreenState extends State<RegisterScreen>{
   }
 }
 
-class ClassScreen  extends StatefulWidget {
-  const ClassScreen ({super.key});
+
+class SearchClassScreen  extends StatefulWidget {
+  const SearchClassScreen ({super.key});
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
   // This class is the configuration for the state.
   @override
-  _ClassScreenState createState() => _ClassScreenState();
+  _SearchClassScreenState createState() => _SearchClassScreenState();
+}
+
+class _SearchClassScreenState extends State<SearchClassScreen>{
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ButtonStyle style =
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+    return Scaffold(
+      backgroundColor: Colors.cyan[100],
+      body: Center(
+          child: Container(
+            child: ListView(
+              padding: EdgeInsets.all(40),
+              children: <Widget>[
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
+                ),
+                Text(
+                  "Búsqueda de clases",
+                  style: TextStyle(fontSize: 30),
+                ),
+                  ElevatedButton(
+                  style: style,
+                  onPressed: () {
+                    _navigateToSearch(context,"1");
+                  },
+                  child: const Text('Por Sucursal'),
+                ), 
+                ElevatedButton(
+                  style: style,
+                  onPressed: () {
+                    _navigateToSearch(context,"2");
+                  },
+                  child: const Text('Por Servicio'),
+                ),  
+                ElevatedButton(
+                  style: style,
+                  onPressed: () {
+                    _navigateToSearch(context,"3");
+                  },
+                  child: const Text('Por Períodos'),
+                ), 
+              ],
+            ),
+            margin: const EdgeInsets.all(10.0),
+            width: 320.0,
+            height: 600.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              color: Colors.cyan[100],
+              boxShadow: [
+                BoxShadow(color: Colors.blue, spreadRadius: 3),
+              ],
+            ),
+          ),
+        ));
+}
+  void _navigateToSearch(BuildContext context,String type) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen(type)));
+  }
+
+}
+
+class ClassScreen  extends StatefulWidget {
+  final String type;
+  const ClassScreen (this.type,{super.key});
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+  // This class is the configuration for the state.
+  @override
+  _ClassScreenState createState() => _ClassScreenState(type);
 }
 
 
@@ -413,8 +491,9 @@ class _ClassScreenState extends State<ClassScreen>{
   late TextEditingController _controller,dateInput, dateInput2;
   String? selectedSucursal = null;
   String? selectedClass = null;
-
-
+  late SqliteService _sqliteService;
+  final String type;
+  _ClassScreenState (this.type);
 
   @override
   void initState() {
@@ -422,6 +501,7 @@ class _ClassScreenState extends State<ClassScreen>{
     _controller = TextEditingController();
     dateInput = TextEditingController();
     dateInput2 = TextEditingController();
+    this._sqliteService= SqliteService();
   }
 
   @override
@@ -441,7 +521,8 @@ class _ClassScreenState extends State<ClassScreen>{
   ); 
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
-    return Scaffold(
+    if(type=="1"){
+      return Scaffold(
       backgroundColor: Colors.cyan[100],
       body: Center(
           child: Container(
@@ -477,7 +558,53 @@ class _ClassScreenState extends State<ClassScreen>{
                       fillColor: Colors.blueAccent,
                     ),
                   ),
-                  DropdownButtonFormField(
+                  ElevatedButton(
+                  style: style,
+                  onPressed: () {
+                    if (selectedSucursal!=null){
+                      _verClasesPorSucursal(selectedSucursal.toString());
+                    }else{
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        },
+                      );
+                    }
+                  },
+                  child: const Text('Buscar clases'),
+                ),  
+              ],
+            ),
+            margin: const EdgeInsets.all(10.0),
+            width: 320.0,
+            height: 600.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              color: Colors.cyan[100],
+              boxShadow: [
+                BoxShadow(color: Colors.blue, spreadRadius: 3),
+              ],
+            ),
+          ),
+        ));
+
+    }else if(type=="2"){
+      return Scaffold(
+      backgroundColor: Colors.cyan[100],
+      body: Center(
+          child: Container(
+            child: ListView(
+              padding: EdgeInsets.all(20),
+              children: <Widget>[
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
+                ),
+                Text(
+                  "Búsqueda de una clase",
+                  style: TextStyle(fontSize: 30),
+                ),
+                DropdownButtonFormField(
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue, width: 2),
@@ -500,7 +627,52 @@ class _ClassScreenState extends State<ClassScreen>{
                     },
                     isDense: true,
                     isExpanded: true,
-                  items: ClasesItems),
+                  items: ClasesItems),       
+                  ElevatedButton(
+                  style: style,
+                  onPressed: () {
+                    if (selectedClass!=null){
+                      _verClasesPorTipoClase(selectedClass.toString());
+                    }else{
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        },
+                      );
+                    }
+                  },
+                  child: const Text('Buscar clases'),
+                ),  
+              ],
+            ),
+            margin: const EdgeInsets.all(10.0),
+            width: 320.0,
+            height: 600.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              color: Colors.cyan[100],
+              boxShadow: [
+                BoxShadow(color: Colors.blue, spreadRadius: 3),
+              ],
+            ),
+          ),
+        ));
+    }else{
+    return Scaffold(
+      backgroundColor: Colors.cyan[100],
+      body: Center(
+          child: Container(
+            child: ListView(
+              padding: EdgeInsets.all(40),
+              children: <Widget>[
+                Expanded(
+                  child: Image(image: AssetImage('assets/logoGymTec.png')),
+                ),
+                Text(
+                  "Búsqueda de una clase",
+                  style: TextStyle(fontSize: 30),
+                ),
                   TextField(
               controller: dateInput,
               //editing controller of this TextField
@@ -564,18 +736,7 @@ class _ClassScreenState extends State<ClassScreen>{
                   ElevatedButton(
                   style: style,
                   onPressed: () {
-                    if (selectedSucursal!=null && selectedClass!=null && dateInput.text.isNotEmpty && dateInput2.text.isNotEmpty){
-                      _verClasesPorSucursalTipoClaseFechas(selectedSucursal.toString(), selectedClass.toString(), dateInput.text, dateInput2.text);
-                    }
-                    else if(selectedSucursal!=null && selectedClass==null){
-                      _verClasesPorSucursal(selectedSucursal.toString());
-                    }
-                    else if(selectedClass!=null && selectedSucursal==null){
-                      _verClasesPorTipoClase(selectedClass.toString());
-                    }else if(selectedClass !=null && selectedSucursal !=null){
-                      _verClasesPorSucursal(selectedSucursal.toString());
-                    }
-                    else if(dateInput.text.isNotEmpty && dateInput2.text.isNotEmpty){
+                    if(dateInput.text.isNotEmpty && dateInput2.text.isNotEmpty){
                       _verClasesPorFechas(dateInput.text, dateInput2.text);
                     }else{
                       showDialog(
@@ -602,6 +763,7 @@ class _ClassScreenState extends State<ClassScreen>{
             ),
           ),
         ));
+  }
   }
 
   List<DropdownMenuItem<String>> get SucursalesItems{
@@ -641,7 +803,8 @@ class _ClassScreenState extends State<ClassScreen>{
     //final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
     //final body = utf8.decode(response.bodyBytes);
     //print(jsonDecode(body));
-    print("hika2");
+    //final response = this._sqliteService.buscarClasesPorSucursal(sucursal);
+    //print(response);
     _navigateToClases(context,"hola1");
   }
 
@@ -650,26 +813,19 @@ class _ClassScreenState extends State<ClassScreen>{
     //final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
     //final body = utf8.decode(response.bodyBytes);
     //print(jsonDecode(body));
-    print("hika2");
+    final response = this._sqliteService.buscarClasesPorServicio(tipoClase);
+    print(response);
     _navigateToClases(context,"hola2");
   }
 
   //metodo de ver clases por fechas
   void _verClasesPorFechas(String fechaInicio, String fechaFinal) async{
-    final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
-    final body = utf8.decode(response.bodyBytes);
-    print(jsonDecode(body));
-    print("hika2");
+    //final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
+    //final body = utf8.decode(response.bodyBytes);
+    //print(jsonDecode(body));
+    final response = this._sqliteService.buscarClasesPorPeriodo(fechaInicio, fechaFinal);
+    print(response);
     _navigateToClases(context,"hola3");
-  }
-
-  //metodo de ver clases por sucursal y tipo de clase, y fechas
-  void _verClasesPorSucursalTipoClaseFechas(String sucursal, String tipoClase, String fechaInicio, String fechaFinal) async{
-    final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
-    final body = utf8.decode(response.bodyBytes);
-    print(jsonDecode(body));
-    print("hika2");
-    _navigateToClases(context,"hola4");
   }
 }
 
@@ -704,6 +860,7 @@ class _RegisterClassState extends State<RegisterClass> {
     // than having to individually change instances of widgets.
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+      
     return Scaffold(
       backgroundColor: Colors.cyan[100],
         body: Center(
@@ -723,7 +880,28 @@ class _RegisterClassState extends State<RegisterClass> {
                     children: <Widget>[
                       const ListTile(
                         title: Text('Clase 1'),
-                        subtitle: Text("Fecha de Inicio: \nFecha de Finalización: \nCapacidad: \nInstructor: \n"),
+                        subtitle: Text("Fecha de Inicio: 8-5-2023\nFecha de Finalización: 8-5-2023\nCapacidad: 20\nInstructor: Justin Fernández\n"),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          TextButton(
+                            child: const Text('Registrar clase'),
+                            onPressed: () {/* ... */},
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const ListTile(
+                        title: Text('Clase 2'),
+                        subtitle: Text("Fecha de Inicio: 8-5-2023\nFecha de Finalización: 8-5-2023\nCapacidad: 20\nInstructor: Justin Fernández\n"),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -762,6 +940,6 @@ class _RegisterClassState extends State<RegisterClass> {
   }
 
   void _ShowRegistrationState(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchClassScreen()));
   }
 }

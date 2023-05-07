@@ -20,8 +20,32 @@ class SqliteService {
            "Cedula_instructor INTEGER NOT NULL,PRIMARY KEY (Id_servicio, Num_clase));"+
           "CREATE TABLE ASISTENCIA_CLASE (Cedula_cliente INTEGER NOT NULL,Id_servicio INTEGER NOT NULL,"+
           "Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase));"+
+          "CREATE TABLE EMPLEADO ("+
+            "Cedula INTEGER NOT NULL,"+
+          	"Nombre TEXT NOT NULL,"+
+	          "Apellido1 TEXT NOT NULL,"+
+	          "Apellido2 TEXT,"+
+	          "Distrito TEXT,"+
+	          "Canton TEXT,Provincia TEXT NOT NULL, Correo TEXT NOT NULL,"+
+	          "Contrasena TEXT NOT NULL,Salario REAL NOT NULL, Id_puesto INTEGER NOT NULL, Id_planilla INTEGER NOT NULL,"+
+	          "Codigo_suc INTEGER,PRIMARY KEY (Cedula));"+
+            "CREATE TABLE SUCURSAL ("+
+              "Codigo_sucursal INTEGER NOT NULL,"+
+              "Nombre TEXT NOT NULL,"+
+              "Distrito TEXT,"+
+              "Canton TEXT NOT NULL,"+
+              "Provincia TEXT NOT NULL,"+
+              "Fecha_apertura DATE,"+
+              "Hora_apertura TIME,"+
+              "Hora_cierre TIME,"+
+              "Max_capacidad INTEGER,"+
+              "Cedula_administrador INTEGER NOT NULL,"+
+              "PRIMARY KEY (Codigo_sucursal)"+
+            ");"+
           "ALTER TABLE ASISTENCIA_CLASE"+
-          "ADD CONSTRAINT FK_Assist_Class FOREIGN KEY (Id_servicio, Num_clase) REFERENCES CLASE(Id_servicio, Num_clase);",
+          "ADD CONSTRAINT FK_Assist_Class FOREIGN KEY (Id_servicio, Num_clase) REFERENCES CLASE(Id_servicio, Num_clase);"+
+          "ALTER TABLE EMPLEADO"
+          "ADD CONSTRAINT FK_SUCURSAL FOREIGN KEY (Codigo_suc) REFERENCES SUCURSAL(Codigo_sucursal);",
       );// FALTAN LOS ALTER
      },
      version: 1,
@@ -67,12 +91,12 @@ class SqliteService {
   return false;
 }
 
-  Future<List<CLASE>> buscarClases() async{
+  Future<List<CLASE>> buscarClasesPorSucursal(String sucursal) async{
     final db = await initializeDB();
   List<Map<String, dynamic>> maps = await db.rawQuery("SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles"+
                 "FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre"+
-                "WHERE SUCURSAL.Nombre = @Nombre_sucursal AND CLASE.Id_servicio = Id_servicio AND @fecha_inicio <= Fecha AND Fecha <= fecha_fin"+
-                "GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad");
+                "WHERE SUCURSAL.Nombre = ?"+
+                "GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad",[sucursal]);
   if (maps.length > 0) {
     List<CLASE> clases = [];
     for (var i = 0; i < maps.length; i++) {
@@ -81,6 +105,48 @@ class SqliteService {
     return clases;
   }
   return [];
+  }
+
+  Future<List<CLASE>> buscarClasesPorServicio(String servicio) async{
+    final db = await initializeDB();
+  List<Map<String, dynamic>> maps = await db.rawQuery("SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles"+
+                "FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre"+
+                "WHERE CLASE.Id_servicio = ?"+
+                "GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad",[servicio]);
+  if (maps.length > 0) {
+    List<CLASE> clases = [];
+    for (var i = 0; i < maps.length; i++) {
+      clases.add(CLASE.fromMap(maps[i]));
+    }
+    return clases;
+  }
+  return [];
+  }
+
+  Future<List<CLASE>> buscarClasesPorPeriodo(String fecha_inicio,fecha_fin) async{
+    final db = await initializeDB();
+  List<Map<String, dynamic>> maps = await db.rawQuery("SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles"+
+                "FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre"+
+                "WHERE ? <= Fecha AND Fecha <= ?"+
+                "GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad",[fecha_inicio,fecha_fin]);
+  if (maps.length > 0) {
+    List<CLASE> clases = [];
+    for (var i = 0; i < maps.length; i++) {
+      clases.add(CLASE.fromMap(maps[i]));
+    }
+    return clases;
+  }
+  return [];
+  }
+
+  Future<bool> registrarClase(String cedulaClient, String Num_clase, String Id_servicio, String Fecha, String Hora_inicio,String Modalidad, String Cedula_instructor) async{
+    final db = await initializeDB();
+    List<Map<String, dynamic>> maps = await db.rawQuery("INSERT INTO ASISTENCIA_CLASE (Cedula_cliente, Id_servicio, Num_clase)"+
+                "VALUES (?,?,?)",[cedulaClient,Id_servicio,Num_clase]);
+    if (maps.length > 0) {
+      return true;
+    }
+    return false;
   }
 }
 
