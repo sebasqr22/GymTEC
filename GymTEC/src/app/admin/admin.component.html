@@ -45,7 +45,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-          <a id='gestTratSpa' class="nav-link collapsed" data-toggle="collapse"
+          <a id='gestTratSpa2' class="nav-link collapsed" data-toggle="collapse"
              (click)="mostrarPantalla('gestTratSpaP')">
             <i class="fas fa-regular fa-spa"></i>
             <span>Gestión de Tratamientos</span>
@@ -360,20 +360,28 @@
 
             <hr class="sidebar-divider my-0">
             <br><br>
-            <h1 class="h3 mb-4 text-gray-800">Activación de SPA</h1>  
+            <h1 class="h3 mb-4 text-gray-800">Activación de SPA</h1>
             <div class="col-sm">
-              <select class="form-control form-control-user" id="gestSucTiendaSELECT"></select>
+              <select class="form-control form-control-user" id="gestSucTiendaNUMEROSSEDESPA"></select>
               <label for="gestSucTiendaNUMEROSSEDESPA">Sede</label>
             </div>
 
-            
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="activacionSpa()">
+              Activar
+            </a>
+
+
             <hr class="sidebar-divider my-0">
             <br><br>
             <h1 class="h3 mb-4 text-gray-800">Activación de Tienda</h1>
             <div class="col-sm">
-              <select class="form-control form-control-user" id="gestSucTiendaSELECT"></select>
+              <select class="form-control form-control-user" id="gestSucTiendaNUMEROSSEDETIENDA"></select>
               <label for="gestSucTiendaNUMEROSSEDETIENDA">Sede</label>
             </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="activacionTienda()">
+              Activar
+            </a>
 
 
 
@@ -744,7 +752,7 @@
                 <label for="gestServPID">ID Único</label>
               </div>
 
-              
+
 
               <div class="col-sm">
                 <textarea class="form-control form-control-user" id="gestServPDESCRIPCION" rows="2"></textarea>
@@ -812,7 +820,7 @@
             <hr class="sidebar-divider">
             <h1 class="h3 mb-4 text-gray-800">Agregar Nuevo Tipo Equipo</h1>
             <div class="form-group row">
-              
+
 
               <div class="col-sm">
                 <input type="text" class="form-control form-control-user" id="gestTipEquipPDESCRIPCIONNUEVO">
@@ -863,7 +871,7 @@
                 <label for="gestInvetPCOSTOSUCURSAL">Costo de Sucursal</label>
               </div>
 
-              
+
             </div>
 
             <a class="btn btn-outline-primary btn-user btn-block" (click)="guardarInventario()">
@@ -892,9 +900,9 @@
                 <label for="gestInvetPNUMEROSERIE2">Número de Serie</label>
               </div>
 
-              
 
-              
+
+
             </div>
             <a class="btn btn-outline-primary btn-user btn-block">
               Guardar

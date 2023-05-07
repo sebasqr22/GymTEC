@@ -100,26 +100,22 @@ activarSucursal(){
   this.api.agregarSucursal(sede.value, nombre.value, distrito.value, canton.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value);
 }
 
-agregarSedes(){
-  //FALTAN CASILLAS EN COMPONENTES PARA NUEVAS SUCURSALES
-}
-
 //pantalla AGREGAR SPA
 activacionSpa(){ //FUNCIONA, ACATAR DETALLE
-  const sede = document.getElementById('sedegestSucSpaSELECT') as HTMLInputElement;
+  const sede = document.getElementById('gestSucTiendaNUMEROSSEDESPA') as HTMLInputElement;
 
   this.api.activarSpa(sede.value); //HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
 //pantalla activar tienda!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 activacionTienda(){//FUNCIONA, ACATAR DETALLE
-  const sede = document.getElementById('gestSucTiendaSELECT') as HTMLInputElement;
+  const sede = document.getElementById('gestSucTiendaNUMEROSSEDETIENDA') as HTMLInputElement;
 
   this.api.activarTienda(sede.value);//HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
 // pantalla GESTION DE TRATAMIENTOS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-agregarTratamiento(){
+agregarTratamiento(){ //ESTE ES EL DE MODIFICAR, NO ESTA
   const tratamiento = document.getElementById('gestTratSpaPSELECT') as HTMLInputElement;
   const IDunico = document.getElementById('gestTratSpaID') as HTMLInputElement;
   const nombre = document.getElementById('gestTratSpaNOMNRE') as HTMLInputElement;
@@ -127,9 +123,9 @@ agregarTratamiento(){
   //STANDBY
 }
 
-eliminarTratamiento(){ //TERMINAR, SIRVE!!!
-  //componente a llamar
-  //this.api.call_EliminarTratamiento()
+eliminarTratamiento(){
+  const tratamiento = document.getElementById('gestTratSpaPSELECT') as HTMLInputElement;
+  this.api.call_EliminarTratamiento(tratamiento.value) //DEBE DE SER EL ID, HAY QUE OBTENERLO DE ALGUNA MANERA
 }
 
 agregarNuevoTratamiento(){
@@ -223,7 +219,7 @@ agregarEmpleado(){ //FUNCA
 
 //pantalla de gestion de servicios!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-guardarServicio(){ 
+guardarServicio(){
   const servicio = document.getElementById('gestServPSELECT') as HTMLInputElement;
   const IDunico = document.getElementById('gestServPID') as HTMLInputElement;
   const nombre = document.getElementById('gestServPNOMBRE') as HTMLInputElement;
