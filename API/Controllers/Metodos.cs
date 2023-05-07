@@ -126,6 +126,8 @@ namespace Metodos{
       [Route("admin/AsociarInventario")]
       public dynamic AsociarInventario(string Codigo_sucursal, string num_serie, string costo) {
         try { 
+
+          // Insertar en la tabla que relaciona o asocia inventario con sucursal
           string queryInventario = @"INSERT INTO INVENTARIO_EN_SUCURSAL
                                     VALUES (@Codigo_sucursal, @NumSerie, @Costo)";
           DB_Handler.ConectarServer();
@@ -137,6 +139,18 @@ namespace Metodos{
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
+
+          // Actualizar sucursal en inventario
+          string queryUpdate = "UPDATE INVENTARIO SET Codigo_sucursal = @Codigo_sucursal WHERE Num_serie = @Num_serie";
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          using (SqlCommand comando = new SqlCommand(queryUpdate, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
+            comando.Parameters.AddWithValue("@Num_serie", num_serie);
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+
           return new { message = "ok"};
         } catch (Exception e) {
           Console.WriteLine(e);
@@ -378,69 +392,33 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AgregarInventario")]
-      public dynamic AgregarInventario(string codigoSucursal, string numSerie, string marca, string idTipoEquipo){
+      public dynamic AgregarInventario(string numSerie, string marca, string idTipoEquipo){
         try{
-          dynamic existeEquipo = aux.VerificarExistenciaTipoEquipo_aux(idTipoEquipo);
-          if(!existeEquipo){
-            return new { message = "No existe este tipo de equipo en la BD" };
+
+          // VERIFICAR QUE NO EXISTA PREVIAMENTE EL INVENTARIO EN LA BASE DE DATOS
+          dynamic existeInventario = aux.VerificarExistenciaInventario_aux(numSerie);
+          if(existeInventario){
+            return new { message = "Ya existe en el inventario en la BD" };
           }
-          // SI SE ASOCIA A UNA SUCURSAL
-          if(codigoSucursal != null){
-            //asociar el inventario a una sucursal
-            dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(codigoSucursal);
-            if(!existeSucursal){
-              return new { message = "No existe esta sucursal en la BD" };
-            }
-            // INSERTAR INVENTARIO EN LA BASE DE DATOS
-            try{
-              DB_Handler.ConectarServer();
-              DB_Handler.AbrirConexion();
-              string queryInsert = "INSERT INTO INVENTARIO VALUES (@Num_serie, @Marca, @Tipo)";
-              using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
-                comando.Parameters.AddWithValue("@Marca", marca);
-                comando.Parameters.AddWithValue("@Tipo", idTipoEquipo);
-                comando.ExecuteNonQuery();
-              }
-              string queryInsert2 = "INSERT INTO INVENTARIO_EN_SUCURSAL VALUES (@Nombre_sucursal, @Num_serie)";
-              using (SqlCommand comando = new SqlCommand(queryInsert2, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(codigoSucursal));
-                comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
-                comando.ExecuteNonQuery();
-              
-              DB_Handler.CerrarConexion();
-              return new { message = "ok" };
-              }
-            }catch{
-                return new { message = "error" };
-            }
+          // VERIFICAR QUE EXISTE EL TIPO DE EQUIPO EN LA BASE DE DATOS
+          dynamic existeTipoEquipo = aux.VerificarExistenciaTipoEquipo_aux(idTipoEquipo);
+          if(!existeTipoEquipo){
+            return new { message = "No existe el tipo de equipo en la BD" };
           }
-           // NO SE ASOCIA A UNA SUCURSAL
-          else{ 
-            try{
-              DB_Handler.ConectarServer();
-              DB_Handler.AbrirConexion();
-              string queryInsert4 = "INSERT INTO INVENTARIO VALUES (@Num_serie, @Marca)";
-              using (SqlCommand comando = new SqlCommand(queryInsert4, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
-                comando.Parameters.AddWithValue("@Marca", marca);
-                comando.ExecuteNonQuery();
-              }
-              string queryInsert5 = "INSERT INTO TIPO_DE_MAQUINA VALUES (@Num_serie, @Id_tipo_equipo)";
-              using (SqlCommand comando = new SqlCommand(queryInsert5, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
-                comando.Parameters.AddWithValue("@Id_tipo_equipo", Int64.Parse(idTipoEquipo));
-                comando.ExecuteNonQuery();
-              }
-              DB_Handler.CerrarConexion();
-              return new { message = "ok" };
-            }catch{
-              return new { message = "error" };
-            }
+          
+          // INSERTAR INVENTARIO EN LA BASE DE DATOS
+          string queryInsert = "INSERT INTO INVENTARIO VALUES (@Num_serie, @Marca, @Id_Tipo)";
+          using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Num_serie", Int64.Parse(numSerie));
+            comando.Parameters.AddWithValue("@Marca", marca);
+            comando.Parameters.AddWithValue("@Id_Tipo", Int64.Parse(idTipoEquipo));
+            comando.ExecuteNonQuery();
           }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
         }catch(Exception e){
           Console.WriteLine(e);
-          return new { message = "error"};
+          return new { message = "error" };
         }
       }
 
