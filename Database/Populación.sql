@@ -46,7 +46,7 @@ INSERT INTO SUCURSAL VALUES (10001, 'GymTEC Campus Central Cartago', 'Dulce Nomb
 INSERT INTO SUCURSAL VALUES (10002, 'GymTEC Campus San Jos�', 'Barrio Am�n', 'San Jos�', 'San Jos�', '2006-06-20', '7:00', '18:00', 25, 123456789);
 INSERT INTO SUCURSAL VALUES (10003, 'GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123456789);
 
-UPDATE EMPLEADO SET Codigo_sucursal = 10001 WHERE Cedula = 123456789;
+UPDATE EMPLEADO SET Codigo_suc = 10001 WHERE Cedula = 123456789;
 
 -- Se tiene por default un Spa inactivo en cada sucursal.
 INSERT INTO SPA VALUES (10001, 0);

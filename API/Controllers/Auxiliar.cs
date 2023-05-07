@@ -295,8 +295,17 @@ namespace funcionesAuxiliares{
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { 
+                            var serviciosExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                serviciosExistentes.Add(new {
+                                    Identificador = reader.GetInt32(0),
+                                    Descripcion = reader.GetString(1),
+                                });
+                            }
                             DB_Handler.CerrarConexion();
-                            return true;
+
+                            //string json_tiposEquipoExistentes = JsonSerializer.Serialize(tiposEquipoExistentes);
+                            return new JsonResult(serviciosExistentes);
                         }
                         else {
                             DB_Handler.CerrarConexion();

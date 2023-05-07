@@ -106,6 +106,7 @@ CREATE TABLE TIPO_EQUIPO (
 CREATE TABLE INVENTARIO (
 	Numero_serie INT NOT NULL,
 	Marca NVARCHAR(50) NOT NULL,
+	Tipo INT NOT NULL,
 	PRIMARY KEY (Numero_serie)
 );
 
@@ -176,19 +177,11 @@ CREATE TABLE TELEFONO_SUCURSAL (
 	PRIMARY KEY (Codigo_sucursal, Telefono)
 );
 
--- Tabla TIPO_DE_MAQUINA
--- Relaciona una maquina con el tipo de equipo al que pertenece.
-CREATE TABLE TIPO_DE_MAQUINA (
-	Num_serie_maquina INT NOT NULL,
-	Id_tipo_equipo INT NOT NULL,
-	PRIMARY KEY (Num_serie_maquina, Id_tipo_equipo)
-);
-
 -- Tabla CLASE
 -- Informacion de una clase impartida en una sucursal.
 CREATE TABLE CLASE (
-	Id_servicio INT NOT NULL,
 	Num_clase INT IDENTITY(1,1) NOT NULL,
+	Id_servicio INT NOT NULL,
 	Fecha DATE,
 	Hora_inicio TIME,
 	Hora_fin TIME,
@@ -218,6 +211,9 @@ ADD CONSTRAINT FK_SUCURSAL FOREIGN KEY (Codigo_suc) REFERENCES SUCURSAL(Codigo_s
 
 ALTER TABLE SUCURSAL
 ADD CONSTRAINT FK_ADMIN FOREIGN KEY (Cedula_administrador) REFERENCES EMPLEADO(Cedula);
+
+ALTER TABLE INVENTARIO
+ADD CONSTRAINT FK_TIPO FOREIGN KEY (Tipo) REFERENCES TIPO_EQUIPO(Identificador);
 
 ALTER TABLE TIENDA
 ADD CONSTRAINT FK_TIENDA FOREIGN KEY (Codigo_sucursal) REFERENCES SUCURSAL(Codigo_sucursal);
@@ -251,12 +247,6 @@ ADD CONSTRAINT FK_Services_Service FOREIGN KEY (Id_servicio) REFERENCES SERVICIO
 
 ALTER TABLE TELEFONO_SUCURSAL
 ADD CONSTRAINT FK_PHONE FOREIGN KEY (Codigo_sucursal) REFERENCES SUCURSAL(Codigo_sucursal);
-
-ALTER TABLE TIPO_DE_MAQUINA
-ADD CONSTRAINT FK_Type_Machine FOREIGN KEY (Num_serie_maquina) REFERENCES INVENTARIO(Numero_serie);
-
-ALTER TABLE TIPO_DE_MAQUINA
-ADD CONSTRAINT FK_Type_Equipment FOREIGN KEY (Id_tipo_equipo) REFERENCES TIPO_EQUIPO(Identificador);
 
 ALTER TABLE CLASE
 ADD CONSTRAINT FK_Class FOREIGN KEY (Id_servicio) REFERENCES SERVICIO(Identificador);
