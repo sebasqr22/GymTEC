@@ -530,9 +530,11 @@ class _ClassScreenState extends State<ClassScreen>{
   }
 
   void _updateClases() async{
-    final response = await http.get(Uri.parse("https://127.0.0.1:7194/usuarios/admin/VerClases"));
+    print("hika");
+    final response = await http.get(Uri.parse("https://192.168.100.12:7194/usuarios/admin/VerClases"));
     final body = utf8.decode(response.bodyBytes);
-    print(json.decode(body));
+    print(response.body);
+    print("hika2");
   }
 }
 
