@@ -14,6 +14,73 @@ namespace funcionesAuxiliares{
     public class AuxiliarFunctions{
         private DatabaseHandler DB_Handler = new DatabaseHandler();
 
+        public dynamic VerificarExistenciaCliente_aux(string cedula){
+            try{
+                // VERIFICAR EXISTENCIA DE CLIENTE
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM CLIENTE WHERE Cedula = @Cedula";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaCliente_aux" };
+            }
+        }
+
+        public dynamic VerClienteEspecifico_aux(string cedula){
+            try{
+                // VER CLIENTE ESPECIFICO
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM CLIENTE WHERE Cedula = @Cedula";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            var cliente = new List<dynamic>();
+                            while (reader.Read()) {
+                                cliente.Add(new {
+                                    Cedula = reader.GetInt32(0),
+                                    Nombre = reader.GetString(1),
+                                    Apellido1 = reader.GetString(2),
+                                    Apellido2 = reader.GetString(3),
+                                    Dia_nacimiento = reader.GetString(4),
+                                    Mes_nacimiento = reader.GetString(5),
+                                    Ano_nacimiento = reader.GetString(6),
+                                    Peso = reader.GetFloat(7),
+                                    Direccion = reader.GetString(8),
+                                    Correo = reader.GetString(9),
+                                    Contrasena = reader.GetString(10),
+
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+                            return new JsonResult(cliente);
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay clientes en la BD" };
+                        }
+                    }
+                }
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerClienteEspecifico" };
+            }
+
+        }
+
         public dynamic VerSucursales_aux(){
             try{
                 // VER SUCURSALES EXISTENTES
@@ -26,15 +93,16 @@ namespace funcionesAuxiliares{
                             var sucursalesExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 sucursalesExistentes.Add(new {
-                                    Nombre = reader.GetString(0),
-                                    Distrito = reader.GetString(1),
-                                    Canton = reader.GetString(2),
-                                    Provincia = reader.GetString(3),
-                                    Fecha_apertura = reader.GetDateTime(4),
-                                    Hora_apertura = reader.GetTimeSpan(5),
-                                    Hora_cierre = reader.GetTimeSpan(6),
-                                    Max_capacidad = reader.GetInt32(7),
-                                    Cedula_administrador = reader.GetInt32(8)
+                                    Codigo_sucursal = reader.GetInt32(0),
+                                    Nombre = reader.GetString(1),
+                                    Distrito = reader.GetString(2),
+                                    Canton = reader.GetString(3),
+                                    Provincia = reader.GetString(4),
+                                    Fecha_apertura = reader.GetDateTime(5),
+                                    Hora_apertura = reader.GetTimeSpan(6),
+                                    Hora_cierre = reader.GetTimeSpan(7),
+                                    Max_capacidad = reader.GetInt32(8),
+                                    Cedula_administrador = reader.GetInt32(9)
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -53,13 +121,13 @@ namespace funcionesAuxiliares{
             }
         }  
 
-        public dynamic VerificarExistenciaSucursal_aux(string Nombre){
+        public dynamic VerificarExistenciaSucursal_aux(string Codigo_sucursal){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM SUCURSAL WHERE Nombre = @Nombre";
+                string querySelect = "SELECT * FROM SUCURSAL WHERE Codigo_sucursal = @Codigo";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Nombre", Nombre);
+                    comando.Parameters.AddWithValue("@Codigo", Int64.Parse(Codigo_sucursal));
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
@@ -125,7 +193,7 @@ namespace funcionesAuxiliares{
                 // VER INVENTARIO EXISTENTE
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = @"SELECT INVENTARIO.Numero_serie, INVENTARIO.Marca, INVENTARIO_EN_SUCURSAL.Nombre_sucursal, TIPO_DE_MAQUINA.Id_tipo_equipo, TIPO_EQUIPO.Descripcion\
+                string querySelect = @"SELECT INVENTARIO.Numero_serie, INVENTARIO.Marca, INVENTARIO_EN_SUCURSAL.Codigo_sucursal, TIPO_DE_MAQUINA.Id_tipo_equipo, TIPO_EQUIPO.Descripcion
                                      FROM INVENTARIO LEFT OUTER JOIN INVENTARIO_EN_SUCURSAL
                                      ON INVENTARIO.Numero_serie = INVENTARIO_EN_SUCURSAL.Num_serie_maquina
                                      LEFT OUTER JOIN TIPO_DE_MAQUINA 
@@ -140,7 +208,7 @@ namespace funcionesAuxiliares{
                                 inventarioExistentes.Add(new {
                                     NumeroSerie = reader.GetInt32(0),
                                     Marca = reader.GetString(1),
-                                    Nombre_sucursal = reader.GetString(2),
+                                    Codigo_sucursal = reader.GetInt32(2),
                                     Id_tipo_equipo = reader.GetInt32(3),
                                     Descripcion = reader.GetString(4)
                                 });
@@ -295,8 +363,16 @@ namespace funcionesAuxiliares{
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { 
+                            // JSON estructura: { "Descripcion": "Gerente" }
+                            var serviciosExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                serviciosExistentes.Add(new {
+                                    Identificador = reader.GetInt32(0),
+                                    Descripcion = reader.GetString(1)
+                                });
+                            }
                             DB_Handler.CerrarConexion();
-                            return true;
+                            return new JsonResult(serviciosExistentes);
                         }
                         else {
                             DB_Handler.CerrarConexion();
@@ -370,7 +446,6 @@ namespace funcionesAuxiliares{
             }
         }
 
-
         public dynamic VerTratamientos_aux(){
             try{
                 DB_Handler.ConectarServer();
@@ -409,7 +484,7 @@ namespace funcionesAuxiliares{
                 DB_Handler.AbrirConexion();
                 string querySelect = "SELECT * FROM TIPO_EQUIPO WHERE @Identificador = Identificador";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Identificador", Identificador);
+                    comando.Parameters.AddWithValue("@Identificador", Int64.Parse(Identificador));
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
@@ -521,7 +596,8 @@ namespace funcionesAuxiliares{
                                     Contraseña = reader.GetString(8),
                                     Salario = reader.GetDouble(9),
                                     Id_puesto = reader.GetInt32(10),
-                                    Id_planilla = reader.GetInt32(11)
+                                    Id_planilla = reader.GetInt32(11),
+                                    Codigo_suc = reader.GetInt32(12)
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -585,12 +661,11 @@ namespace funcionesAuxiliares{
                             var puestosExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 puestosExistentes.Add(new {
+                                    Identificador = reader.GetInt32(0),
                                     Descripcion = reader.GetString(1)
                                 });
                             }
                             DB_Handler.CerrarConexion();
-
-                            //string json_puestosExistentes = JsonSerializer.Serialize(puestosExistentes);
                             return new JsonResult(puestosExistentes);
                         }
                         else {
@@ -605,13 +680,13 @@ namespace funcionesAuxiliares{
             }
         }
         
-        public dynamic VerificarExistenciaPuesto_aux(string descripcionPuesto){
+        public dynamic VerificarExistenciaPuesto_aux(string Id_puesto){
            try{ 
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM PUESTO WHERE Descripcion = @Descripcion";
+                string querySelect = "SELECT * FROM PUESTO WHERE Id_puesto = @Id_puesto";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Descripcion", descripcionPuesto);
+                    comando.Parameters.AddWithValue("@Descripcion", Id_puesto);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
@@ -638,9 +713,8 @@ namespace funcionesAuxiliares{
                             var tratamientosExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 tratamientosExistentes.Add(new {
-                                    Nsucursal = reader.GetString(0),
-                                    idSpa = reader.GetInt32(1),
-                                    idTratamiento = reader.GetInt32(2)
+                                    Codigo_sucursal = reader.GetInt32(0),
+                                    Id_tratamiento = reader.GetInt32(2)
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -660,14 +734,13 @@ namespace funcionesAuxiliares{
             }
         }
 
-        public dynamic VerificarExistenciaTratamientoSPA_aux(string nombreSucursal, int numSpa, int idTratamiento){
+        public dynamic VerificarExistenciaTratamientoSPA_aux(string Codigo_sucursal, int idTratamiento){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM TRATAMIENTO_SPA WHERE Nsucursal = @Nsucursal AND Spa = @Spa AND Id_tratamiento = @Id_tratamiento";
+                string querySelect = "SELECT * FROM TRATAMIENTO_SPA WHERE Codigo_sucursal = @Codigo AND Id_tratamiento = @Id_tratamiento";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Nsucursal", nombreSucursal);
-                    comando.Parameters.AddWithValue("@Spa", numSpa);
+                    comando.Parameters.AddWithValue("@Codigo", Int64.Parse(Codigo_sucursal));
                     comando.Parameters.AddWithValue("@Id_tratamiento", idTratamiento);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
@@ -696,7 +769,7 @@ namespace funcionesAuxiliares{
                     sb.Append(b.ToString("x2"));
                 }
                 contrasenaEncriptada = sb.ToString();
-                Console.WriteLine(sb.ToString()); // borrar luego
+                Console.WriteLine(sb.ToString()); 
             }            
             return contrasenaEncriptada;
         }

@@ -17,16 +17,21 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/login/LoginCliente?cedula=${cedula}&contrasena=${contrasena}`, {});
   }
 
+
   //ADMIN COMPONENT
-  call_VerTratamientoSPA(){
-    return this.http.get(`https://localhost:7194/usuarios/admin/VerTratamientoSPA`);
-  }
-  call_AgregarTratamientoSPA(nombreSucursal:string, numSpa: number){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTratamientoSPA?nombreSucursal=${nombreSucursal}&numSpa=${numSpa}`, {});
+
+  // AgregarTratamiento(string nombreTratamiento)
+  call_AgregarTratamiento(nombreTratamiento:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTratamiento?nombreTratamiento=${nombreTratamiento}`, {});
   }
 
-  call_EliminarTratamientoSPA(nombreSucursal:string, numSpa: number){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTratamientoSPA?nombreSucursal=${nombreSucursal}&numSpa=${numSpa}`, {});
+  // EliminarTratamiento(string idTratamiento)
+  call_EliminarTratamiento(idTratamiento:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTratamiento?idTratamiento=${idTratamiento}`, {});
+  }
+
+  call_VerTratamientos(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerTratamientos`);
   }
 
   call_VerPuestos(descripcionPuesto:string){
@@ -37,8 +42,9 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarPuesto?descripcionPuesto=${descripcionPuesto}`, {});
   }
 
-  call_EliminarPuesto(descripcionPuesto:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarPuesto?descripcionPuesto=${descripcionPuesto}`, {});
+  //EliminarPuesto(string Id_puesto){
+  call_EliminarPuesto(idPuesto:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarPuesto?idPuesto=${idPuesto}`, {});
   }
 
   call_VerPlanillas(){
@@ -73,18 +79,23 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
   }
 
-  call_EliminarTipoEquipo(descripcionTipoEquipo:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
+  // EliminarTipoEquipo(string idTipoEquipo)
+  call_EliminarTipoEquipo(idTipoEquipo:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTipoEquipo?idTipoEquipo=${idTipoEquipo}`, {});
   }
 
   agregarProductos(codigoBarras:string, nombreProducto:string, Descripcion:string, costo:string){
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarProducto?codigoBarras=${codigoBarras}&nombreProducto=${nombreProducto}&Descripcion=${Descripcion}&costo=${costo}`, {})
-  }  activarSpa(nombreSucursal:string, numSpa:number){
-    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarSPA?nombreSucursal=${nombreSucursal}&numSpa=${numSpa}`, {});
   }
 
-  activarTienda(nombreSucursal:string, numTienda:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarTienda?nombreSucursal=${nombreSucursal}&numTienda=${numTienda}`, {});
+  // ActivarSPA(string codigo_sucursal)
+  activarSpa(codigoSucursal:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarSPA?codigo_sucursal=${codigoSucursal}`, {});
+  }
+
+  // ActivarTienda(string codigo_sucursal)
+  activarTienda(codigo_sucursal:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarTienda?codigo_sucursal=${codigo_sucursal}`, {});
   }
 
   verProductos(){
@@ -98,7 +109,7 @@ export class GetApiService {
   crearClase(servicioClase:string, cedulaInstructor:string, modalidad:string, capacidad:string, fecha:string, horaInicio:string, horaFinal:string){
     return this.http.post(`https://localhost:7194/usuarios/admin/CrearClase?servicioClase=${servicioClase}&cedulaInstructor=${cedulaInstructor}&modalidad=${modalidad}&capacidad=${capacidad}&fecha=${fecha}&horaInicio=${horaInicio}&horaFinal=${horaFinal}`, {})
   }
-  
+
   eliminarClase(Id_servicio:string, cedulaInstructor:string, modalidad:string, fecha:string, horaInicio:string){
     return this.http.post(`https://localhost:7194/usuarios/admin/EliminarClase?Id_servicio=${Id_servicio}&cedulaInstructor=${cedulaInstructor}&modalidad=${modalidad}&fecha=${fecha}&horaInicio=${horaInicio}`, {});
   }
@@ -107,8 +118,9 @@ export class GetApiService {
     return this.http.get(`https://localhost:7194/usuarios/admin/VerClases`);
   }
 
-  agregarInventario(numSerie:string, marca:string, nombreSucursal:string,  idTipoEquipo:string,  descripcion:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarInventario?numSerie=${numSerie}&marca=${marca}&nombreSucursal=${nombreSucursal}&idTipoEquipo=${idTipoEquipo}&descripcion=${descripcion}`, {})
+  //AgregarInventario(string numSerie, string marca, string idTipoEquipo){
+  agregarInventario(numSerie:string, marca:string, idTipoEquipo:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarInventario?numSerie=${numSerie}&marca=${marca}&idTipoEquipo=${idTipoEquipo}`, {})
   }
 
   verInventario(){
@@ -124,43 +136,52 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/CopiarCalendarioActividades?Id_servicio=${Id_servicio}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&Hora_inicio=${Hora_inicio}&Hora_fin=${Hora_fin}&Modalidad=${Modalidad}&Capacidad=${Capacidad}&Cedula_instructor=${Cedula_instructor}&`, {})
   }
 
-  asociarServicioSpaASucursal(nombreSucursal:string, idServicio:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarServiciosASucursal?nombreSucursal=${nombreSucursal}&idServicio=${idServicio}`, {})
+  // string Codigo_sucursal, string idServicio
+  asociarServicioSpaASucursal(codigoSucursal:string, idServicio:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarServiciosASucursal?codigoSucursal=${codigoSucursal}&idServicio=${idServicio}`, {})
   }
 
-  asociarTratamientoASpa(numSpa:string, nombreSucursal:string, idTratamiento:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarTratamientoASpa?numSpa=${numSpa}&nombreSucursal=${nombreSucursal}&idTratamiento=${idTratamiento}`, {})
+  //AsociarTratamientosASPA(string Codigo_sucursal, string Id_tratamiento){
+  asociarTratamientoASpa(Codigo_sucursal:string, idTratamiento:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarTratamientosASPA?Codigo_sucursal=${Codigo_sucursal}&idTratamiento=${idTratamiento}`, {})
   }
 
-  agregarSucursal(Nombre:string, Distrito:string, Provincia:string, Fecha_apertura:string, Hora_apertura:string, Hora_cierre:string, Max_capacidad:string, Cedula_administrador:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarSucursal?Nombre=${Nombre}&Distrito=${Distrito}&Provincia=${Provincia}&Fecha_apertura=${Fecha_apertura}&Hora_apertura=${Hora_apertura}&Hora_cierre=${Hora_cierre}&Max_capacidad=${Max_capacidad}&Cedula_administrador=${Cedula_administrador}&`, {})
+  //AgregarSucursal(string Nombre, string Distrito, string Canton, string Provincia, string Fecha_apertura, string Hora_apertura, string Hora_cierre, string Max_capacidad, string Cedula_administrador){
+  agregarSucursal(Nombre:string, Distrito:string, Canton:string, Provincia:string, Fecha_apertura:string, Hora_apertura:string, Hora_cierre:string, Max_capacidad:string, Cedula_administrador:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarSucursal?Nombre=${Nombre}&Distrito=${Distrito}&Canton=${Canton}&Provincia=${Provincia}&Fecha_apertura=${Fecha_apertura}&Hora_apertura=${Hora_apertura}&Hora_cierre=${Hora_cierre}&Max_capacidad=${Max_capacidad}&Cedula_administrador=${Cedula_administrador}`, {})
   }
 
-  eliminarSucursal(nombreSucursal:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarSucursal?nombreSucursal=${nombreSucursal}`, {})
+  //EliminarSucursal(string codigo_suc){
+  eliminarSucursal(codigoSucursal:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarSucursal?codigoSucursal=${codigoSucursal}`, {})
   }
 
   verSucursales(){
     return this.http.post(`https://localhost:7194/usuarios/admin/VerSucursal`, {})
   }
 
-  asociarInventario(nombre_sucursal:string, num_serie:string, costo:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarInventario?nombre_sucursal=${nombre_sucursal}&num_serie=${num_serie}&costo=${costo}`, {})
+  //AsociarInventario(string Codigo_sucursal, string num_serie, string costo) {
+  asociarInventario(codigoSucursal:string, num_serie:string, costo:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarInventario?codigoSucursal=${codigoSucursal}&num_serie=${num_serie}&costo=${costo}`, {})
   }
 
-  asociarProductosATienda(nombreSucursal:string, numTienda:string, codigoProducto:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarProductosATienda?nombreSucursal=${nombreSucursal}&numTienda=${numTienda}&codigoProducto=${codigoProducto}`, {})
+//AsociarProductosATienda(string Codigo_sucursal, string Codigo_producto){
+  asociarProductosATienda(codigoSucursal:string, codigoProducto:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarProductosATienda?codigoSucursal=${codigoSucursal}&codigoProducto=${codigoProducto}`, {})
   }
 
-  copiarGimnasio(gym_nuevo:string, gym_viejo:string, num_spa:string, num_tienda:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarGimnasio?gym_nuevo=${gym_nuevo}&gym_viejo=${gym_viejo}&num_spa=${num_spa}&num_tienda=${num_tienda}`, {});
+  //CopiarGimnasio(string new_gym, string copied_gym) {
+  copiarGimnasio(gym_nuevo:string, gym_viejo:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarGimnasio?gym_nuevo=${gym_nuevo}&gym_viejo=${gym_viejo}`, {})
   }
+
 
   eliminarServicio(Id_servicio:string){
     return this.http.post(`https://localhost:7194/usuarios/admin/EliminarServicio?Id_servicio=${Id_servicio}`, {});
   }
 
-  verSericios(){
+  // antes decia VerSericios, fue un typo
+  verServicios(){
     return this.http.post(`https://localhost:7194/usuarios/admin/EliminarServicios`, {})
   }
 
@@ -176,16 +197,32 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTratamiento?nombreTratamiento=${nombreTratamiento}`, {})
   }
 
-  buscarCliente(){
-    //falta la ruta para este metodo
-    //return this.http.get()
+  //VerClienteEspecifico(string cedula){
+  buscarCliente(cedula:string){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerClienteEspecifico?cedula=${cedula}`, {})
   }
 
   registrarClienteEnClase(cedulaClient:string, Num_clase:string, Id_servicio:string, Fecha:string, Hora_inicio:string, Modalidad:string, Cedula_instructor:string){
     return this.http.post(`https://localhost:7194/usuarios/admin/CopiarGRegistrarClienteEnClaseimnasio?cedulaClient=${cedulaClient}&Num_clase=${Num_clase}&Id_servicio=${Id_servicio}&Fecha=${Fecha}&Hora_inicio=${Hora_inicio}&Modalidad=${Modalidad}&Cedula_instructor=${Cedula_instructor}`, {})
   }
 
-  buscarClase(Nombre_sucursal:string, Id_servicio:string, fechaInicio:string, fecha_fin:string){
-    return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClase?Nombre_sucursal=${Nombre_sucursal}&Id_servicio=${Id_servicio}&fechaInicio=${fechaInicio}&fecha_fin=${fecha_fin}`, {})
+  //BuscarClase(string Codigo_sucursal,string Id_servicio, string fechaInicio, string fecha_fin){
+  buscarClase(codigoSucursal:string, Id_servicio:string, fechaInicio:string, fecha_fin:string){
+    return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClase?codigoSucursal=${codigoSucursal}&Id_servicio=${Id_servicio}&fechaInicio=${fechaInicio}&fecha_fin=${fecha_fin}`, {})
+  }
+
+  //BuscarClasePorSucursal(string Codigo_sucursal){
+  buscarClasePorSucursal(codigoSucursal:string){
+      return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClasePorSucursal?codigoSucursal=${codigoSucursal}`, {})
+  }
+
+  //BuscarClasePorServicio(string Id_servicio){
+  buscarClasePorServicio(Id_servicio:string){
+      return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClasePorServicio?Id_servicio=${Id_servicio}`, {})
+  }
+
+  //BuscarClasePorPeriodos(string fechaInicio, string fecha_fin){
+  buscarClasePorPeriodos(fechaInicio:string, fecha_fin:string){
+    return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClasePorPeriodos?fechaInicio=${fechaInicio}&fecha_fin=${fecha_fin}`, {})
   }
 }

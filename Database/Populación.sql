@@ -42,18 +42,18 @@ INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Pesas');
 INSERT INTO EMPLEADO VALUES (123456789, 'H�ctor', 'Perez', 'Rodr�guez', 'Dulce Nombre', 'Cartago', 'Cartago', 'pjhector01@gmail.com', '987654321hec', 3480000, 1, 1, NULL);
 
 -- Sucursales ya existentes en los campus del Tecnol�gico de Costa Rica.
-INSERT INTO SUCURSAL VALUES (10001, 'GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789);
-INSERT INTO SUCURSAL VALUES (10002, 'GymTEC Campus San Jos�', 'Barrio Am�n', 'San Jos�', 'San Jos�', '2006-06-20', '7:00', '18:00', 25, 123456789);
-INSERT INTO SUCURSAL VALUES (10003, 'GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123456789);
+INSERT INTO SUCURSAL (Nombre, Distrito, Canton, Provincia, Fecha_apertura, Hora_apertura, Hora_cierre, Max_capacidad, Cedula_administrador) VALUES ('GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789);
+INSERT INTO SUCURSAL (Nombre, Distrito, Canton, Provincia, Fecha_apertura, Hora_apertura, Hora_cierre, Max_capacidad, Cedula_administrador) VALUES ('GymTEC Campus San Jos�', 'Barrio Am�n', 'San Jos�', 'San Jos�', '2006-06-20', '7:00', '18:00', 25, 123456789);
+INSERT INTO SUCURSAL (Nombre, Distrito, Canton, Provincia, Fecha_apertura, Hora_apertura, Hora_cierre, Max_capacidad, Cedula_administrador) VALUES ('GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123456789);
 
-UPDATE EMPLEADO SET Codigo_sucursal = 10001 WHERE Cedula = 123456789;
+UPDATE EMPLEADO SET Codigo_sucursal = 1 WHERE Cedula = 123456789;
 
 -- Se tiene por default un Spa inactivo en cada sucursal.
-INSERT INTO SPA VALUES (10001, 0);
-INSERT INTO SPA VALUES (10002, 0);
-INSERT INTO SPA VALUES (10003, 0);
+INSERT INTO SPA VALUES (1, 0);
+INSERT INTO SPA VALUES (2, 0);
+INSERT INTO SPA VALUES (3, 0);
 
 -- Se tiene por default una Tienda inactiva en cada sucursal.
-INSERT INTO TIENDA VALUES (10001, 0);
-INSERT INTO TIENDA VALUES (10002, 0);
-INSERT INTO TIENDA VALUES (10003, 0);
+INSERT INTO TIENDA VALUES (1, 0);
+INSERT INTO TIENDA VALUES (2, 0);
+INSERT INTO TIENDA VALUES (3, 0);
