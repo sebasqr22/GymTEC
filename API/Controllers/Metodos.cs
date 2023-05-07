@@ -21,8 +21,26 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/EliminarSucursal")]
-      public dynamic EliminarSucursal(string ){
+      public dynamic EliminarSucursal(string nombreSucursal){
         try{
+          // Verificar que la sucursal exista
+          dynamic existeSucursal = aux.VerificarExistenciaSucursal_aux(nombreSucursal);
+          if (!existeSucursal) {
+            return new { message = "No existe esta sucursal" };
+          }
+
+          // Eliminar sucursal
+          string queryDelete = "DELETE FROM SUCURSAL WHERE Nombre = @nombreSucursal";
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+
+          using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Nombre_sucursal", nombreSucursal);
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+
+
           return new { message = "ok" };
         }catch(Exception e){
           Console.WriteLine(e);
