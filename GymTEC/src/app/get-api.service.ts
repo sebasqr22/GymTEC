@@ -17,7 +17,23 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/login/LoginCliente?cedula=${cedula}&contrasena=${contrasena}`, {});
   }
 
+
   //ADMIN COMPONENT
+
+  // AgregarTratamiento(string nombreTratamiento)
+  call_AgregarTratamiento(nombreTratamiento:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTratamiento?nombreTratamiento=${nombreTratamiento}`, {});
+  }
+
+  // EliminarTratamiento(string idTratamiento)
+  call_EliminarTratamiento(idTratamiento:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTratamiento?idTratamiento=${idTratamiento}`, {});
+  }
+
+  call_VerTratamientos(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerTratamientos`);
+  }
+
   call_VerPuestos(descripcionPuesto:string){
     return this.http.get(`https://localhost:7194/usuarios/admin/VerPuestos?descripcionPuesto=${descripcionPuesto}`);
   }
@@ -65,7 +81,7 @@ export class GetApiService {
 
   // EliminarTipoEquipo(string idTipoEquipo)
   call_EliminarTipoEquipo(idTipoEquipo:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTipoEquipo?idTipoEquipo=${idTipoEquipo}`, {});
   }
 
   agregarProductos(codigoBarras:string, nombreProducto:string, Descripcion:string, costo:string){
@@ -122,7 +138,7 @@ export class GetApiService {
 
   // string Codigo_sucursal, string idServicio
   asociarServicioSpaASucursal(codigoSucursal:string, idServicio:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarServiciosASucursal?nombreSucursal=${nombreSucursal}&idServicio=${idServicio}`, {})
+    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarServiciosASucursal?codigoSucursal=${codigoSucursal}&idServicio=${idServicio}`, {})
   }
 
   //AsociarTratamientosASPA(string Codigo_sucursal, string Id_tratamiento){
@@ -193,5 +209,20 @@ export class GetApiService {
   //BuscarClase(string Codigo_sucursal,string Id_servicio, string fechaInicio, string fecha_fin){
   buscarClase(codigoSucursal:string, Id_servicio:string, fechaInicio:string, fecha_fin:string){
     return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClase?codigoSucursal=${codigoSucursal}&Id_servicio=${Id_servicio}&fechaInicio=${fechaInicio}&fecha_fin=${fecha_fin}`, {})
+  }
+
+  //BuscarClasePorSucursal(string Codigo_sucursal){
+  buscarClasePorSucursal(codigoSucursal:string){
+      return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClasePorSucursal?codigoSucursal=${codigoSucursal}`, {})
+  }
+
+  //BuscarClasePorServicio(string Id_servicio){
+  buscarClasePorServicio(Id_servicio:string){
+      return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClasePorServicio?Id_servicio=${Id_servicio}`, {})
+  }
+
+  //BuscarClasePorPeriodos(string fechaInicio, string fecha_fin){
+  buscarClasePorPeriodos(fechaInicio:string, fecha_fin:string){
+    return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClasePorPeriodos?fechaInicio=${fechaInicio}&fecha_fin=${fecha_fin}`, {})
   }
 }

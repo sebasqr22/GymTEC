@@ -330,6 +330,124 @@ namespace Metodos{
         }
       }
 
+      [HttpGet]
+      [Route("cliente/BuscarClasePorSucursal")]
+      public dynamic BuscarClasePorSucursal(string Codigo_sucursal){
+        try{
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
+                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
+                           WHERE SUCURSAL.Codigo_sucursal = @Codigo_sucursal
+                           GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Codigo_sucursal", Codigo_sucursal);
+            comando.ExecuteNonQuery();
+            SqlDataReader reader = comando.ExecuteReader();
+            if (reader.HasRows) { 
+                var clasesBuscadas = new List<dynamic>();
+                while (reader.Read()) {
+                    clasesBuscadas.Add(new {
+                        Fecha = reader.GetString(0),
+                        Hora_inicio = reader.GetString(1),
+                        Hora_fin = reader.GetString(2),
+                        EmpleadoNombre = reader.GetString(3),
+                        EmpleadoApellido1 = reader.GetString(4),
+                        EmpleadoApellido2 = reader.GetString(5),
+                        Capacidad = reader.GetInt32(6)
+                    });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(clasesBuscadas);
+            }
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "No hay clases para esta sucursal" };
+
+        }catch{
+          return new { message = "error" };
+        }
+      }
+
+      [HttpGet]
+      [Route("cliente/BuscarClasePorServicio")]
+      public dynamic BuscarClasePorServicio(string Id_servicio){
+        try{
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
+                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
+                           WHERE CLASE.Id_servicio = Id_servicio
+                           GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Id_servicio", Id_servicio);
+            comando.ExecuteNonQuery();
+            SqlDataReader reader = comando.ExecuteReader();
+            if (reader.HasRows) { 
+                var clasesBuscadas = new List<dynamic>();
+                while (reader.Read()) {
+                    clasesBuscadas.Add(new {
+                        Fecha = reader.GetString(0),
+                        Hora_inicio = reader.GetString(1),
+                        Hora_fin = reader.GetString(2),
+                        EmpleadoNombre = reader.GetString(3),
+                        EmpleadoApellido1 = reader.GetString(4),
+                        EmpleadoApellido2 = reader.GetString(5),
+                        Capacidad = reader.GetInt32(6)
+                    });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(clasesBuscadas);
+            }
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "No hay clases de este tipo en ninguna sucursal" };
+
+        }catch{
+          return new { message = "error" };
+        }
+      }
+
+      [HttpGet]
+      [Route("cliente/BuscarClasePorPeriodos")]
+      public dynamic BuscarClasePorPeriodos(string fechaInicio, string fecha_fin){
+        try{
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
+                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
+                           WHERE @fecha_inicio <= Fecha AND Fecha <= fecha_fin
+                           GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@fecha_inicio", fechaInicio);
+            comando.Parameters.AddWithValue("@fecha_fin", fecha_fin);
+            comando.ExecuteNonQuery();
+            SqlDataReader reader = comando.ExecuteReader();
+            if (reader.HasRows) { 
+                var clasesBuscadas = new List<dynamic>();
+                while (reader.Read()) {
+                    clasesBuscadas.Add(new {
+                        Fecha = reader.GetString(0),
+                        Hora_inicio = reader.GetString(1),
+                        Hora_fin = reader.GetString(2),
+                        EmpleadoNombre = reader.GetString(3),
+                        EmpleadoApellido1 = reader.GetString(4),
+                        EmpleadoApellido2 = reader.GetString(5),
+                        Capacidad = reader.GetInt32(6)
+                    });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(clasesBuscadas);
+            }
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "No hay clases en este rango de fechas" };
+
+        }catch{
+          return new { message = "error" };
+        }
+      }
+
       [HttpPost]
       [Route("admin/CopiarCalendarioActividades")]
       public dynamic CopiarCalendarioActividades(string Id_servicio, string fechaInicio, string fechaFin, string Hora_inicio, string Hora_fin, string Modalidad, string Capacidad, string Cedula_instructor){
@@ -620,6 +738,19 @@ namespace Metodos{
         }
         // ELIMINAR PRODUCTO EN LA BASE DE DATOS
         try{
+
+          // ELIMINAR DE VENTA_PRODUCTO
+
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string queryDelete = "DELETE FROM VENTA_PRODUCTO WHERE Codigo_barras = @Codigo_barras";
+          using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Codigo_barras", Int64.Parse(codigoBarras));
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+
+          // ELIMINAR DE PRODUCTO
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           string queryDelete = "DELETE FROM PRODUCTO WHERE Codigo_barras = @Codigo_barras";
@@ -628,6 +759,8 @@ namespace Metodos{
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
+
+
           return new { message = "ok" };
         }catch(Exception e){
           Console.WriteLine(e);
@@ -1046,6 +1179,32 @@ namespace Metodos{
         }
       }
 
+      [HttpPost]
+      [Route("admin/EliminarTratamiento")]
+      public dynamic EliminarTratamiento(string idTratamiento){
+        try{
+          // VERIFICAR QUE EXISTE EL TRATAMIENTO
+          if (string.IsNullOrEmpty(idTratamiento)) {
+              return new { message = "error" };}
+          bool existeTratamiento = aux.VerificarExistenciaTratamiento_aux(idTratamiento);
+          if (!existeTratamiento) {
+              return new { message = "Tratamiento no existe en la BD. Error" };}
+          // ELIMINAR TRATAMIENTO EN LA BASE DE DATOS
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string queryDelete = "DELETE FROM TRATAMIENTO WHERE Identificador = @Id_tratamiento";
+          using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+              comando.Parameters.AddWithValue("@Id_tratamiento", Int64.Parse(idTratamiento));
+              comando.ExecuteNonQuery();
+              DB_Handler.CerrarConexion();
+          }
+          return new { message = "ok" };
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
       [HttpGet]
       [Route("admin/VerTratamientosSPA")]
       public dynamic VerTratamientosSPA(){
@@ -1087,6 +1246,8 @@ namespace Metodos{
           return new { message = "error" };
         }
       }
+
+
 
       [HttpPost]
       [Route("admin/EliminarTratamientoSPA")]
