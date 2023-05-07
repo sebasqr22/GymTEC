@@ -753,8 +753,8 @@ namespace Metodos{
           // ELIMINAR DE PRODUCTO
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string queryDelete = "DELETE FROM PRODUCTO WHERE Codigo_barras = @Codigo_barras";
-          using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+          string queryDelete2 = "DELETE FROM PRODUCTO WHERE Codigo_barras = @Codigo_barras";
+          using (SqlCommand comando = new SqlCommand(queryDelete2, DB_Handler.conectarDB)) {
             comando.Parameters.AddWithValue("@Codigo_barras", Int64.Parse(codigoBarras));
             comando.ExecuteNonQuery();
           }
