@@ -48,7 +48,7 @@
           <a id='gestTratSpa' class="nav-link collapsed" data-toggle="collapse"
              (click)="mostrarPantalla('gestTratSpaP')">
             <i class="fas fa-regular fa-spa"></i>
-            <span>Tratamientos de Spa</span>
+            <span>Gestión de Tratamientos</span>
           </a>
         </li>
 
@@ -327,7 +327,7 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestSucSpaHORARIOAPERTURA">
+                <input type="text" class="form-control form-control-user" id="gestSucSpaHORARIOAPERTURA"> <!--cambiar el datatype a el date para horas-->
                 <label for="gestSucSpaHORARIOAPERTURA">Horario de apertura</label>
               </div>
 
@@ -468,7 +468,7 @@
             <h1 class="h3 mb-4 text-gray-800">Agregar Nuevo Tratamiento</h1>
             <div class="col-sm">
               <input type="text" class="form-control form-control-user" id="gestTratSpaNOOMBRENUEVO">
-              <label for="gestTratSpaID">Nombre</label>
+              <label for="gestTratSpaID">Descripcion</label>
             </div>
             <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarNuevoTratamiento()">
               Guardar Nuevo
@@ -514,12 +514,8 @@
             <hr class="sidebar-divider">
             <h1 class="h3 mb-4 text-gray-800">Agregar Nuevo Puesto</h1>
             <div class="form-group row">
-              <div class="col-sm-6 mb-3 mb-sm-0">
-                <input type="text" class="form-control form-control-user" id="gestPuestPNOMBREAGREGAR">
-                <label for="gestPuestPNOMBREAGREGAR">Nombre</label>
-              </div>
 
-              <div class="col-sm-6 mb-3 mb-sm-0">
+              <div class="col-sm">
                 <input type="text" class="form-control form-control-user" id="gestPuestPDESCRIPCIONAGREGAR">
                 <label for="gestPuestPDESCRIPCIONAGREGAR">Descripción</label>
               </div>
@@ -532,10 +528,10 @@
           </div><!-- MARCO -->
 
           <div id="gestTipPlaP" class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800">Gestión de Tipos de Planilla</h1>
+            <h1 class="h3 mb-4 text-gray-800">Gestión de Tipos de Planilla</h1> <!--MODIFICAR ESTA VISTA DE ACA PARA QUE SEA SOLO PARA AGREGAR Y ELIMINAR TIPOS DE PLANILLA YA EXISTENTES-->
             <div class="col-sm">
               <select class="form-control form-control-user" id="gestTipPlaPSELECT"></select>
-              <label for="gestTipPlaPSELECT">Tipo de Planilla</label>
+              <label for="gestTipPlaPSELECT">Cedula del empleado</label> <!--CAMBIADO PARA FUNCIONAR CON CALCULOS EN BASE AL SALARIO DE UN EMPLEADO-->>
             </div>
 
             <div class="form-group row">
@@ -743,15 +739,12 @@
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-6">
+              <div class="col-sm">
                 <input type="text" class="form-control form-control-user" id="gestServPID" readonly>
                 <label for="gestServPID">ID Único</label>
               </div>
 
-              <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestServPNOMBRE">
-                <label for="gestServPNOMBRE">Nombre</label>
-              </div>
+              
 
               <div class="col-sm">
                 <textarea class="form-control form-control-user" id="gestServPDESCRIPCION" rows="2"></textarea>
@@ -773,10 +766,7 @@
             <h1 class="h3 mb-4 text-gray-800">Creación de Servicios</h1>
             <div class="form-group row">
 
-              <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestServPNOMBRE2">
-                <label for="gestServPNOMBRE2">Nombre</label>
-              </div>
+
 
               <div class="col-sm">
                 <textarea class="form-control form-control-user" id="gestServPDESCRIPCION2" rows="1"></textarea>
@@ -822,12 +812,9 @@
             <hr class="sidebar-divider">
             <h1 class="h3 mb-4 text-gray-800">Agregar Nuevo Tipo Equipo</h1>
             <div class="form-group row">
-              <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestTipEquipPIDNUEVO">
-                <label for="gestTipEquipPIDNUEVO">ID</label>
-              </div>
+              
 
-              <div class="col-sm-6">
+              <div class="col-sm">
                 <input type="text" class="form-control form-control-user" id="gestTipEquipPDESCRIPCIONNUEVO">
                 <label for="gestTipEquipPDESCRIPCIONNUEVO">Descripción</label>
               </div>
@@ -876,10 +863,7 @@
                 <label for="gestInvetPCOSTOSUCURSAL">Costo de Sucursal</label>
               </div>
 
-              <div class="col-sm">
-                <input type="checkbox" class="form-control form-control-user" id="gestInvetPASIGNADA">
-                <label for="gestInvetPASIGNADA">Asignada a Gimnasio</label>
-              </div>
+              
             </div>
 
             <a class="btn btn-outline-primary btn-user btn-block" (click)="guardarInventario()">
@@ -908,15 +892,9 @@
                 <label for="gestInvetPNUMEROSERIE2">Número de Serie</label>
               </div>
 
-              <div class="col-sm-6">
-                <input type="number" class="form-control form-control-user" id="gestInvetPCOSTOSUCURSAL2" step="0.01">
-                <label for="gestInvetPCOSTOSUCURSAL2">Costo de Sucursal</label>
-              </div>
+              
 
-              <div class="col-sm">
-                <input type="checkbox" class="form-control form-control-user" id="gestInvetPASIGNADA2">
-                <label for="gestInvetPASIGNADA2">Asignada a Gimnasio</label>
-              </div>
+              
             </div>
             <a class="btn btn-outline-primary btn-user btn-block">
               Guardar
@@ -1084,6 +1062,11 @@
             <div class="col-sm">
               <select class="form-control form-control-user" id="confGymPInventarioEQUIPO"></select>
               <label for="confGymPInventarioEQUIPO">Equipo</label>
+            </div>
+
+            <div class="col-sm">
+              <input type="text" class="form-control form-control-user" id="confGymPInventarioCOSTO">
+              <label for="confGymPInventarioCOSTO">Costo</label>
             </div>
             <a class="btn btn-outline-primary btn-user btn-block" (click)="asociarInventario()">
               Asociar

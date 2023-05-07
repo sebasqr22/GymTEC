@@ -658,7 +658,7 @@ namespace Metodos{
       
       [HttpPost]
       [Route("admin/CrearClase")]
-      public dynamic CrearClase(string servicioClase, string cedulaInstructor, string modalidad, string capacidad, string fecha, string horaInicio, string horaFinal){
+      public dynamic CrearClase(string idServicio, string cedulaInstructor, string modalidad, string capacidad, string fecha, string horaInicio, string horaFinal){
         try{
             if(string.IsNullOrEmpty(servicioClase) || string.IsNullOrEmpty(modalidad) || string.IsNullOrEmpty(fecha) || string.IsNullOrEmpty(horaInicio) || string.IsNullOrEmpty(horaFinal) || string.IsNullOrEmpty(capacidad) || string.IsNullOrEmpty(cedulaInstructor)){
               return new { message = "error" };}
@@ -670,9 +670,9 @@ namespace Metodos{
             }
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryInsert = "INSERT INTO CLASE VALUES (@Id_servicio, @Fecha, @Hora_inicio, @Hora_fin, @Modalidad, @Capacidad,@Cedula_instructor)";
+            string queryInsert = "INSERT INTO CLASE VALUES (@Id_servicio, @Fecha, @Hora_inicio, @Hora_fin, @Modalidad, @Capacidad, @Cedula_instructor)";
             using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-              comando.Parameters.AddWithValue("@Id_servicio", servicioClase);
+              comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(servicioClase));
               comando.Parameters.AddWithValue("@Fecha", DateTime.ParseExact(fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
               comando.Parameters.AddWithValue("@Hora_inicio", TimeSpan.ParseExact(horaInicio, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
               comando.Parameters.AddWithValue("@Hora_fin", TimeSpan.ParseExact(horaFinal, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
@@ -1048,23 +1048,23 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/EliminarPlanilla")]
-      public dynamic EliminarPlanilla(string descripcionPlanilla){
+      public dynamic EliminarPlanilla(string idPlanilla){
         try{
             // VERIFICACION DE DATOS
-            if(string.IsNullOrEmpty(descripcionPlanilla)){
+            if(string.IsNullOrEmpty(idPlanilla)){
                 return new { message = "error" };}
 
             // ELIMINAR PLANILLA EN LA BASE DE DATOS
-            dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux(descripcionPlanilla);
+            dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux(idPlanilla);
             if(!existePlanilla){
                 return new { message = "No existe esta planilla en la BD" };
             }
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryDelete = "DELETE FROM PLANILLA WHERE Descripcion = @Descripcion";
+            string queryDelete = "DELETE FROM PLANILLA WHERE Identificador = @idPlanilla";
             using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Descripcion", descripcionPlanilla);
+                comando.Parameters.AddWithValue("@Identificador", descripcionPlanilla);
                 comando.ExecuteNonQuery();
             }
             DB_Handler.CerrarConexion();

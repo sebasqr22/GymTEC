@@ -214,7 +214,7 @@ agregarEmpleado(){ //FUNCA
   const canton = document.getElementById('gestEmplPCANTON2') as HTMLInputElement;
   const provincia = document.getElementById('gestEmplPPROVINCIA2') as HTMLInputElement;
   //@ts-ignore
-  //LOS ULTIMOS 3 PARAMETROS DE LA LLAMADA DE ABAJO SON INTS, ADEMAS LA FUNCION LOS TRABAJA COMO IDs, HAY QUE OBTENERLOS COMO TAL
+  //LA FUNCION LOS TRABAJA COMO IDs LOS PARAMETRO DE SUCURSAL, PUESTO Y PLANTILLA, HAY QUE OBTENERLOS COMO TAL
   this.auth.agregarEmpleados(this.toNum(cedula.value), nombre.value,apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
 }
 
@@ -223,13 +223,13 @@ agregarEmpleado(){ //FUNCA
 
 //pantalla de gestion de servicios!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-guardarServicio(){
+guardarServicio(){ 
   const servicio = document.getElementById('gestServPSELECT') as HTMLInputElement;
   const IDunico = document.getElementById('gestServPID') as HTMLInputElement;
   const nombre = document.getElementById('gestServPNOMBRE') as HTMLInputElement;
   const pagoHoras = document.getElementById('gestServPDESCRIPCION') as HTMLInputElement;
 
-  //this.api.guardarServicio(); no acepta la funcion api.guardarservicio, solo this.guardarservicio
+  //STANDBY
 }
 
 eliminarServicio(){
@@ -241,25 +241,25 @@ agregarNuevoServicio(){
   const nombre = document.getElementById('gestServPNOMBRE2') as HTMLInputElement;
   const descripcion = document.getElementById('gestServPDESCRIPCION2') as HTMLInputElement;
 
-  //no hay funcion para agregar nuevos servicios
+  //FALTA LA LLAMDA DEL API SERVICE
 }
 
 //pantalla de gestion de tipos de equipos!!!!!!!!!!!!!!!!!!!!!!!!!!!
-guardarTipoEquipo(){
-  const gym = document.getElementById('gestTipEquipPGYM') as HTMLInputElement;
-  const id = document.getElementById('gestTipEquipPID') as HTMLInputElement;
+guardarTipoEquipo(){ //FUNCA, VERIFICAR QUE SEA SI CON LA DESCRIPCION QUE SE QUIERE TRABAJAR
+  //const gym = document.getElementById('gestTipEquipPGYM') as HTMLInputElement;
+  // id = document.getElementById('gestTipEquipPID') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCION') as HTMLInputElement;
 
-  //this.guardarTipoEquipo(); por que esta funcion recibe como parametro la descripcion?
+  this.api.call_AgregarTipoEquipo(descripcion.value);
 }
 
 eliminarTipoEquipo(){
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCION') as HTMLInputElement;
-  this.api.call_EliminarTipoEquipo(descripcion.value)
+  this.api.call_EliminarTipoEquipo(descripcion.value) //ESTO NO ES UNA DESCRIPCION ES LA ID CON LA QUE TRABAJA
 }
 
 agregarNuevoEquipo(){
-  const id = document.getElementById('gestTipEquipPIDNUEVO') as HTMLInputElement;
+ // const id = document.getElementById('gestTipEquipPIDNUEVO') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCIONNUEVO') as HTMLInputElement;
   this.api.call_AgregarTipoEquipo(descripcion.value);
 }
@@ -276,10 +276,10 @@ guardarInventario(){
   const costo = document.getElementById('gestInvetPCOSTOSUCURSAL') as HTMLInputElement;
   const asignadaAGym = document.getElementById('gestInvetPASIGNADA') as HTMLInputElement;
 
-  //this.api.agregarInventario(numeroDeSerie.value, marca.value, sucursal.value, tipoDeEquipo.value, descripcion.value)
+  //STANDBY
 }
 
-eliminarInventario(){
+eliminarInventario(){ //FUNCA, SI NO LO HACE ES PORQUE TRABAJA CON IDS
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE') as HTMLInputElement;
   this.api.eliminarInventario(numeroDeSerie.value)
 }
@@ -291,7 +291,7 @@ agregarNuevoInventario(){
   const costo = document.getElementById('gestInvetPCOSTOSUCURSAL2') as HTMLInputElement;
   const asignadaAGym = document.getElementById('gestInvetPASIGNADA2') as HTMLInputElement;
 
-  //this.api.agregarInventario(numeroDeSerie.value, marca.value, sucursal.value, tipoDeEquipo.value, descripcion.value) la sucursal esta dando problemas
+  this.api.agregarInventario(numeroDeSerie.value, marca.value, tipoDeEquipo.value) //SI FALLA EL TIPO DE EQUIPO ES PORQUE ESTA TRABAJANDO COMO ID, MANDARLO COMO TAL
 
 }
 
@@ -304,10 +304,10 @@ agregarNuevoInventario(){
     const descripcion = document.getElementById('gestProductPDESCRIPCION') as HTMLInputElement;
     const costo = document.getElementById('gestProductPCOSTO') as HTMLInputElement;
 
-    //no acepta la llamada this.api.asociarproducto
+    //STANDBY
   }
 
-  eliminarProducto(){
+  eliminarProducto(){ //FUNCA, CUIDADO CON IDS
     const numeroBarras = document.getElementById('gestProductPCODIGONUEVO') as HTMLInputElement;
     this.api.eliminarProductos(numeroBarras.value);
   }
@@ -327,22 +327,22 @@ agregarNuevoInventario(){
     const spa = document.getElementById('confGymPSpaSPA') as HTMLInputElement;
     const tratamiento = document.getElementById('confGymPSpaTratamiento') as HTMLInputElement;
 
-    //this.auth.agregarTratamientosSPA(spa.value, tratamiento.valueAsNumber);
+    this.api.asociarTratamientoASpa(spa.value, tratamiento.value); // SPA DEBERIA DE SER LA SUCURSAL, TAMBIEN AMBOS PARAMETROS RECIBEN IDS
   }
 
   asociarProductosATienda(){
     const gym = document.getElementById('confGymPProducSELECT') as HTMLInputElement;
     const producto = document.getElementById('confGymPProducASOCIAR') as HTMLInputElement;
 
-    //this.api.asociarProductosATienda(); parametros confusos, modificar html para obtener los codigos que solicita
+    this.api.asociarProductosATienda(gym.value, producto.value); //SON IDS, SI DA PROBLEMAS ES ESO
   }
 
   asociarInventario(){
     const gym = document.getElementById('confGymPInventarioGYM') as HTMLInputElement;
     const equipo = document.getElementById('confGymPInventarioEQUIPO') as HTMLInputElement;
+    // falta el componente de costo a asignar
 
-
-    //this.asociarInventario(gym.value, equipo.value, QUE COSTO?);
+    //this.api.asociarInventario(gym.value, equipo.value, costo.value)
   }
 
   crearClase(){
