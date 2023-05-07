@@ -25,23 +25,23 @@ export class AuthService {
     })
   }
 
-  verTratamientosSPA(){
-    this.api.call_VerTratamientoSPA().subscribe((data) =>{
-      console.log(data);
-    })
-  }
-  
-  agregarTratamientosSPA(nombreSucursal:string, numSpa: number){
-    this.api.call_AgregarTratamientoSPA(nombreSucursal, numSpa).subscribe((data) => {
-      console.log(data);
-    })
-  }
-
-  eliminarTratamientosSPA(nombreSucursal:string, numSpa: number){
-    this.api.call_EliminarTratamientoSPA(nombreSucursal, numSpa).subscribe((data) => {
-      console.log(data);
-    })
-  }
+  // verTratamientosSPA(){
+  //   this.api.call_VerTratamientoSPA().subscribe((data) =>{
+  //     console.log(data);
+  //   })
+  // }
+  //
+  // agregarTratamientosSPA(nombreSucursal:string, numSpa: number){
+  //   this.api.call_AgregarTratamientoSPA(nombreSucursal, numSpa).subscribe((data) => {
+  //     console.log(data);
+  //   })
+  // }
+  //
+  // eliminarTratamientosSPA(nombreSucursal:string, numSpa: number){
+  //   this.api.call_EliminarTratamientoSPA(nombreSucursal, numSpa).subscribe((data) => {
+  //     console.log(data);
+  //   })
+  // }
 
   verPuestos(descripcionPuesto:string){
     this.api.call_VerPuestos(descripcionPuesto).subscribe((data)=>{

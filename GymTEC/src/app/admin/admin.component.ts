@@ -96,40 +96,26 @@ activarSucursal(){
   const horaApertura = document.getElementById('gestSucSpaHORARIOAPERTURA') as HTMLInputElement;
   const horaCierre = document.getElementById('gestSucSpaHORARIOCIERRE') as HTMLInputElement;
 
-  this.api.agregarSucursal(nombre.value, distrito.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value)
+
+  this.api.agregarSucursal(sede.value, nombre.value, distrito.value, canton.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value);
 }
 
 agregarSedes(){
-  //this.api.sede
+  //FALTAN CASILLAS EN COMPONENTES PARA NUEVAS SUCURSALES
 }
 
 //pantalla AGREGAR SPA
-activacionSpa(){
+activacionSpa(){ //FUNCIONA, ACATAR DETALLE
   const sede = document.getElementById('sedegestSucSpaSELECT') as HTMLInputElement;
-  const nombre = document.getElementById('gestSucSpaNOMBRE') as HTMLInputElement;
-  const direccion = document.getElementById('gestSucSpaDIRECCION') as HTMLInputElement;
-  const fechaDeApertura = document.getElementById('gestSucSpaFECHAAPERTURA') as HTMLInputElement;
-  const horarioDeAtencion = document.getElementById('gestSucSpaHORARIOATENCION') as HTMLInputElement;
-  const empleadoAdmin = document.getElementById('gestSucSpaEMPLEADOADMINISTRADOR') as HTMLInputElement;
-  const capacidad = document.getElementById('gestSucSpaCAPACIDAD') as HTMLInputElement;
-  const numerosTelefono = document.getElementById('gestSucTiendaNUMEROS2') as HTMLInputElement;
-  const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO2') as HTMLInputElement;
 
-  //this.api.activarSpa(nombre.value, FALTA EL NUMERO DE SPA QUE NO HACE FALTA);
+  this.api.activarSpa(sede.value); //HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
 //pantalla activar tienda!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-activacionTienda(){
+activacionTienda(){//FUNCIONA, ACATAR DETALLE
   const sede = document.getElementById('gestSucTiendaSELECT') as HTMLInputElement;
-  const nombre = document.getElementById('gestSucTiendaNOMBRE') as HTMLInputElement;
-  const direccion = document.getElementById('gestSucTiendaDIRECCION') as HTMLInputElement;
-  const fechaDeApertura = document.getElementById('gestSucTiendaFECHAAPERTURA') as HTMLInputElement;
-  const horarioDeAtencion = document.getElementById('gestSucTiendaHORARIODEATENCION') as HTMLInputElement;
-  const empleadoAdministrador = document.getElementById('gestSucTiendaEMPLEADOADMINISTRADOR') as HTMLInputElement;
-  const numerosDeTelefono = document.getElementById('gestSucTiendaNUMEROS') as HTMLInputElement;
-  const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO') as HTMLInputElement;
 
-  //this.api.activarTienda() QUE ES ESTO QUE PIDE??????????????
+  this.api.activarTienda(sede.value);//HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
 // pantalla GESTION DE TRATAMIENTOS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -138,16 +124,18 @@ agregarTratamiento(){
   const IDunico = document.getElementById('gestTratSpaID') as HTMLInputElement;
   const nombre = document.getElementById('gestTratSpaNOMNRE') as HTMLInputElement;
 
-  this.api.agregarTratamiento(nombre.value);
+  //STANDBY
 }
 
-eliminarTratamiento(){
-  //this.api.tratami DONDE ESTA ESTA FUNCION ??????????????
+eliminarTratamiento(){ //TERMINAR, SIRVE!!!
+  //componente a llamar
+  //this.api.call_EliminarTratamiento()
 }
 
 agregarNuevoTratamiento(){
-  const nombreNuevo = document.getElementById('gestTratSpaNOOMBRENUEVO') as HTMLInputElement;
+  const nombreNuevo = document.getElementById('gestTratSpaNOOMBRENUEVO') as HTMLInputElement; //TENER CUIDADO, VER SI HAY QUE ELIMINAR LA CASILLA DE NOMBRE Y TRABAJAR CON DESCRIPCION
 
+  this.api.agregarTratamiento(nombreNuevo.value);
 }
 
 //pantall de gestion de puestos!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -156,16 +144,15 @@ guardarPuesto(){
   const puesto = document.getElementById('gestPuestPSELECT') as HTMLInputElement;
   const ID = document.getElementById('gestPuestPID') as HTMLInputElement;
   const descripcion = document.getElementById('gestPuestPDESCRIPCION') as HTMLInputElement;
-  //no hay metodo de modificar puesto
+  //STANDBY
 }
 
 eliminarPuesto(){
-  const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement;
-  this.api.call_EliminarPuesto(descripcion.value);
+  const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement; //VERIFICAR ESTE, SACAR ID DEL PUESTO Y PASARA ESE PARAMETRO
+  this.api.call_EliminarPuesto(descripcion.value); //ESTO RECIVE COMO PARAMETRO PUESTO_ID
 }
 
-agregarNuevoPuesto(){
-  const nombre = document.getElementById('gestPuestPNOMBREAGREGAR') as HTMLInputElement;
+agregarNuevoPuesto(){ //ELIMINAR CASILLA DE NOMBRE DEL HTML
   const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement;
 
   this.api.call_AgregarPuesto(descripcion.value);
@@ -186,7 +173,7 @@ gestionDePlanilla(){
 }
 
 //pantalla de gestion de empleados!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-gestionEmpleados(){
+gestionEmpleados(){ //FUNCA
   const empleado = document.getElementById('gestEmplPSELECT') as HTMLInputElement;
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
   const nombre = document.getElementById('gestEmplPNOMBRE') as HTMLInputElement;
@@ -206,16 +193,15 @@ gestionEmpleados(){
   this.api.call_AgregarEmpleados(cedula.value, nombre.value, apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
 }
 
-eliminarEmpleado(){
+eliminarEmpleado(){ //FUNCA
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
   //@ts-ignore
   this.auth.eliminarEmpleados(this.toNum(cedula.value));
 }
 
-agregarEmpleado(){
+agregarEmpleado(){ //FUNCA
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA22') as HTMLInputElement;
   const nombre = document.getElementById('gestEmplPNOMBRE2') as HTMLInputElement;
-  const direccion = document.getElementById('gestEmplPDIRECCION2') as HTMLInputElement;
   const puestoQueDesem = document.getElementById('gestEmplPPUESTO2') as HTMLInputElement;
   const sucursalQueTrabaja = document.getElementById('gestEmplPSUCURSAL2') as HTMLInputElement;
   const tipoDePlanilla = document.getElementById('gestEmplPLANILLA2') as HTMLInputElement;
@@ -228,6 +214,7 @@ agregarEmpleado(){
   const canton = document.getElementById('gestEmplPCANTON2') as HTMLInputElement;
   const provincia = document.getElementById('gestEmplPPROVINCIA2') as HTMLInputElement;
   //@ts-ignore
+  //LOS ULTIMOS 3 PARAMETROS DE LA LLAMADA DE ABAJO SON INTS, ADEMAS LA FUNCION LOS TRABAJA COMO IDs, HAY QUE OBTENERLOS COMO TAL
   this.auth.agregarEmpleados(this.toNum(cedula.value), nombre.value,apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
 }
 
@@ -305,7 +292,7 @@ agregarNuevoInventario(){
   const asignadaAGym = document.getElementById('gestInvetPASIGNADA2') as HTMLInputElement;
 
   //this.api.agregarInventario(numeroDeSerie.value, marca.value, sucursal.value, tipoDeEquipo.value, descripcion.value) la sucursal esta dando problemas
-  
+
 }
 
 //pantalla GESTION DE PRODUCTOS
@@ -340,7 +327,7 @@ agregarNuevoInventario(){
     const spa = document.getElementById('confGymPSpaSPA') as HTMLInputElement;
     const tratamiento = document.getElementById('confGymPSpaTratamiento') as HTMLInputElement;
 
-    this.auth.agregarTratamientosSPA(spa.value, tratamiento.valueAsNumber);
+    //this.auth.agregarTratamientosSPA(spa.value, tratamiento.valueAsNumber);
   }
 
   asociarProductosATienda(){
@@ -354,7 +341,7 @@ agregarNuevoInventario(){
     const gym = document.getElementById('confGymPInventarioGYM') as HTMLInputElement;
     const equipo = document.getElementById('confGymPInventarioEQUIPO') as HTMLInputElement;
 
-  
+
     //this.asociarInventario(gym.value, equipo.value, QUE COSTO?);
   }
 

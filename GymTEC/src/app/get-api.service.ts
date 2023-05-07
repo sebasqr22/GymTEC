@@ -147,8 +147,8 @@ export class GetApiService {
   }
 
   //AgregarSucursal(string Nombre, string Distrito, string Canton, string Provincia, string Fecha_apertura, string Hora_apertura, string Hora_cierre, string Max_capacidad, string Cedula_administrador){
-  agregarSucursal(Nombre:string, Distrito:string, Canton:string, Provincia:string, Fecha_apertura:string, Hora_apertura:string, Hora_cierre:string, Max_capacidad:string, Cedula_administrador:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarSucursal?Nombre=${Nombre}&Distrito=${Distrito}&Canton=${Canton}&Provincia=${Provincia}&Fecha_apertura=${Fecha_apertura}&Hora_apertura=${Hora_apertura}&Hora_cierre=${Hora_cierre}&Max_capacidad=${Max_capacidad}&Cedula_administrador=${Cedula_administrador}`, {})
+  agregarSucursal( Codigo_sucursal:string, Nombre:string, Distrito:string, Canton:string, Provincia:string, Fecha_apertura:string, Hora_apertura:string, Hora_cierre:string, Max_capacidad:string, Cedula_administrador:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarSucursal?Codigo_sucursal=${Codigo_sucursal}&Nombre=${Nombre}&Distrito=${Distrito}&Canton=${Canton}&Provincia=${Provincia}&Fecha_apertura=${Fecha_apertura}&Hora_apertura=${Hora_apertura}&Hora_cierre=${Hora_cierre}&Max_capacidad=${Max_capacidad}&Cedula_administrador=${Cedula_administrador}`, {})
   }
 
   //EliminarSucursal(string codigo_suc){
