@@ -12,7 +12,46 @@ using System.Globalization;
 namespace funcionesAuxiliares{
 
     public class AuxiliarFunctions{
-        private DatabaseHandler DB_Handler = new DatabaseHandler();  
+        private DatabaseHandler DB_Handler = new DatabaseHandler();
+
+        public dynamic VerSucursales_aux(){
+            try{
+                // VER SUCURSALES EXISTENTES
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM SUCURSAL";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
+                            var sucursalesExistentes = new List<dynamic>();
+                            while (reader.Read()) {
+                                sucursalesExistentes.Add(new {
+                                    Nombre = reader.GetString(0),
+                                    Distrito = reader.GetString(1),
+                                    Canton = reader.GetString(2),
+                                    Provincia = reader.GetString(3),
+                                    Fecha_apertura = reader.GetDateTime(4),
+                                    Hora_apertura = reader.GetTimeSpan(5),
+                                    Hora_cierre = reader.GetTimeSpan(6),
+                                    Max_capacidad = reader.GetInt32(7),
+                                    Cedula_administrador = reader.GetInt32(8)
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+                            return new JsonResult(sucursalesExistentes);
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay sucursales en la BD" };
+                        }
+                    }
+                }
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerSucursales_aux" };
+            }
+        }  
 
         public dynamic VerificarExistenciaSucursal_aux(string Nombre){
             try{

@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { AuthService } from '../auth.service';
+import { GetApiService } from '../get-api.service';
 
 @Component({
   selector: 'app-admin',
@@ -7,22 +8,36 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit{
-  constructor(private auth:AuthService) { }
+  constructor(private auth:AuthService, private api:GetApiService) { }
   nombre = 'Sebas';
   tipo = 'SPA';
   dropdown = 0;
 
-  pantallaActual = 'principal'
+  pantallaActual = 'principal';
 
   pantallas = ['gestSucSpa', 'gestSucTienda', 'gestTratSpaP', 'gestTipPlaP', 'gestEmplP', 'gestServP', 'gestTipEquipP'
     , 'gestInvetP', 'gestProductP', 'confGymPSpa' , 'confGymPProduc' , 'confGymPInventario' , 'confGymPCrear', 'genPlanPComo' , 'genPlanPMensuales' ,
-    'genPlanPHoras' , 'genPlanPClase', 'copCalenP', 'copGymp', 'gestPuestP']
+    'genPlanPHoras' , 'genPlanPClase', 'copCalenP', 'copGymp', 'gestPuestP'];
+
+  provincias = ["San José", "Alajuela", "Cartago", "Limón", "Guanacaste", "Puntarenas", "Heredia"]
 
 
   ngOnInit() {
     for (let i = 0; i < this.pantallas.length; i++) {
       const tmp = document.getElementById(this.pantallas[i]) as HTMLInputElement
       tmp.style.display = 'none'
+    }
+    this.cargarProvincias(["gestSucSpaPROVINCIA", "gestEmplPPROVINCIA", "gestEmplPPROVINCIA2"]);
+  }
+
+  cargarProvincias(lista:any){
+    for (let i = 0; i < lista.length; i++) {
+      const p = document.getElementById(lista[i]) as HTMLSelectElement;
+      for (let i = 0; i < this.provincias.length; i++) {
+        const provincia = this.provincias[i];
+        const option = new Option(provincia, provincia);
+        p.add(option);
+      }
     }
   }
 
@@ -68,6 +83,19 @@ toNum(dato:string):number{
   return parseInt(dato, 10);
 }
 
+activarSucursal(){
+  const sede = document.getElementById('sedegestSucSpaSELECT') as HTMLInputElement;
+  const nombre = document.getElementById('gestSucSpaNOMBRE') as HTMLInputElement;
+  const direccion = document.getElementById('gestSucSpaDIRECCION') as HTMLInputElement;
+  const fechaDeApertura = document.getElementById('gestSucSpaFECHAAPERTURA') as HTMLInputElement;
+  const horarioDeAtencion = document.getElementById('gestSucSpaHORARIOATENCION') as HTMLInputElement;
+  const empleadoAdmin = document.getElementById('gestSucSpaEMPLEADOADMINISTRADOR') as HTMLInputElement;
+  const capacidad = document.getElementById('gestSucSpaCAPACIDAD') as HTMLInputElement;
+  const numerosTelefono = document.getElementById('gestSucTiendaNUMEROS2') as HTMLInputElement;
+
+  //this.api.suc
+}
+
 agregarSedes(){
 
 }
@@ -84,7 +112,7 @@ activacionSpa(){
   const numerosTelefono = document.getElementById('gestSucTiendaNUMEROS2') as HTMLInputElement;
   const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO2') as HTMLInputElement;
 
-  //
+  //agregar
 }
 
 //pantalla activar tienda!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -97,6 +125,8 @@ activacionTienda(){
   const empleadoAdministrador = document.getElementById('gestSucTiendaEMPLEADOADMINISTRADOR') as HTMLInputElement;
   const numerosDeTelefono = document.getElementById('gestSucTiendaNUMEROS') as HTMLInputElement;
   const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO') as HTMLInputElement;
+
+  //
 }
 
 // pantalla GESTION DE TRATAMIENTOS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -104,6 +134,9 @@ agregarTratamiento(){
   const tratamiento = document.getElementById('gestTratSpaPSELECT') as HTMLInputElement;
   const IDunico = document.getElementById('gestTratSpaID') as HTMLInputElement;
   const nombre = document.getElementById('gestTratSpaNOMNRE') as HTMLInputElement;
+
+  //falta implementar
+  //this.api.call_AgregarTratamientoSPA()
 }
 
 eliminarTratamiento(){
@@ -121,16 +154,18 @@ guardarPuesto(){
   const puesto = document.getElementById('gestPuestPSELECT') as HTMLInputElement;
   const ID = document.getElementById('gestPuestPID') as HTMLInputElement;
   const descripcion = document.getElementById('gestPuestPDESCRIPCION') as HTMLInputElement;
-
+  //no hay metodo de modificar puesto
 }
 
 eliminarPuesto(){
-  //llamada a eliminar puesto
+  //this.api.call_EliminarPuesto()
 }
 
 agregarNuevoPuesto(){
   const nombre = document.getElementById('gestPuestPNOMBREAGREGAR') as HTMLInputElement;
   const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement;
+
+  //this.api.call_AgregarPuesto()
 }
 
 //pantalla GESTION DE TIPOS DE PLANILLA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -150,21 +185,19 @@ gestionEmpleados(){
   const empleado = document.getElementById('gestEmplPSELECT') as HTMLInputElement;
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
   const nombre = document.getElementById('gestEmplPNOMBRE') as HTMLInputElement;
-  const direccion = document.getElementById('gestEmplPDIRECCION') as HTMLInputElement;
   const puestoQueDesem = document.getElementById('gestEmplPPUESTO') as HTMLInputElement;
   const sucursalQueTrabaja = document.getElementById('gestEmplPSUCURSAL') as HTMLInputElement;
   const tipoDePlanilla = document.getElementById('gestEmplPLANILLA') as HTMLInputElement;
   const salario = document.getElementById('gestEmplPSALARIO') as HTMLInputElement;
   const correo = document.getElementById('gestEmplPCORREO') as HTMLInputElement;
   const contrasena = document.getElementById('gestEmplPPASSWORD') as HTMLInputElement;
-  const apellido1 = "";
-  const apellido2 = "";
-  const distrito = "";
-  const canton = "";
-  const provincia = "";
+  const apellido1 = document.getElementById('gestEmplPPRIMERAPELLIDO') as HTMLInputElement;
+  const apellido2 = document.getElementById('gestEmplPSEGUNDOAPELLIDO') as HTMLInputElement;
+  const distrito = document.getElementById('gestEmplPDISTRITO') as HTMLInputElement;
+  const canton = document.getElementById('gestEmplPCANTON') as HTMLInputElement;
+  const provincia = document.getElementById('gestEmplPPROVINCIA') as HTMLInputElement;
   //modificarEmpleado
   //@ts-ignore
-  this.auth.agregarEmpleados(this.toNum(cedula.value), nombre.value,apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
 }
 
 eliminarEmpleado(){
@@ -183,18 +216,15 @@ agregarEmpleado(){
   const salario = document.getElementById('gestEmplPSALARIO2') as HTMLInputElement;
   const correo = document.getElementById('gestEmplPCORREO2') as HTMLInputElement;
   const contrasena = document.getElementById('gestEmplPPASSWORD2') as HTMLInputElement;
-  const apellido1 = "";
-  const apellido2 = "";
-  const distrito = "";
-  const canton = "";
-  const provincia = "";
+  const apellido1 = document.getElementById('gestEmplPPRIMERAPELLIDO2') as HTMLInputElement;
+  const apellido2 = document.getElementById('gestEmplPSEGUNDOAPELLIDO2') as HTMLInputElement;
+  const distrito = document.getElementById('gestEmplPDISTRITO2') as HTMLInputElement;
+  const canton = document.getElementById('gestEmplPCANTON2') as HTMLInputElement;
+  const provincia = document.getElementById('gestEmplPPROVINCIA2') as HTMLInputElement;
   //@ts-ignore
   this.auth.agregarEmpleados(this.toNum(cedula.value), nombre.value,apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
 }
 
-agregarNuevoEmpleado(){
-
-}
 
 
 
@@ -205,6 +235,8 @@ guardarServicio(){
   const IDunico = document.getElementById('gestServPID') as HTMLInputElement;
   const nombre = document.getElementById('gestServPNOMBRE') as HTMLInputElement;
   const pagoHoras = document.getElementById('gestServPDESCRIPCION') as HTMLInputElement;
+
+
 }
 
 eliminarServicio(){
@@ -215,6 +247,7 @@ agregarNuevoServicio(){
   const nombre = document.getElementById('gestServPNOMBRE2') as HTMLInputElement;
   const descripcion = document.getElementById('gestServPDESCRIPCION2') as HTMLInputElement;
 
+  
 }
 
 //pantalla de gestion de tipos de equipos!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -315,8 +348,6 @@ agregarNuevoInventario(){
     const fecha = document.getElementById('confGymPCrearFECHA') as HTMLInputElement;
     const horaInicio = document.getElementById('confGymPCrearHORAINICIO') as HTMLInputElement;
     const horaFinalizacion = document.getElementById('confGymPCrearHORAFINAL') as HTMLInputElement;
-
-    //crearClase
   }
 
 }//bracket que cierra
