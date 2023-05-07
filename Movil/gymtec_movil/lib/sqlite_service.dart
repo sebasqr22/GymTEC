@@ -19,7 +19,9 @@ class SqliteService {
            "Hora_inicio TIME,Hora_fin TIME,Modalidad TEXT,Capacidad INTEGER,"+
            "Cedula_instructor INTEGER NOT NULL,PRIMARY KEY (Id_servicio, Num_clase));"+
           "CREATE TABLE ASISTENCIA_CLASE (Cedula_cliente INTEGER NOT NULL,Id_servicio INTEGER NOT NULL,"+
-          "Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase));",
+          "Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase));"+
+          "ALTER TABLE ASISTENCIA_CLASE"+
+          "ADD CONSTRAINT FK_Assist_Class FOREIGN KEY (Id_servicio, Num_clase) REFERENCES CLASE(Id_servicio, Num_clase);",
       );// FALTAN LOS ALTER
      },
      version: 1,
@@ -65,6 +67,21 @@ class SqliteService {
   return false;
 }
 
+  Future<List<CLASE>> buscarClases() async{
+    final db = await initializeDB();
+  List<Map<String, dynamic>> maps = await db.rawQuery("SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles"+
+                "FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre"+
+                "WHERE SUCURSAL.Nombre = @Nombre_sucursal AND CLASE.Id_servicio = Id_servicio AND @fecha_inicio <= Fecha AND Fecha <= fecha_fin"+
+                "GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad");
+  if (maps.length > 0) {
+    List<CLASE> clases = [];
+    for (var i = 0; i < maps.length; i++) {
+      clases.add(CLASE.fromMap(maps[i]));
+    }
+    return clases;
+  }
+  return [];
+  }
 }
 
 

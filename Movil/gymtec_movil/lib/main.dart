@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:gymtec_movil/database_handler.dart';
 import 'package:gymtec_movil/sqlite_service.dart';
@@ -160,7 +160,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<bool> _verCliente(String correo, String password) {
-    Future<bool> miCliente = _sqliteService.iniciarSesion(correo,password);
+    String generateMd5(String input) {
+      return md5.convert(utf8.encode(input)).toString();
+    }
+    Future<bool> miCliente = _sqliteService.iniciarSesion(correo,generateMd5(password));
     return miCliente;
   }
 }
@@ -372,6 +375,10 @@ class _RegisterScreenState extends State<RegisterScreen>{
 
   void crearCliente(int cedula, String nombre, String apellido1, String apellido2, int edad,String fecha_nacimiento, double peso, double imc,String direccion, String correo, String password){
   DateTime fecha = DateTime.parse(fecha_nacimiento);
+  String generateMd5(String input) {
+  return md5.convert(utf8.encode(input)).toString();
+  }
+  String thePassword = generateMd5(password);
     CLIENTE cliente = CLIENTE(
   cedula: cedula, 
   Nombre: nombre, 
@@ -383,7 +390,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
   peso: peso,
   Direccion: direccion,
   Correo: correo,
-  Password: password
+  Password: thePassword
 );
     this._sqliteService.createCliente(cliente);
 
@@ -403,19 +410,35 @@ class ClassScreen  extends StatefulWidget {
 
 
 class _ClassScreenState extends State<ClassScreen>{
-  late TextEditingController _controller;
+  late TextEditingController _controller,dateInput, dateInput2;
   String? selectedSucursal = null;
   String? selectedClass = null;
+
 
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    dateInput = TextEditingController();
+    dateInput2 = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () { 
+      Navigator.of(context).pop(); // dismiss dialog
+    },
+  );
+  AlertDialog alert = AlertDialog(
+    title: Text("Error de búsqueda"),
+    content: Text("Seleccione una opción de búsqueda!"),
+    actions: [
+      okButton,
+    ],
+  ); 
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Scaffold(
@@ -478,12 +501,89 @@ class _ClassScreenState extends State<ClassScreen>{
                     isDense: true,
                     isExpanded: true,
                   items: ClasesItems),
-                  // Faltan fechas
+                  TextField(
+              controller: dateInput,
+              //editing controller of this TextField
+              decoration: InputDecoration(
+                  icon: Icon(Icons.calendar_today), //icon of text field
+                  labelText: "Fecha de inicio" //label text of field
+                  ),
+              readOnly: true,
+              //set it true, so that user will not able to edit text
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    //DateTime.now(), //- not to allow to choose before today.
+                    lastDate: DateTime(2100));
+ 
+                if (pickedDate != null) {
+                  print(
+                      pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                  String formattedDate =
+                      DateFormat('yyyy-MM-dd').format(pickedDate);
+                  print(
+                      formattedDate); //formatted date output using intl package =>  2021-03-16
+                  setState(() {
+                    dateInput.text =
+                        formattedDate; //set output date to TextField value.
+                  });
+                } else {}
+              }),
+              TextField(
+              controller: dateInput2,
+              //editing controller of this TextField
+              decoration: InputDecoration(
+                  icon: Icon(Icons.calendar_today), //icon of text field
+                  labelText: "Fecha Final" //label text of field
+                  ),
+              readOnly: true,
+              //set it true, so that user will not able to edit text
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.parse(dateInput.text),
+                    firstDate: DateTime.parse(dateInput.text),
+                    //DateTime.now() - not to allow to choose before today.
+                    lastDate: DateTime(2100));
+ 
+                if (pickedDate != null) {
+                  print(
+                      pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                  String formattedDate =
+                      DateFormat('yyyy-MM-dd').format(pickedDate);
+                  print(
+                      formattedDate); //formatted date output using intl package =>  2021-03-16
+                  setState(() {
+                    dateInput2.text =
+                        formattedDate; //set output date to TextField value.
+                  });
+                } else {}
+              }),
                   ElevatedButton(
                   style: style,
                   onPressed: () {
-                    if(selectedSucursal!=null && selectedClass !=null){
-                     _navigateToClases(context);
+                    if (selectedSucursal!=null && selectedClass!=null && dateInput.text.isNotEmpty && dateInput2.text.isNotEmpty){
+                      _verClasesPorSucursalTipoClaseFechas(selectedSucursal.toString(), selectedClass.toString(), dateInput.text, dateInput2.text);
+                    }
+                    else if(selectedSucursal!=null && selectedClass==null){
+                      _verClasesPorSucursal(selectedSucursal.toString());
+                    }
+                    else if(selectedClass!=null && selectedSucursal==null){
+                      _verClasesPorTipoClase(selectedClass.toString());
+                    }else if(selectedClass !=null && selectedSucursal !=null){
+                      _verClasesPorSucursal(selectedSucursal.toString());
+                    }
+                    else if(dateInput.text.isNotEmpty && dateInput2.text.isNotEmpty){
+                      _verClasesPorFechas(dateInput.text, dateInput2.text);
+                    }else{
+                      showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
                     }
                   },
                   child: const Text('Buscar clases'),
@@ -525,33 +625,73 @@ class _ClassScreenState extends State<ClassScreen>{
     return menuItems;
   }
 
-  void _navigateToClases(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterClass()));
+  void _navigateToClases(BuildContext context,String clases) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterClass(clases)));
   }
 
   void _updateClases() async{
     print("hika");
-    final response = await http.get(Uri.parse("https://192.168.100.12:7194/usuarios/admin/VerClases"));
+    final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
     final body = utf8.decode(response.bodyBytes);
-    print(response.body);
+    //print(jsonDecode(body));
     print("hika2");
+  }
+  // metodo de ver clases por sucursal
+  void _verClasesPorSucursal(String sucursal) async{
+    //final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
+    //final body = utf8.decode(response.bodyBytes);
+    //print(jsonDecode(body));
+    print("hika2");
+    _navigateToClases(context,"hola1");
+  }
+
+  //metodo de ver clases por tipoclase
+  void _verClasesPorTipoClase(String tipoClase) async{
+    //final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
+    //final body = utf8.decode(response.bodyBytes);
+    //print(jsonDecode(body));
+    print("hika2");
+    _navigateToClases(context,"hola2");
+  }
+
+  //metodo de ver clases por fechas
+  void _verClasesPorFechas(String fechaInicio, String fechaFinal) async{
+    final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
+    final body = utf8.decode(response.bodyBytes);
+    print(jsonDecode(body));
+    print("hika2");
+    _navigateToClases(context,"hola3");
+  }
+
+  //metodo de ver clases por sucursal y tipo de clase, y fechas
+  void _verClasesPorSucursalTipoClaseFechas(String sucursal, String tipoClase, String fechaInicio, String fechaFinal) async{
+    final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
+    final body = utf8.decode(response.bodyBytes);
+    print(jsonDecode(body));
+    print("hika2");
+    _navigateToClases(context,"hola4");
   }
 }
 
 class RegisterClass extends StatefulWidget {
-  const RegisterClass ({super.key});
+  final String clases;
+  const RegisterClass (this.clases,{super.key});
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
   // This class is the configuration for the state.
   @override
-  _RegisterClassState createState() => _RegisterClassState();
+  _RegisterClassState createState() => _RegisterClassState(clases); 
 }
 
 class _RegisterClassState extends State<RegisterClass> {
+  // has parameter clases
+  final String clases;
+  _RegisterClassState(this.clases);
   @override
   void initState() {
     super.initState();
+    print(clases);
   }
 
   @override
@@ -574,7 +714,7 @@ class _RegisterClassState extends State<RegisterClass> {
                   child: Image(image: AssetImage('assets/logoGymTec.png')),
                 ),
                 Text(
-                  "Registro de Clase en SUCURSAL NOMBRE: ",
+                  "Registro de Clase: ",
                   style: TextStyle(fontSize: 40),
                 ),
                  Card(
@@ -582,8 +722,8 @@ class _RegisterClassState extends State<RegisterClass> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const ListTile(
-                        title: Text('The Enchanted Nightingale'),
-                        subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+                        title: Text('Clase 1'),
+                        subtitle: Text("Fecha de Inicio: \nFecha de Finalización: \nCapacidad: \nInstructor: \n"),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
