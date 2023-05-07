@@ -526,9 +526,9 @@ namespace Metodos{
         try {
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string queryInsert = "INSERT INTO SERVICIO (Descripcion) VALUES (@desc)";
+          string queryInsert = "INSERT INTO SERVICIO (Descripcion) VALUES (@descripcion)";
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@desc", descripcion);
+            comando.Parameters.AddWithValue("@descripcion", descripcion);
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -984,21 +984,21 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/EliminarPuesto")]
-      public dynamic EliminarPuesto(string descripcionPuesto){
+      public dynamic EliminarPuesto(string Id_puesto){
         try{
-            if(string.IsNullOrEmpty(descripcionPuesto)){
+            if(string.IsNullOrEmpty(Id_puesto)){
                 return new { message = "error" };}
 
             // ELIMINAR PUESTO EN LA BASE DE DATOS
-            bool existePuesto = aux.VerificarExistenciaPuesto_aux(descripcionPuesto);
+            bool existePuesto = aux.VerificarExistenciaPuesto_aux(Id_puesto);
             if (!existePuesto) {
                 return new { message = "Puesto no existe en la BD. Error" };}
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryDelete = "DELETE FROM PUESTO WHERE Descripcion = @Descripcion";
+            string queryDelete = "DELETE FROM PUESTO WHERE Id_puesto = @Id_puesto";
             using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Descripcion", descripcionPuesto);
+                comando.Parameters.AddWithValue("@Descripcion", Id_puesto);
                 comando.ExecuteNonQuery();
                 DB_Handler.CerrarConexion();
             }

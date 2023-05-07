@@ -614,13 +614,13 @@ namespace funcionesAuxiliares{
             }
         }
         
-        public dynamic VerificarExistenciaPuesto_aux(string descripcionPuesto){
+        public dynamic VerificarExistenciaPuesto_aux(string Id_puesto){
            try{ 
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM PUESTO WHERE Descripcion = @Descripcion";
+                string querySelect = "SELECT * FROM PUESTO WHERE Id_puesto = @Id_puesto";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Descripcion", descripcionPuesto);
+                    comando.Parameters.AddWithValue("@Descripcion", Id_puesto);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
