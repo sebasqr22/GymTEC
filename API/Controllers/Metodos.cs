@@ -20,6 +20,25 @@ namespace Metodos{
       AuxiliarFunctions aux = new AuxiliarFunctions();
 
       [HttpPost]
+      [Route("admin/VerClienteEspecifico")]
+      public dynamic VerClienteEspecifico(string cedula){
+        try{
+          // Verificar que el cliente exista
+          dynamic existeCliente = aux.VerificarExistenciaCliente_aux(cedula);
+          if (!existeCliente) {
+            return new { message = "No existe este cliente" };
+          }
+
+          return aux.VerClienteEspecifico_aux(cedula);
+
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+
+      [HttpPost]
       [Route("admin/EliminarSucursal")]
       public dynamic EliminarSucursal(string codigo_suc){
         try{
@@ -61,10 +80,10 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AgregarSucursal")]
-      public dynamic AgregarSucursal(string Codigo_sucursal, string Nombre, string Distrito, string Provincia, string Fecha_apertura, string Hora_apertura, string Hora_cierre, string Max_capacidad, string Cedula_administrador){
+      public dynamic AgregarSucursal(string Codigo_sucursal, string Nombre, string Distrito, string Canton, string Provincia, string Fecha_apertura, string Hora_apertura, string Hora_cierre, string Max_capacidad, string Cedula_administrador){
         try{
 
-          string queryInsert = "INSERT INTO SUCURSAL VALUES (@Codigo_sucursal, @Nombre, @Distrito, @Provincia, @Fecha_apertura, @Hora_apertura, @Hora_cierre, @Max_capacidad, @Cedula_administrador)";
+          string queryInsert = "INSERT INTO SUCURSAL VALUES (@Nombre, @Distrito, @Canton, @Provincia, @Fecha_apertura, @Hora_apertura, @Hora_cierre, @Max_capacidad, @Cedula_administrador)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
 
@@ -83,6 +102,7 @@ namespace Metodos{
             comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
             comando.Parameters.AddWithValue("@Nombre", Nombre);
             comando.Parameters.AddWithValue("@Distrito", Distrito);
+            comando.Parameters.AddWithValue("@Canton", Canton);
             comando.Parameters.AddWithValue("@Provincia", Provincia);
             comando.Parameters.AddWithValue("@Fecha_apertura", DateTime.ParseExact(Hora_apertura, "yyyy-MM-dd", CultureInfo.InvariantCulture));
             comando.Parameters.AddWithValue("@Hora_apertura", DateTime.ParseExact(Hora_apertura, "HH:mm:ss", CultureInfo.InvariantCulture));

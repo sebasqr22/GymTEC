@@ -14,6 +14,73 @@ namespace funcionesAuxiliares{
     public class AuxiliarFunctions{
         private DatabaseHandler DB_Handler = new DatabaseHandler();
 
+        public dynamic VerificarExistenciaCliente_aux(string cedula){
+            try{
+                // VERIFICAR EXISTENCIA DE CLIENTE
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM CLIENTE WHERE Cedula = @Cedula";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaCliente_aux" };
+            }
+        }
+
+        public dynamic VerClienteEspecifico_aux(string cedula){
+            try{
+                // VER CLIENTE ESPECIFICO
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM CLIENTE WHERE Cedula = @Cedula";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            var cliente = new List<dynamic>();
+                            while (reader.Read()) {
+                                cliente.Add(new {
+                                    Cedula = reader.GetInt32(0),
+                                    Nombre = reader.GetString(1),
+                                    Apellido1 = reader.GetString(2),
+                                    Apellido2 = reader.GetString(3),
+                                    Dia_nacimiento = reader.GetString(4),
+                                    Mes_nacimiento = reader.GetString(5),
+                                    Ano_nacimiento = reader.GetString(6),
+                                    Peso = reader.GetFloat(7),
+                                    Direccion = reader.GetString(8),
+                                    Correo = reader.GetString(9),
+                                    Contrasena = reader.GetString(10),
+
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+                            return new JsonResult(cliente);
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return new { message = "No hay clientes en la BD" };
+                        }
+                    }
+                }
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerClienteEspecifico" };
+            }
+
+        }
+
         public dynamic VerSucursales_aux(){
             try{
                 // VER SUCURSALES EXISTENTES
