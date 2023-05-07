@@ -86,18 +86,21 @@ toNum(dato:string):number{
 activarSucursal(){
   const sede = document.getElementById('sedegestSucSpaSELECT') as HTMLInputElement;
   const nombre = document.getElementById('gestSucSpaNOMBRE') as HTMLInputElement;
-  const direccion = document.getElementById('gestSucSpaDIRECCION') as HTMLInputElement;
   const fechaDeApertura = document.getElementById('gestSucSpaFECHAAPERTURA') as HTMLInputElement;
-  const horarioDeAtencion = document.getElementById('gestSucSpaHORARIOATENCION') as HTMLInputElement;
   const empleadoAdmin = document.getElementById('gestSucSpaEMPLEADOADMINISTRADOR') as HTMLInputElement;
   const capacidad = document.getElementById('gestSucSpaCAPACIDAD') as HTMLInputElement;
   const numerosTelefono = document.getElementById('gestSucTiendaNUMEROS2') as HTMLInputElement;
+  const provincia = document.getElementById("gestSucSpaPROVINCIA") as HTMLInputElement;
+  const canton = document.getElementById("gestSucSpaCANTON") as HTMLInputElement;
+  const distrito = document.getElementById("gestSucSpaDISTRITO") as HTMLInputElement;
+  const horaApertura = document.getElementById('gestSucSpaHORARIOAPERTURA') as HTMLInputElement;
+  const horaCierre = document.getElementById('gestSucSpaHORARIOCIERRE') as HTMLInputElement;
 
-  //this.api.suc
+  this.api.agregarSucursal(nombre.value, distrito.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value)
 }
 
 agregarSedes(){
-
+  //this.api.sede
 }
 
 //pantalla AGREGAR SPA
@@ -112,7 +115,7 @@ activacionSpa(){
   const numerosTelefono = document.getElementById('gestSucTiendaNUMEROS2') as HTMLInputElement;
   const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO2') as HTMLInputElement;
 
-  //agregar
+  //this.api.activarSpa(nombre.value, FALTA EL NUMERO DE SPA QUE NO HACE FALTA);
 }
 
 //pantalla activar tienda!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -126,7 +129,7 @@ activacionTienda(){
   const numerosDeTelefono = document.getElementById('gestSucTiendaNUMEROS') as HTMLInputElement;
   const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO') as HTMLInputElement;
 
-  //
+  //this.api.activarTienda() QUE ES ESTO QUE PIDE??????????????
 }
 
 // pantalla GESTION DE TRATAMIENTOS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -135,12 +138,11 @@ agregarTratamiento(){
   const IDunico = document.getElementById('gestTratSpaID') as HTMLInputElement;
   const nombre = document.getElementById('gestTratSpaNOMNRE') as HTMLInputElement;
 
-  //falta implementar
-  //this.api.call_AgregarTratamientoSPA()
+  this.api.agregarTratamiento(nombre.value);
 }
 
 eliminarTratamiento(){
-  //llamada a eliminar tratamiento
+  //this.api.tratami DONDE ESTA ESTA FUNCION ??????????????
 }
 
 agregarNuevoTratamiento(){
@@ -158,14 +160,15 @@ guardarPuesto(){
 }
 
 eliminarPuesto(){
-  //this.api.call_EliminarPuesto()
+  const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement;
+  this.api.call_EliminarPuesto(descripcion.value);
 }
 
 agregarNuevoPuesto(){
   const nombre = document.getElementById('gestPuestPNOMBREAGREGAR') as HTMLInputElement;
   const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement;
 
-  //this.api.call_AgregarPuesto()
+  this.api.call_AgregarPuesto(descripcion.value);
 }
 
 //pantalla GESTION DE TIPOS DE PLANILLA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -177,7 +180,9 @@ gestionDePlanilla(){
   const pagoClase = document.getElementById('gestTipPlaPPAGOPORCLASE') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipPlaPDESCRIPCION') as HTMLInputElement;
 
-  //this.auth
+  this.api.call_AgregarPlanilla(descripcion.value);
+
+  //aqui si no comprendo que llamada hacer
 }
 
 //pantalla de gestion de empleados!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -198,6 +203,7 @@ gestionEmpleados(){
   const provincia = document.getElementById('gestEmplPPROVINCIA') as HTMLInputElement;
   //modificarEmpleado
   //@ts-ignore
+  this.api.call_AgregarEmpleados(cedula.value, nombre.value, apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
 }
 
 eliminarEmpleado(){
@@ -236,18 +242,19 @@ guardarServicio(){
   const nombre = document.getElementById('gestServPNOMBRE') as HTMLInputElement;
   const pagoHoras = document.getElementById('gestServPDESCRIPCION') as HTMLInputElement;
 
-
+  //this.api.guardarServicio(); no acepta la funcion api.guardarservicio, solo this.guardarservicio
 }
 
 eliminarServicio(){
-  //llamada a eliminar servicio
+  const servicio = document.getElementById('gestServPSELECT') as HTMLInputElement;
+  this.api.eliminarServicio(servicio.value);
 }
 
 agregarNuevoServicio(){
   const nombre = document.getElementById('gestServPNOMBRE2') as HTMLInputElement;
   const descripcion = document.getElementById('gestServPDESCRIPCION2') as HTMLInputElement;
 
-  
+  //no hay funcion para agregar nuevos servicios
 }
 
 //pantalla de gestion de tipos de equipos!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -255,15 +262,19 @@ guardarTipoEquipo(){
   const gym = document.getElementById('gestTipEquipPGYM') as HTMLInputElement;
   const id = document.getElementById('gestTipEquipPID') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCION') as HTMLInputElement;
+
+  //this.guardarTipoEquipo(); por que esta funcion recibe como parametro la descripcion?
 }
 
 eliminarTipoEquipo(){
-  //llamada a eliminar equipo
+  const descripcion = document.getElementById('gestTipEquipPDESCRIPCION') as HTMLInputElement;
+  this.api.call_EliminarTipoEquipo(descripcion.value)
 }
 
 agregarNuevoEquipo(){
   const id = document.getElementById('gestTipEquipPIDNUEVO') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCIONNUEVO') as HTMLInputElement;
+  this.api.call_AgregarTipoEquipo(descripcion.value);
 }
 
 
@@ -277,10 +288,13 @@ guardarInventario(){
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE') as HTMLInputElement;
   const costo = document.getElementById('gestInvetPCOSTOSUCURSAL') as HTMLInputElement;
   const asignadaAGym = document.getElementById('gestInvetPASIGNADA') as HTMLInputElement;
+
+  //this.api.agregarInventario(numeroDeSerie.value, marca.value, sucursal.value, tipoDeEquipo.value, descripcion.value)
 }
 
 eliminarInventario(){
-  //llamada a eliminar inventario
+  const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE') as HTMLInputElement;
+  this.api.eliminarInventario(numeroDeSerie.value)
 }
 
 agregarNuevoInventario(){
@@ -290,7 +304,8 @@ agregarNuevoInventario(){
   const costo = document.getElementById('gestInvetPCOSTOSUCURSAL2') as HTMLInputElement;
   const asignadaAGym = document.getElementById('gestInvetPASIGNADA2') as HTMLInputElement;
 
-  //agregarInventario
+  //this.api.agregarInventario(numeroDeSerie.value, marca.value, sucursal.value, tipoDeEquipo.value, descripcion.value) la sucursal esta dando problemas
+  
 }
 
 //pantalla GESTION DE PRODUCTOS
@@ -302,11 +317,12 @@ agregarNuevoInventario(){
     const descripcion = document.getElementById('gestProductPDESCRIPCION') as HTMLInputElement;
     const costo = document.getElementById('gestProductPCOSTO') as HTMLInputElement;
 
-    //modificar producto api
+    //no acepta la llamada this.api.asociarproducto
   }
 
   eliminarProducto(){
-    //eliminar producto
+    const numeroBarras = document.getElementById('gestProductPCODIGONUEVO') as HTMLInputElement;
+    this.api.eliminarProductos(numeroBarras.value);
   }
 
   agregarProducto(){
@@ -315,6 +331,8 @@ agregarNuevoInventario(){
     const numeroBarras = document.getElementById('gestProductPCODIGONUEVO') as HTMLInputElement;
     const descripcion = document.getElementById('gestProductPDESCRIPCIONNUEVO') as HTMLInputElement;
     const costo = document.getElementById('gestProductPCOSTONUEVO') as HTMLInputElement;
+
+    this.api.agregarProductos(numeroBarras.value, nombre.value, descripcion.value, costo.value);
   }
 
 //pantalla CONFIGURACION GIMNASIO
@@ -329,14 +347,15 @@ agregarNuevoInventario(){
     const gym = document.getElementById('confGymPProducSELECT') as HTMLInputElement;
     const producto = document.getElementById('confGymPProducASOCIAR') as HTMLInputElement;
 
-    //agregarProducto
+    //this.api.asociarProductosATienda(); parametros confusos, modificar html para obtener los codigos que solicita
   }
 
   asociarInventario(){
     const gym = document.getElementById('confGymPInventarioGYM') as HTMLInputElement;
     const equipo = document.getElementById('confGymPInventarioEQUIPO') as HTMLInputElement;
 
-    //agregarProducto
+  
+    //this.asociarInventario(gym.value, equipo.value, QUE COSTO?);
   }
 
   crearClase(){
@@ -348,8 +367,10 @@ agregarNuevoInventario(){
     const fecha = document.getElementById('confGymPCrearFECHA') as HTMLInputElement;
     const horaInicio = document.getElementById('confGymPCrearHORAINICIO') as HTMLInputElement;
     const horaFinalizacion = document.getElementById('confGymPCrearHORAFINAL') as HTMLInputElement;
+
+    this.api.crearClase(tipo.value, instructor.value, grupalOno.value, capacidad.value, fecha.value, horaInicio.value, horaFinalizacion.value)
   }
 
-}//bracket que cierra
+}//bracket que cierras
 
 

@@ -99,7 +99,7 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/CrearClase?servicioClase=${servicioClase}&cedulaInstructor=${cedulaInstructor}&modalidad=${modalidad}&capacidad=${capacidad}&fecha=${fecha}&horaInicio=${horaInicio}&horaFinal=${horaFinal}`, {})
   }
   
-  elimnarClase(Id_servicio:string, cedulaInstructor:string, modalidad:string, fecha:string, horaInicio:string){
+  eliminarClase(Id_servicio:string, cedulaInstructor:string, modalidad:string, fecha:string, horaInicio:string){
     return this.http.post(`https://localhost:7194/usuarios/admin/EliminarClase?Id_servicio=${Id_servicio}&cedulaInstructor=${cedulaInstructor}&modalidad=${modalidad}&fecha=${fecha}&horaInicio=${horaInicio}`, {});
   }
 
@@ -132,12 +132,60 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/AsociarTratamientoASpa?numSpa=${numSpa}&nombreSucursal=${nombreSucursal}&idTratamiento=${idTratamiento}`, {})
   }
 
+  agregarSucursal(Nombre:string, Distrito:string, Provincia:string, Fecha_apertura:string, Hora_apertura:string, Hora_cierre:string, Max_capacidad:string, Cedula_administrador:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarSucursal?Nombre=${Nombre}&Distrito=${Distrito}&Provincia=${Provincia}&Fecha_apertura=${Fecha_apertura}&Hora_apertura=${Hora_apertura}&Hora_cierre=${Hora_cierre}&Max_capacidad=${Max_capacidad}&Cedula_administrador=${Cedula_administrador}&`, {})
+  }
+
+  eliminarSucursal(nombreSucursal:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarSucursal?nombreSucursal=${nombreSucursal}`, {})
+  }
+
+  verSucursales(){
+    return this.http.post(`https://localhost:7194/usuarios/admin/VerSucursal`, {})
+  }
+
+  asociarInventario(nombre_sucursal:string, num_serie:string, costo:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarInventario?nombre_sucursal=${nombre_sucursal}&num_serie=${num_serie}&costo=${costo}`, {})
+  }
+
+  asociarProductosATienda(nombreSucursal:string, numTienda:string, codigoProducto:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AsociarProductosATienda?nombreSucursal=${nombreSucursal}&numTienda=${numTienda}&codigoProducto=${codigoProducto}`, {})
+  }
+
+  copiarGimnasio(gym_nuevo:string, gym_viejo:string, num_spa:string, num_tienda:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarGimnasio?gym_nuevo=${gym_nuevo}&gym_viejo=${gym_viejo}&num_spa=${num_spa}&num_tienda=${num_tienda}`, {});
+  }
+
+  eliminarServicio(Id_servicio:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarServicio?Id_servicio=${Id_servicio}`, {});
+  }
+
+  verSericios(){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarServicios`, {})
+  }
+
+  generarPlanillasTodos(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/GenerarPlanillasTodos`, {})
+  }
+
+  verTratamientos(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerTratamientos`, {})
+  }
+
+  agregarTratamiento(nombreTratamiento:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTratamiento?nombreTratamiento=${nombreTratamiento}`, {})
+  }
+
   buscarCliente(){
     //falta la ruta para este metodo
     //return this.http.get()
   }
 
-  registrarClienteEnClase(){
-    
+  registrarClienteEnClase(cedulaClient:string, Num_clase:string, Id_servicio:string, Fecha:string, Hora_inicio:string, Modalidad:string, Cedula_instructor:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarGRegistrarClienteEnClaseimnasio?cedulaClient=${cedulaClient}&Num_clase=${Num_clase}&Id_servicio=${Id_servicio}&Fecha=${Fecha}&Hora_inicio=${Hora_inicio}&Modalidad=${Modalidad}&Cedula_instructor=${Cedula_instructor}`, {})
+  }
+
+  buscarClase(Nombre_sucursal:string, Id_servicio:string, fechaInicio:string, fecha_fin:string){
+    return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClase?Nombre_sucursal=${Nombre_sucursal}&Id_servicio=${Id_servicio}&fechaInicio=${fechaInicio}&fecha_fin=${fecha_fin}`, {})
   }
 }
