@@ -201,7 +201,7 @@ namespace Metodos{
       }
 
       [HttpPost]
-      [Route("admin/AsociarTratamientoASpa")]
+      [Route("admin/AsociarTratamientoASPA")]
       public dynamic AsociarTratamientosASPA(string Codigo_sucursal, string Id_tratamiento){
         try{
           // ACTUALIZAR TRATAMIENTO_SPA
@@ -716,21 +716,21 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/EliminarTipoEquipo")]
-      public dynamic EliminarTipoEquipo(string descripcion){
+      public dynamic EliminarTipoEquipo(string idTipoEquipo){
         try{
-            if(string.IsNullOrEmpty(descripcion)){
+            if(string.IsNullOrEmpty(idTipoEquipo)){
               return new { message = "error" };}
 
             // ELIMINAR TIPO DE EQUIPO EN LA BASE DE DATOS
-            dynamic existeTipoEquipo = aux.VerificarExistenciaTipoEquipo_aux(descripcion);
+            dynamic existeTipoEquipo = aux.VerificarExistenciaTipoEquipo_aux(idTipoEquipo);
             if(!existeTipoEquipo){
               return new { message = "No existe este tipo de equipo en la BD" };
             }
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryDelete = "DELETE FROM TIPO_EQUIPO WHERE Descripcion = @Descripcion";
+            string queryDelete = "DELETE FROM TIPO_EQUIPO WHERE Identificador = @Identificador";
             using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
-              comando.Parameters.AddWithValue("@Descripcion", descripcion);
+              comando.Parameters.AddWithValue("@Identificador", Int64.Parse(idTipoEquipo));
               comando.ExecuteNonQuery();
             }
             DB_Handler.CerrarConexion();

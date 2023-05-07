@@ -446,7 +446,6 @@ namespace funcionesAuxiliares{
             }
         }
 
-
         public dynamic VerTratamientos_aux(){
             try{
                 DB_Handler.ConectarServer();
@@ -485,7 +484,7 @@ namespace funcionesAuxiliares{
                 DB_Handler.AbrirConexion();
                 string querySelect = "SELECT * FROM TIPO_EQUIPO WHERE @Identificador = Identificador";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Identificador", Identificador);
+                    comando.Parameters.AddWithValue("@Identificador", Int64.Parse(Identificador));
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();

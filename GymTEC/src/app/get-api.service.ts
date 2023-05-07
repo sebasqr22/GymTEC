@@ -18,17 +18,6 @@ export class GetApiService {
   }
 
   //ADMIN COMPONENT
-  call_VerTratamientoSPA(){
-    return this.http.get(`https://localhost:7194/usuarios/admin/VerTratamientoSPA`);
-  }
-  call_AgregarTratamientoSPA(nombreSucursal:string, numSpa: number){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTratamientoSPA?nombreSucursal=${nombreSucursal}&numSpa=${numSpa}`, {});
-  }
-
-  call_EliminarTratamientoSPA(nombreSucursal:string, numSpa: number){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTratamientoSPA?nombreSucursal=${nombreSucursal}&numSpa=${numSpa}`, {});
-  }
-
   call_VerPuestos(descripcionPuesto:string){
     return this.http.get(`https://localhost:7194/usuarios/admin/VerPuestos?descripcionPuesto=${descripcionPuesto}`);
   }
@@ -37,8 +26,9 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarPuesto?descripcionPuesto=${descripcionPuesto}`, {});
   }
 
-  call_EliminarPuesto(descripcionPuesto:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarPuesto?descripcionPuesto=${descripcionPuesto}`, {});
+  //EliminarPuesto(string Id_puesto){
+  call_EliminarPuesto(idPuesto:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarPuesto?idPuesto=${idPuesto}`, {});
   }
 
   call_VerPlanillas(){
@@ -73,18 +63,23 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
   }
 
-  call_EliminarTipoEquipo(descripcionTipoEquipo:string){
+  // EliminarTipoEquipo(string idTipoEquipo)
+  call_EliminarTipoEquipo(idTipoEquipo:string){
     return this.http.post(`https://localhost:7194/usuarios/admin/EliminarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
   }
 
   agregarProductos(codigoBarras:string, nombreProducto:string, Descripcion:string, costo:string){
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarProducto?codigoBarras=${codigoBarras}&nombreProducto=${nombreProducto}&Descripcion=${Descripcion}&costo=${costo}`, {})
-  }  activarSpa(nombreSucursal:string, numSpa:number){
-    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarSPA?nombreSucursal=${nombreSucursal}&numSpa=${numSpa}`, {});
   }
 
-  activarTienda(nombreSucursal:string, numTienda:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarTienda?nombreSucursal=${nombreSucursal}&numTienda=${numTienda}`, {});
+  // ActivarSPA(string codigo_sucursal)
+  activarSpa(codigoSucursal:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarSPA?codigo_sucursal=${codigoSucursal}`, {});
+  }
+
+  // ActivarTienda(string codigo_sucursal)
+  activarTienda(codigo_sucursal:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/ActivarTienda?codigo_sucursal=${codigo_sucursal}`, {});
   }
 
   verProductos(){
@@ -181,7 +176,6 @@ export class GetApiService {
   verTratamientos(){
     return this.http.get(`https://localhost:7194/usuarios/admin/VerTratamientos`, {})
   }
-
 
   agregarTratamiento(nombreTratamiento:string){
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTratamiento?nombreTratamiento=${nombreTratamiento}`, {})
