@@ -31,7 +31,7 @@ CREATE TABLE EMPLEADO (
 -- Tabla SUCURSAL
 -- Informacion de las sucursales del gimnasio.
 CREATE TABLE SUCURSAL (
-	Codigo_sucursal INT NOT NULL,
+	Codigo_sucursal INT IDENTITY(1,1) NOT NULL,
 	Nombre NVARCHAR(50) NOT NULL,
 	Distrito NVARCHAR(50),
 	Canton NVARCHAR(50) NOT NULL,

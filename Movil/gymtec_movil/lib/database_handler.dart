@@ -64,3 +64,11 @@ class ASISTENCIA_CLASE{
     return {'Cedula_cliente':cedula_cliente,"Id_servicio":id_servicio, "Num_clase":num_clase};
   }
 }
+
+class EMPLEADO{
+
+}
+
+class SUCURSAL{
+  
+}
