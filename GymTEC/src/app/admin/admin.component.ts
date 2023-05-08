@@ -353,10 +353,11 @@ agregarNuevoInventario(){
   }
 
   copiarCalendario(){
-    const aCopiar = document.getElementById('copCalenPSEMANA1') as HTMLInputElement;
-    const aPegar = document.getElementById('copCalenPSEMANA2') as HTMLInputElement;
+    const fInicio = document.getElementById('copCalenPDIA1') as HTMLInputElement;
+    const fFinal = document.getElementById('copCalenPDIA2') as HTMLInputElement;
+    const aMover = document.getElementById('copCalenPMOVIMIENTO') as HTMLInputElement;
 
-    //this.api.copiarCalendarioActividades();
+    //this.api.copiarCalendarioActividades(aCopiar.value, aPegar.value);// AQUI LOS PARAMETRO SNO ESTOY SEGURO QUE FUNCIONEN, VERIFICAR QUE LOS PARAMETROS QUE RECIVE SON LOS QUE NECESITA
   }
 
   copiarGym(){

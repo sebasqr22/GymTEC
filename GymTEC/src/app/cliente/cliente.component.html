@@ -35,7 +35,7 @@
           <a id='home' class="nav-link collapsed" data-toggle="collapse" data-target="#gestSucC" aria-expanded="false"
              aria-controls="gestSucC"(click)="cambiarPantalla('busqueda')">
             <i class="fas fa-duotone fa-dumbbell"></i>
-            <span>Búsqueda y Registro</span>
+            <span>Opciones</span>
           </a>
         </li>
         <!-- Divider -->
@@ -161,26 +161,52 @@
 
             <div class="form-group row">
               <div class="col-sm-6 mb-3 mb-sm-0">
-                <input type="date" class="form-control form-control-user" id="fechaInicio">
-                <label for="fechaInicio">Fecha de Inicio</label>
+                <input type="date" class="form-control form-control-user" id="busquedafechaInicio">
+                <label for="busquedafechaInicio">Fecha de Inicio</label>
               </div>
               <div class="col-sm-6">
-                <input type="date" class="form-control form-control-user" id="fechaFinaliza">
-                <label for="fechaFinaliza">Fecha de Finalización</label>
+                <input type="date" class="form-control form-control-user" id="busquedafechaFinaliza">
+                <label for="busquedafechaFinaliza">Fecha de Finalización</label>
+              </div>
+              <div class="col-sm-6">
+                <select class="form-control form-control-user" id="busquedasede"></select>
+                <label for="busquedasede">Sede</label>
+              </div>
+              <div class="col-sm-6">
+                <select class="form-control form-control-user" id="busquedatipoDeClase"></select>
+                <label for="busquedatipoDeClase">Tipo de clase</label>
               </div>
               <div class="col-sm">
-                <select class="form-control form-control-user" id="sede"></select>
-                <label for="fechaFinaliza">Sede</label>
+                <textarea class="form-control form-control-user" id="busquedaResultado" rows="4"
+                          cols="50" readonly></textarea>
+                <label for="busquedaResultado">Resultado</label>
               </div>
-              <a class="btn btn-outline-primary btn-user btn-block" (click)="buscarClases()">
-                Buscar
-              </a>
-              <hr class="sidebar-divider my-0">
+
+
             </div>
 
-            <div id="clasesCartas" class="row"></div>
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="buscarClases()">
+              Buscar
+            </a>
+
+            <br><br>
+            <hr class="sidebar-divider my-0">
+            <hr class="sidebar-divider">
+            <h1 class="h3 mb-4 text-gray-800">Registrarse a clase</h1>
+            <div class="form-group row">
+
+              <div class="col-sm">
+                <select class="form-control form-control-user" id="registroAClase"></select>
+                <label for="registroAClase">Clase con cupo a la que registrarse</label>
+              </div>
+
+              <a class="btn btn-outline-primary btn-user btn-block">
+                Registrarse
+              </a>
 
           </div>
+
+
 
           <div id="registro" class="container-fluid">
             <h1 class="h3 mb-4 text-gray-800" id="registroName"></h1>
