@@ -39,7 +39,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar una sucursal de la db
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarSucursal")]
       public dynamic EliminarSucursal(string codigo_suc){
         try{
@@ -69,7 +69,7 @@ namespace Metodos{
       }
 
       //Función utilizada para los datos correspondientes a una sucursal
-      [HttpPost]
+      [HttpGet]
       [Route("admin/VerSucursal")]
       public dynamic VerSucursales(){
         try{
@@ -206,6 +206,27 @@ namespace Metodos{
         }
       }
 
+      //Funcion utilizada para eliminar o desasociar un producto de una tienda
+      [HttpDelete]
+      [Route("admin/EliminarProductoDeTienda")]
+      public dynamic EliminarProductoDeTienda(string codigo_sucursal, string Codigo_producto) {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string queryDelete = "DELETE FROM VENTA_PRODUCTO WHERE Codigo_sucursal = @Suc AND Codigo_producto = @Pro";
+          using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Suc", Int64.Parse(codigo_sucursal));
+            comando.Parameters.AddWithValue("@Pro", Int64.Parse(Codigo_producto));
+            comando.ExecuteNonQuery();
+          }
+          DB_Handler.CerrarConexion();
+          return new { message = "ok" };
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
       //Función utilizada para asociar tratamientos a un spa ya existente
       [HttpPost]
       [Route("admin/AsociarTratamientoASPA")]
@@ -226,6 +247,38 @@ namespace Metodos{
         }catch  (Exception e){
           Console.WriteLine(e);
           return new { message = "error" };
+        }
+      }
+
+       //Funcion utilizada para eliminar la relacion de una sucursal con un tratamiento
+      [HttpDelete]
+      [Route("admin/EliminarTratamientoDeSPA")]
+      public dynamic EliminarTratamientoDeSPA(string codigo_sucursal, int idTratamiento){
+        try{
+            // VERIFICACION DE DATOS
+            if (string.IsNullOrEmpty(codigo_sucursal)) {
+                return new { message = "error" };}
+
+            // ELIMINAR TRATAMIENTO_SPA EN LA BASE DE DATOS
+            dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(codigo_sucursal, idTratamiento);
+            if (!existeTratamientoSPA) {
+                return new { message = "Tratamiento no existe en la BD. Error" };}
+
+            DB_Handler.ConectarServer();
+            DB_Handler.AbrirConexion();
+            string queryDelete = "DELETE FROM TRATAMIENTO_SPA WHERE Codigo_sucursal = @Codigo";
+            using (SqlCommand comando2 = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+                comando2.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
+                comando2.ExecuteNonQuery();
+                Console.WriteLine("Tratamiento eliminado exitosamente");
+                DB_Handler.CerrarConexion();
+            }
+
+            return aux.VerTratamientosSPA_aux();  // JSON
+                  
+        }catch(Exception e){
+            Console.WriteLine(e);
+            return new { message = "error" };
         }
       }
 
@@ -448,7 +501,7 @@ namespace Metodos{
       }
       
       //Función utilizada para eliminar un inventario ya existente
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarInventario")] 
       public dynamic EliminarInventario(string Numero_serie){
         // VERIFICAR QUE EXISTE EL INVENTARIO EN LA BASE DE DATOS
@@ -540,25 +593,21 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar una clase ya existente
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarClase")] 
-      public dynamic EliminarClase(string Id_servicio, string cedulaInstructor, string modalidad, string fecha, string horaInicio){
+      public dynamic EliminarClase(string Num_clase) {//, string Id_servicio, string cedulaInstructor, string modalidad, string fecha, string horaInicio){
         // VERIFICAR QUE NO EXISTE LA CLASE EN LA BASE DE DATOS
-        dynamic existeClase = aux.VerificarExistenciaClase_aux(Id_servicio, cedulaInstructor, modalidad, fecha, horaInicio);
-        if(!existeClase){
-          return new { message = "No existe esta clase en la BD" };
-        }
+        //dynamic existeClase = aux.VerificarExistenciaClase_aux(Id_servicio, cedulaInstructor, modalidad, fecha, horaInicio);
+        //if(!existeClase){
+          //return new { message = "No existe esta clase en la BD" };
+        //}
         // ELIMINAR CLASE EN LA BASE DE DATOS
         try{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string queryInsert = "DELETE FROM SERVICIO WHERE Id_servicio = @Id_servicio AND Cedula_instructor = @Cedula_instructor AND Modalidad = @Modalidad AND Fecha = @Fecha AND Hora_inicio = @Hora_inicio";
+          string queryInsert = "DELETE FROM CLASE WHERE Num_clase = @Num";
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(Id_servicio));
-            comando.Parameters.AddWithValue("@Fecha", DateTime.ParseExact(fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
-            comando.Parameters.AddWithValue("@Hora_inicio", TimeSpan.ParseExact(horaInicio, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
-            comando.Parameters.AddWithValue("@Modalidad", modalidad);
-            comando.Parameters.AddWithValue("@Cedula_instructor", Int64.Parse(cedulaInstructor));
+            comando.Parameters.AddWithValue("@Num", Int64.Parse(Num_clase));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -570,7 +619,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un servicio ya existente
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarServicio")]
       public dynamic EliminarServicio(string Id_servicio){
         // VERIFICAR QUE NO EXISTE EL SERVICIO EN LA BASE DE DATOS
@@ -704,7 +753,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un producto ya existente
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarProducto")]
       public dynamic EliminarProducto(string codigoBarras){
         // VERIFICAR QUE NO EXISTE EL PRODUCTO EN LA BASE DE DATOS
@@ -827,7 +876,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un tipo de equipo ya existente
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarTipoEquipo")]
       public dynamic EliminarTipoEquipo(string idTipoEquipo){
         try{
@@ -907,7 +956,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un empleado ya existente
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarEmpleado")]
       public dynamic EliminarEmpleado(string cedula){
         try{
@@ -1035,7 +1084,7 @@ namespace Metodos{
         }
 
       //Función utilizada para eliminar una planilla ya existente
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarPlanilla")]
       public dynamic EliminarPlanilla(string idPlanilla){
         try{
@@ -1105,7 +1154,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un puesto ya existente
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarPuesto")]
       public dynamic EliminarPuesto(string Id_puesto){
         try{
@@ -1174,7 +1223,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un tratamiento ya existente
-      [HttpPost]
+      [HttpDelete]
       [Route("admin/EliminarTratamiento")]
       public dynamic EliminarTratamiento(string idTratamiento){
         try{
@@ -1241,39 +1290,6 @@ namespace Metodos{
         }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };
-        }
-      }
-
-
-      //Funcion utilizada para eliminar la relacion de una sucursal con un tratamiento
-      [HttpPost]
-      [Route("admin/EliminarTratamientoSPA")]
-      public dynamic EliminarTratamientoSPA(string codigo_sucursal, int idTratamiento){
-        try{
-            // VERIFICACION DE DATOS
-            if (string.IsNullOrEmpty(codigo_sucursal)) {
-                return new { message = "error" };}
-
-            // ELIMINAR TRATAMIENTO_SPA EN LA BASE DE DATOS
-            dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(codigo_sucursal, idTratamiento);
-            if (!existeTratamientoSPA) {
-                return new { message = "Tratamiento no existe en la BD. Error" };}
-
-            DB_Handler.ConectarServer();
-            DB_Handler.AbrirConexion();
-            string queryDelete = "DELETE FROM TRATAMIENTO_SPA WHERE Codigo_sucursal = @Codigo";
-            using (SqlCommand comando2 = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
-                comando2.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
-                comando2.ExecuteNonQuery();
-                Console.WriteLine("Tratamiento eliminado exitosamente");
-                DB_Handler.CerrarConexion();
-            }
-
-            return aux.VerTratamientosSPA_aux();  // JSON
-                  
-        }catch(Exception e){
-            Console.WriteLine(e);
-            return new { message = "error" };
         }
       }
 

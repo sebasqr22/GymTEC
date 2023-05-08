@@ -185,24 +185,16 @@ namespace funcionesAuxiliares{
                 // VER INVENTARIO EXISTENTE
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = @"SELECT INVENTARIO.Numero_serie, INVENTARIO.Marca, INVENTARIO_EN_SUCURSAL.Nombre_sucursal, TIPO_DE_MAQUINA.Id_tipo_equipo, TIPO_EQUIPO.Descripcion\
-                                     FROM INVENTARIO LEFT OUTER JOIN INVENTARIO_EN_SUCURSAL
-                                     ON INVENTARIO.Numero_serie = INVENTARIO_EN_SUCURSAL.Num_serie_maquina
-                                     LEFT OUTER JOIN TIPO_DE_MAQUINA 
-                                     ON INVENTARIO.Numero_serie = TIPO_DE_MAQUINA.Num_serie_maquina 
-                                     LEFT OUTER JOIN TIPO_EQUIPO 
-                                     ON TIPO_DE_MAQUINA.Id_tipo_equipo = TIPO_EQUIPO.Identificador"; 
+                string querySelect = @"SELECT * FROM INVENTARIO"; 
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
                             var inventarioExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 inventarioExistentes.Add(new {
-                                    NumeroSerie = reader.GetInt32(0),
+                                    Numero_serie = reader.GetInt32(0),
                                     Marca = reader.GetString(1),
-                                    Nombre_sucursal = reader.GetString(2),
-                                    Id_tipo_equipo = reader.GetInt32(3),
-                                    Descripcion = reader.GetString(4)
+                                    Tipo = reader.GetString(2)
                                 });
                             }
                             DB_Handler.CerrarConexion();
