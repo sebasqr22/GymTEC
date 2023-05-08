@@ -1305,10 +1305,10 @@ namespace Metodos{
                   return new { message = "error" };}
 
               // SEPARAR FECHA DE NACIMIENTO
-              string[] fechaNSeparada = fechaNacimiento.Split("/");
-              string mes = fechaNSeparada[0];
-              string dia = fechaNSeparada[1];
-              string anio = fechaNSeparada[2];
+              string[] fechaNSeparada = fechaNacimiento.Split("-");
+              string anio = fechaNSeparada[0];
+              string mes = fechaNSeparada[1];
+              string dia = fechaNSeparada[2];
 
               // INSERTAR DATOS EN LA BASE DE DATOS
               DB_Handler.ConectarServer();
