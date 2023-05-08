@@ -159,22 +159,22 @@ namespace Metodos{
           DB_Handler.AbrirConexion();
           using (SqlCommand comando = new SqlCommand(queryInventario, DB_Handler.conectarDB)) {
             comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
-            comando.Parameters.AddWithValue("@NumSerie", num_serie);
+            comando.Parameters.AddWithValue("@NumSerie", Int64.Parse(num_serie));
             comando.Parameters.AddWithValue("@Costo", Math.Round(Convert.ToDouble(costo, CultureInfo.InvariantCulture), 2));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
 
           // Actualizar sucursal en inventario
-          string queryUpdate = "UPDATE INVENTARIO SET Codigo_sucursal = @Codigo_sucursal WHERE Num_serie = @Num_serie";
-          DB_Handler.ConectarServer();
-          DB_Handler.AbrirConexion();
-          using (SqlCommand comando = new SqlCommand(queryUpdate, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
-            comando.Parameters.AddWithValue("@Num_serie", num_serie);
-            comando.ExecuteNonQuery();
-          }
-          DB_Handler.CerrarConexion();
+          //string queryUpdate = "UPDATE INVENTARIO SET Codigo_sucursal = @Codigo_sucursal WHERE Num_serie = @Num_serie";
+          //DB_Handler.ConectarServer();
+          //DB_Handler.AbrirConexion();
+          //using (SqlCommand comando = new SqlCommand(queryUpdate, DB_Handler.conectarDB)) {
+            //comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
+            //comando.Parameters.AddWithValue("@Num_serie", num_serie);
+            //comando.ExecuteNonQuery();
+          //}
+          //DB_Handler.CerrarConexion();
 
           return new { message = "ok"};
         } catch (Exception e) {
@@ -193,8 +193,8 @@ namespace Metodos{
           DB_Handler.AbrirConexion();
           
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
-            comando.Parameters.AddWithValue("@Codigo_producto", Int64.Parse(Codigo_producto));
+            comando.Parameters.AddWithValue("@codigoSucursal", Int64.Parse(Codigo_sucursal));
+            comando.Parameters.AddWithValue("@codigoProducto", Int64.Parse(Codigo_producto));
             comando.ExecuteNonQuery();
           }
           DB_Handler.CerrarConexion();
@@ -538,9 +538,9 @@ namespace Metodos{
       //Función utilizada para ver el inventario existente
       [HttpGet]
       [Route("admin/VerInventario")]
-      public dynamic VerInventario(){
+      public dynamic VerInventario(string codigo_suc, string num_serie){
         try{
-          return aux.VerInventario_aux();
+          return aux.VerInventario_aux(codigo_suc, num_serie);
         }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };
@@ -552,7 +552,8 @@ namespace Metodos{
       [Route("admin/AgregarInventario")]
       public dynamic AgregarInventario(string numSerie, string marca, string idTipoEquipo){
         try{
-
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
           // VERIFICAR QUE NO EXISTA PREVIAMENTE EL INVENTARIO EN LA BASE DE DATOS
           dynamic existeInventario = aux.VerificarExistenciaInventario_aux(numSerie);
           if(existeInventario){
@@ -714,9 +715,9 @@ namespace Metodos{
       //Función utilizada para ver los productos exitentes en la db
       [HttpGet]
       [Route("admin/VerProductos")]
-      public dynamic VerProductos(){
+      public dynamic VerProductos(string codigo_gym, string cod_producto){
         try{
-          return aux.VerProductos_aux();
+          return aux.VerProductos_aux(codigo_gym, cod_producto);
         }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };

@@ -180,21 +180,26 @@ namespace funcionesAuxiliares{
             }
         }
 
-        public dynamic VerInventario_aux(){
+        public dynamic VerInventario_aux(string codigo_suc, string num_serie){
             try{
                 // VER INVENTARIO EXISTENTE
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = @"SELECT * FROM INVENTARIO"; 
+                string querySelect = @"SELECT Tipo, Marca, Numero_serie, Costo_sucursal 
+                                    FROM INVENTARIO JOIN INVENTARIO_EN_SUCURSAL ON Numero_serie = Num_serie_maquina
+                                    WHERE Codigo_sucursal = @CodigoSuc AND Numero_serie = @IdMaquina"; 
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@CodigoSuc", Int64.Parse(codigo_suc));
+                    comando.Parameters.AddWithValue("@IdMaquina", Int64.Parse(num_serie));
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
                             var inventarioExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 inventarioExistentes.Add(new {
-                                    Numero_serie = reader.GetInt32(0),
+                                    Tipo_equipo = reader.GetInt32(0),
                                     Marca = reader.GetString(1),
-                                    Tipo = reader.GetString(2)
+                                    Num_serie = reader.GetInt32(2),
+                                    Costo_sucursal = reader.GetDouble(3)
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -211,13 +216,17 @@ namespace funcionesAuxiliares{
                 return new { message = "error en VerInventario_aux" };
             }
         }
-        public dynamic VerProductos_aux(){
+        public dynamic VerProductos_aux(string codigo_gym, string Codigo_producto){
             try{
                 // VER PRODUCTOS EXISTENTES
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM PRODUCTO";
+                string querySelect = @"SELECT Codigo_barras, Nombre, Descripcion, Costo 
+                                    FROM PRODUCTO JOIN VENTA_PRODUCTO ON Codigo_barras = Codigo_producto
+                                    WHERE Codigo_sucursal = @Suc AND Codigo_barras = @Produ";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Suc", Int64.Parse(codigo_gym));
+                    comando.Parameters.AddWithValue("@Produ", Int64.Parse(Codigo_producto));
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
                             var productosExistentes = new List<dynamic>();
@@ -226,7 +235,7 @@ namespace funcionesAuxiliares{
                                     Codigo_barras = reader.GetInt32(0),
                                     Nombre = reader.GetString(1),
                                     Descripcion = reader.GetString(2),
-                                    Costo = reader.GetFloat(3),
+                                    Costo = reader.GetDouble(3),
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -636,7 +645,7 @@ namespace funcionesAuxiliares{
                             var planillasExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 planillasExistentes.Add(new {
-                                    Id_planilla = reader.GetInt32(0),
+                                    Identificador = reader.GetInt32(0),
                                     Descripcion = reader.GetString(1)
                                 });
                             }
@@ -668,6 +677,7 @@ namespace funcionesAuxiliares{
                             var puestosExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 puestosExistentes.Add(new {
+                                    Identificador = reader.GetInt32(0),
                                     Descripcion = reader.GetString(1)
                                 });
                             }
