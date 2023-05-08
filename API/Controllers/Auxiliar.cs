@@ -77,6 +77,65 @@ namespace funcionesAuxiliares{
             }
         }
 
+        public dynamic VerificarExistenciaCliente_aux(string cedula) {
+            try {
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM CLIENTE WHERE Cedula = @Cedula";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+                DB_Handler.CerrarConexion();
+                return false;
+            } catch (Exception e) {
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaCliente" };
+            }
+        }
+
+        public dynamic VerClienteEspecifico_aux(string cedula) {
+            try {
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM CLIENTE WHERE Cedula = @Cedula";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            var cliente = new List<dynamic>();
+                            while (reader.Read()) {
+                                cliente.Add(new {
+                                    Cedula = reader.GetString(0),
+                                    Nombre = reader.GetString(1),
+                                    Apellido1 = reader.GetString(2),
+                                    Apellido2 = reader.GetString(3),
+                                    Dia_nacimiento = reader.GetDateTime(4),
+                                    Mes_nacimiento = reader.GetTimeSpan(5),
+                                    Ano_nacimiento = reader.GetTimeSpan(6),
+                                    Peso = reader.GetInt32(7),
+                                    Direccion = reader.GetInt32(8),
+                                    Correo = reader.GetString(9),
+                                    Contrasena = reader.GetString(10)
+                                });
+                            }
+                            DB_Handler.CerrarConexion();
+                            return new JsonResult(cliente);
+                        }
+                    }
+                }
+                DB_Handler.CerrarConexion();
+                return false;
+            } catch (Exception e) {
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaCliente" };
+            }
+        }
+
         public dynamic VerificarExistenciaInventarioEnSucursal_aux(string Num_serie_maquina){
             try{
                 // VERIFICAR EXISTENCIA DE INVENTARIO EN SUCURSAL
@@ -379,6 +438,28 @@ namespace funcionesAuxiliares{
             }
         }
 
+        public dynamic VerificarExistenciaTratamientoSPA_aux(string codigo_sucursal, int id_tratamiento) {
+            try {
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM TRATAMIENTO_SPA WHERE Codigo_sucursal = @Codigo AND Id_tratamiento = @Tratamiento";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
+                    comando.Parameters.AddWithValue("@Tratamiento", id_tratamiento);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+                DB_Handler.CerrarConexion();
+                return false;
+            } catch (Exception e) {
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaTratamientoSPA" };
+            }
+        }
 
         public dynamic VerTratamientos_aux(){
             try{

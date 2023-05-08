@@ -450,37 +450,33 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/CopiarCalendarioActividades")]
-      public dynamic CopiarCalendarioActividades(string Id_servicio, string fechaInicio, string fechaFin, string Hora_inicio, string Hora_fin, string Modalidad, string Capacidad, string Cedula_instructor){
+      public dynamic CopiarCalendarioActividades(string fechaInicio, string fechaFin, string semanasMover){
         try{ 
           // VERIFICAR EXISTENCIA DE CLASE 
-          dynamic existeCalendario = aux.VerificarExistenciaClase_aux(Id_servicio, Cedula_instructor, Modalidad, fechaInicio, Hora_inicio);
-          if(!existeCalendario){
-            return new { message = "No existe este calendario en la BD" };
-          }
+          // dynamic existeCalendario = aux.VerificarExistenciaClase_aux(Id_servicio, Cedula_instructor, Modalidad, fechaInicio, Hora_inicio);
+          //if(!existeCalendario){
+            //return new { message = "No existe este calendario en la BD" };
+          //}
           // COPIAR CALENDARIO EN CLASE
-          try{
-            DB_Handler.ConectarServer();
-            DB_Handler.AbrirConexion();
-            string queryInsert = @"INSERT INTO CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor)
-                                   SELECT Id_servicio, DATEADD(WEEK, 1, Fecha), Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor
-                                   FROM CLASE WHERE @Fecha_Inicio < Fecha AND Fecha < @Fecha_fin
-                                   GROUP BY Id_servicio, Num_clase, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor
-                                   ";
-            using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-              comando.Parameters.AddWithValue("@Fecha_Inicio", fechaInicio);
-              comando.Parameters.AddWithValue("@Fecha_fin", fechaFin);
-              comando.ExecuteNonQuery();
-            }
-
-            DB_Handler.CerrarConexion();
-            return new {message = "ok"};
-          }catch{
-            return new { message = "error1" };
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string queryInsert = @"INSERT INTO CLASE (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor)
+                                SELECT Id_servicio, DATEADD(WEEK, @CantidadSemanas, Fecha), Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor
+                                FROM CLASE WHERE @Fecha_Inicio <= Fecha AND Fecha <= @Fecha_fin
+                                GROUP BY Id_servicio, Num_clase, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor
+                                ";
+          using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@CantidadSemanas", Int64.Parse(semanasMover));
+            comando.Parameters.AddWithValue("@Fecha_Inicio", fechaInicio);
+            comando.Parameters.AddWithValue("@Fecha_fin", fechaFin);
+            comando.ExecuteNonQuery();
           }
-        }catch(Exception e){
-          Console.WriteLine(e);
-          return new { message = "error2" };
-        }
+          DB_Handler.CerrarConexion();
+          return new {message = "ok"};
+          } catch (Exception e) {
+            Console.WriteLine(e);
+            return new { message = "Error al copiar calendario" };
+          }
       }
       
       [HttpPost]
@@ -660,11 +656,11 @@ namespace Metodos{
       [Route("admin/CrearClase")]
       public dynamic CrearClase(string idServicio, string cedulaInstructor, string modalidad, string capacidad, string fecha, string horaInicio, string horaFinal){
         try{
-            if(string.IsNullOrEmpty(servicioClase) || string.IsNullOrEmpty(modalidad) || string.IsNullOrEmpty(fecha) || string.IsNullOrEmpty(horaInicio) || string.IsNullOrEmpty(horaFinal) || string.IsNullOrEmpty(capacidad) || string.IsNullOrEmpty(cedulaInstructor)){
+            if(string.IsNullOrEmpty(idServicio) || string.IsNullOrEmpty(modalidad) || string.IsNullOrEmpty(fecha) || string.IsNullOrEmpty(horaInicio) || string.IsNullOrEmpty(horaFinal) || string.IsNullOrEmpty(capacidad) || string.IsNullOrEmpty(cedulaInstructor)){
               return new { message = "error" };}
 
             // INSERTAR CLASE EN LA BASE DE DATOS
-            dynamic existeClase = aux.VerificarExistenciaClase_aux(servicioClase, cedulaInstructor, modalidad, fecha, horaInicio);
+            dynamic existeClase = aux.VerificarExistenciaClase_aux(idServicio, cedulaInstructor, modalidad, fecha, horaInicio);
             if(existeClase){
               return new { message = "Ya existe esta clase en la BD" };
             }
@@ -672,7 +668,7 @@ namespace Metodos{
             DB_Handler.AbrirConexion();
             string queryInsert = "INSERT INTO CLASE VALUES (@Id_servicio, @Fecha, @Hora_inicio, @Hora_fin, @Modalidad, @Capacidad, @Cedula_instructor)";
             using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-              comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(servicioClase));
+              comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(idServicio));
               comando.Parameters.AddWithValue("@Fecha", DateTime.ParseExact(fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
               comando.Parameters.AddWithValue("@Hora_inicio", TimeSpan.ParseExact(horaInicio, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
               comando.Parameters.AddWithValue("@Hora_fin", TimeSpan.ParseExact(horaFinal, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
@@ -1064,7 +1060,7 @@ namespace Metodos{
             DB_Handler.AbrirConexion();
             string queryDelete = "DELETE FROM PLANILLA WHERE Identificador = @idPlanilla";
             using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Identificador", descripcionPlanilla);
+                comando.Parameters.AddWithValue("@idPlanilla", Int64.Parse(idPlanilla));
                 comando.ExecuteNonQuery();
             }
             DB_Handler.CerrarConexion();
