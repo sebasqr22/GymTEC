@@ -19,6 +19,7 @@ namespace Metodos{
       private DatabaseHandler DB_Handler = new DatabaseHandler();  
       AuxiliarFunctions aux = new AuxiliarFunctions();
 
+      //Función utilizada para ver los datos correspondientes a un cliente en especifico
       [HttpPost]
       [Route("admin/VerClienteEspecifico")]
       public dynamic VerClienteEspecifico(string cedula){
@@ -37,7 +38,7 @@ namespace Metodos{
         }
       }
 
-
+      //Función utilizada para eliminar una sucursal de la db
       [HttpPost]
       [Route("admin/EliminarSucursal")]
       public dynamic EliminarSucursal(string codigo_suc){
@@ -67,6 +68,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para los datos correspondientes a una sucursal
       [HttpPost]
       [Route("admin/VerSucursal")]
       public dynamic VerSucursales(){
@@ -78,6 +80,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para agregar una sucursal a una db
       [HttpPost]
       [Route("admin/AgregarSucursal")]
       public dynamic AgregarSucursal(string Codigo_sucursal, string Nombre, string Distrito, string Canton, string Provincia, string Fecha_apertura, string Hora_apertura, string Hora_cierre, string Max_capacidad, string Cedula_administrador){
@@ -120,6 +123,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para asociar servicios a una sucursal ya existente
       [HttpPost]
       [Route("admin/AsociarServiciosASucursal")]
       public dynamic AsociarServiciosASucursal(string Codigo_sucursal, string idServicio){
@@ -142,6 +146,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para asociar inventario a una sucursal ya existente
       [HttpPost]
       [Route("admin/AsociarInventario")]
       public dynamic AsociarInventario(string Codigo_sucursal, string num_serie, string costo) {
@@ -178,6 +183,7 @@ namespace Metodos{
         }
       }
       
+      //Función utilizada para asociar productos a una tienda ya existente
       [HttpPost]
       [Route("admin/AsociarProductosATienda")]
       public dynamic AsociarProductosATienda(string Codigo_sucursal, string Codigo_producto){
@@ -200,6 +206,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para asociar tratamientos a un spa ya existente
       [HttpPost]
       [Route("admin/AsociarTratamientoASPA")]
       public dynamic AsociarTratamientosASPA(string Codigo_sucursal, string Id_tratamiento){
@@ -222,6 +229,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para copiar un gym y todos sus parametros en un completamente nuevo
       [HttpPost]
       [Route("admin/CopiarGimnasio")]
       public dynamic CopiarGimnasio(string new_gym, string copied_gym) {
@@ -261,6 +269,7 @@ namespace Metodos{
 
       }
 
+      //Función utilizada para registrar clientes a una clase ya existente
       [HttpPost]
       [Route("cliente/RegistrarClienteEnClase")]
       public dynamic RegistrarClienteEnClase(string cedulaClient, string Num_clase, string Id_servicio, string Fecha, string Hora_inicio,string Modalidad, string Cedula_instructor){
@@ -288,6 +297,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para buscar clases correspondientes a una sucursal ya existente
       [HttpGet]
       [Route("cliente/BuscarClasePorSucursal")]
       public dynamic BuscarClasePorSucursal(string Codigo_sucursal){
@@ -327,6 +337,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para buscar clases ya existente por servicio que muestran
       [HttpGet]
       [Route("cliente/BuscarClasePorServicio")]
       public dynamic BuscarClasePorServicio(string Id_servicio){
@@ -364,6 +375,8 @@ namespace Metodos{
         }
       }
 
+      
+      //Función utilizada para buscar clases por periodos de tiempo
       [HttpGet]
       [Route("cliente/BuscarClasePorPeriodos")]
       public dynamic BuscarClasePorPeriodos(string fechaInicio, string fecha_fin){
@@ -402,6 +415,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para copiar todas las actividades en un rango de tiempo a otro rango de tiempo
       [HttpPost]
       [Route("admin/CopiarCalendarioActividades")]
       public dynamic CopiarCalendarioActividades(string fechaInicio, string fechaFin, string semanasMover){
@@ -433,6 +447,7 @@ namespace Metodos{
           }
       }
       
+      //Función utilizada para eliminar un inventario ya existente
       [HttpPost]
       [Route("admin/EliminarInventario")] 
       public dynamic EliminarInventario(string Numero_serie){
@@ -467,6 +482,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para ver el inventario existente
       [HttpGet]
       [Route("admin/VerInventario")]
       public dynamic VerInventario(){
@@ -478,6 +494,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para agregar nuevo inventario a la db
       [HttpPost]
       [Route("admin/AgregarInventario")]
       public dynamic AgregarInventario(string numSerie, string marca, string idTipoEquipo){
@@ -510,6 +527,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para ver las clases existentes
       [HttpGet]
       [Route("admin/VerClases")]
       public dynamic VerClases(){
@@ -521,6 +539,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para eliminar una clase ya existente
       [HttpPost]
       [Route("admin/EliminarClase")] 
       public dynamic EliminarClase(string Id_servicio, string cedulaInstructor, string modalidad, string fecha, string horaInicio){
@@ -550,6 +569,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para eliminar un servicio ya existente
       [HttpPost]
       [Route("admin/EliminarServicio")]
       public dynamic EliminarServicio(string Id_servicio){
@@ -575,6 +595,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para ver los servicios existentes en la db
       [HttpGet]
       [Route("admin/VerServicios")]
       public dynamic VerServicios(){
@@ -586,6 +607,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para agregar un nuevo servicio a la db
       [HttpPost]
       [Route("admin/AgregarServicio")]
       public dynamic AgregarServicio(string descripcion) {
@@ -605,7 +627,7 @@ namespace Metodos{
         }
       }
 
-      
+      //Función utilizada para crear una nueva clase
       [HttpPost]
       [Route("admin/CrearClase")]
       public dynamic CrearClase(string idServicio, string cedulaInstructor, string modalidad, string capacidad, string fecha, string horaInicio, string horaFinal){
@@ -639,6 +661,8 @@ namespace Metodos{
           }
       }
 
+      
+      //Función utilizada para ver los productos exitentes en la db
       [HttpGet]
       [Route("admin/VerProductos")]
       public dynamic VerProductos(){
@@ -650,6 +674,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para agregar un nuevo producto a la db
       [HttpPost]
       [Route("admin/AgregarProducto")]
       public dynamic AgregarProducto(string codigoBarras, string nombreProducto, string Descripcion, string costo){
@@ -678,6 +703,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para eliminar un producto ya existente
       [HttpPost]
       [Route("admin/EliminarProducto")]
       public dynamic EliminarProducto(string codigoBarras){
@@ -718,6 +744,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para activar la tienda correspondiente a una sucursal
       [HttpPost]
       [Route("admin/ActivarTienda")]
       public dynamic ActivarTienda(string codigo_sucursal){
@@ -739,6 +766,7 @@ namespace Metodos{
 
       }
 
+      //Función utilizada para activar el spa correspondiente a una sucursal
       [HttpPost]
       [Route("admin/ActivarSPA")]
       public dynamic ActivarSPA(string codigo_sucursal){
@@ -770,6 +798,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para agregar un nuevo tipo de equipo a la db
       [HttpPost]
       [Route("admin/AgregarTipoEquipo")]
       public dynamic AgregarTipoEquipo(string descripcion){
@@ -797,6 +826,7 @@ namespace Metodos{
           }
       }
 
+      //Función utilizada para eliminar un tipo de equipo ya existente
       [HttpPost]
       [Route("admin/EliminarTipoEquipo")]
       public dynamic EliminarTipoEquipo(string idTipoEquipo){
@@ -823,6 +853,8 @@ namespace Metodos{
             return new { message = "error" };
           }
       }
+      
+      //Función utilizada para ver los empleados existentes en la db
       [HttpGet]
       [Route("admin/VerEmpleados")]
       public dynamic VerEmpleados(){
@@ -834,6 +866,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para agregar un nuevo empleado a la db
       [HttpPost]
       [Route("admin/AgregarEmpleado")]
       public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, string id_puesto, string id_planilla, string codigo_suc){
@@ -873,6 +906,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para eliminar un empleado ya existente
       [HttpPost]
       [Route("admin/EliminarEmpleado")]
       public dynamic EliminarEmpleado(string cedula){
@@ -899,6 +933,8 @@ namespace Metodos{
           return new { message = "error" };
         }
       }
+      
+      //Función utilizada para ver las planillas ya existentes en la db
       [HttpGet]
       [Route("admin/VerPlanillas")]
       public dynamic VerPlanillas(){
@@ -910,6 +946,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para generar todas las planillas correspondientes de los empleados
       [HttpGet]
       [Route("admin/GenerarPlanillasTodos")]
       public dynamic GenerarPlanillasTodos(){
@@ -965,6 +1002,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para agregar una nueva planilla a la db
       [HttpPost]
       [Route("admin/AgregarPlanilla")]
         public dynamic AgregarPlanilla(string descripcionPlanilla){
@@ -996,6 +1034,7 @@ namespace Metodos{
           }
         }
 
+      //Función utilizada para eliminar una planilla ya existente
       [HttpPost]
       [Route("admin/EliminarPlanilla")]
       public dynamic EliminarPlanilla(string idPlanilla){
@@ -1026,6 +1065,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para ver todos los puestos ya existentes en la db
       [HttpGet]
       [Route("admin/VerPuestos")]
       public dynamic VerPuestos(){
@@ -1037,6 +1077,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para agregar un nuevo puesto a la db
       [HttpPost]
       [Route("admin/AgregarPuesto")]
       public dynamic AgregarPuesto(string descripcionPuesto){
@@ -1063,6 +1104,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para eliminar un puesto ya existente
       [HttpPost]
       [Route("admin/EliminarPuesto")]
       public dynamic EliminarPuesto(string Id_puesto){
@@ -1090,6 +1132,7 @@ namespace Metodos{
         }
       }      
 
+      //Función utilizada para ver los tratamientos ya existentes ya en la db
       [HttpGet]
       [Route ("admin/VerTratamientos")]
       public dynamic VerTratamientos(){
@@ -1101,6 +1144,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para agregar un nuevo tratamiento a la db
       [HttpPost]
       [Route("admin/AgregarTratamiento")]
       public dynamic AgregarTratamiento(string nombreTratamiento){
@@ -1129,6 +1173,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para eliminar un tratamiento ya existente
       [HttpPost]
       [Route("admin/EliminarTratamiento")]
       public dynamic EliminarTratamiento(string idTratamiento){
@@ -1155,6 +1200,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para ver los tratamientos ya existentes ESTA FUNCION ESTA DUPLICADA
       [HttpGet]
       [Route("admin/VerTratamientosSPA")]
       public dynamic VerTratamientosSPA(){
@@ -1166,6 +1212,7 @@ namespace Metodos{
         }
       }
 
+      //Funcion utilizada para asociar un tratamiento a un spa
       [HttpPost]
       [Route("admin/AgregarTratamientoSPA")]
       public dynamic AgregarTratamientoSPA(string codigo_sucursal, int idTratamiento){
@@ -1198,7 +1245,7 @@ namespace Metodos{
       }
 
 
-
+      //Funcion utilizada para eliminar la relacion de una sucursal con un tratamiento
       [HttpPost]
       [Route("admin/EliminarTratamientoSPA")]
       public dynamic EliminarTratamientoSPA(string codigo_sucursal, int idTratamiento){
@@ -1230,6 +1277,7 @@ namespace Metodos{
         }
       }
 
+      //Función utilizada para realizar el registro de un cliente a la db
       [HttpPost]
       [Route("login/SignUpCliente")]
       public dynamic SignUpCliente(string cedula, string nombre, string apellido1, string apellido2, string fechaNacimiento, string peso, string direccion, string correoElectronico, string contrasena) {
@@ -1274,6 +1322,7 @@ namespace Metodos{
           }
       }
 
+      //Función utilizada para realizar el login de un cliente
       [HttpPost]
       [Route("login/LoginCliente")]
       public dynamic LoginCliente(string cedula, string contrasena){

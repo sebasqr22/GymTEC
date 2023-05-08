@@ -30,6 +30,7 @@ export class AdminComponent implements OnInit{
     this.cargarProvincias(["gestSucSpaPROVINCIA", "gestEmplPPROVINCIA", "gestEmplPPROVINCIA2"]);
   }
 
+  //Función utilizada para cargar cada una de las 7 provincias en los componentes select que las necesitan
   cargarProvincias(lista:any){
     for (let i = 0; i < lista.length; i++) {
       const p = document.getElementById(lista[i]) as HTMLSelectElement;
@@ -41,6 +42,7 @@ export class AdminComponent implements OnInit{
     }
   }
 
+  //Utilizado para los modificar la vista actual y mostrar solamente los componentes que son necesarios
   mostrar(idPrincipal:string, idDrop:string){
     const principal = document.getElementById(idPrincipal) as HTMLInputElement
     const drop = document.getElementById(idDrop) as HTMLInputElement
@@ -57,6 +59,7 @@ export class AdminComponent implements OnInit{
     }
   }
 
+  //Cicla entre cada una de las ventanas posibles y muestra la que se solicita
   mostrarPantalla(pantalla:string){
     const act = document.getElementById(this.pantallaActual) as HTMLInputElement
     act.style.display = 'none'
@@ -67,6 +70,8 @@ export class AdminComponent implements OnInit{
 
     this.pantallaActual = tmp.id
   }
+
+  //Muestra los componentes desplegables que pertenecen a ciertas opciones de mostrar ventanas
 mostrarDropdown(){
   const drop = document.getElementById("dropdown") as HTMLInputElement
   if(this.dropdown === 0){
@@ -83,6 +88,7 @@ toNum(dato:string):number{
   return parseInt(dato, 10);
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega una sucursal a la db)
 activarSucursal(){
   const sede = document.getElementById('sedegestSucSpaSELECT') as HTMLInputElement;
   const nombre = document.getElementById('gestSucSpaNOMBRE') as HTMLInputElement;
@@ -100,21 +106,21 @@ activarSucursal(){
   this.api.agregarSucursal(sede.value, nombre.value, distrito.value, canton.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value);
 }
 
-//pantalla AGREGAR SPA
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (activa el spa correspondiente a una sede)
 activacionSpa(){ //FUNCIONA, ACATAR DETALLE
   const sede = document.getElementById('gestSucTiendaNUMEROSSEDESPA') as HTMLInputElement;
 
   this.api.activarSpa(sede.value); //HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
-//pantalla activar tienda!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (activa la tienda correspondiente a una sede)
 activacionTienda(){//FUNCIONA, ACATAR DETALLE
   const sede = document.getElementById('gestSucTiendaNUMEROSSEDETIENDA') as HTMLInputElement;
 
   this.api.activarTienda(sede.value);//HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
-// pantalla GESTION DE TRATAMIENTOS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (Modifica un tratamiento ya existente)
 agregarTratamiento(){ //ESTE ES EL DE MODIFICAR, NO ESTA
   const tratamiento = document.getElementById('gestTratSpaPSELECT') as HTMLInputElement;
   const IDunico = document.getElementById('gestTratSpaID') as HTMLInputElement;
@@ -123,19 +129,21 @@ agregarTratamiento(){ //ESTE ES EL DE MODIFICAR, NO ESTA
   //STANDBY
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un tratamineto ya existente)
 eliminarTratamiento(){
   const tratamiento = document.getElementById('gestTratSpaPSELECT') as HTMLInputElement;
   this.api.call_EliminarTratamiento(tratamiento.value) //DEBE DE SER EL ID, HAY QUE OBTENERLO DE ALGUNA MANERA
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un tratamiento nuevo a la db)
 agregarNuevoTratamiento(){
   const nombreNuevo = document.getElementById('gestTratSpaNOOMBRENUEVO') as HTMLInputElement; //TENER CUIDADO, VER SI HAY QUE ELIMINAR LA CASILLA DE NOMBRE Y TRABAJAR CON DESCRIPCION
 
   this.api.agregarTratamiento(nombreNuevo.value);
 }
 
-//pantall de gestion de puestos!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica un puesto ya existente)
 guardarPuesto(){ //No hay para modificar este valo
   const puesto = document.getElementById('gestPuestPSELECT') as HTMLInputElement;
   const ID = document.getElementById('gestPuestPID') as HTMLInputElement;
@@ -143,18 +151,20 @@ guardarPuesto(){ //No hay para modificar este valo
   //STANDBY
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un puesto ya existente)
 eliminarPuesto(){
   const descripcion = document.getElementById('gestPuestPSELECT') as HTMLInputElement; //VERIFICAR ESTE, SACAR ID DEL PUESTO Y PASARA ESE PARAMETRO
   this.api.call_EliminarPuesto(descripcion.value); //ESTO RECIVE COMO PARAMETRO PUESTO_ID
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo puesto a la db)
 agregarNuevoPuesto(){ //ELIMINAR CASILLA DE NOMBRE DEL HTML
   const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement;
 
   this.api.call_AgregarPuesto(descripcion.value);
 }
 
-//pantalla GESTION DE TIPOS DE PLANILLA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados ()
 gestionDePlanilla(){
   const tipoPlanilla = document.getElementById('gestTipPlaPSELECT') as HTMLInputElement;
   const id = document.getElementById('gestTipPlaPID') as HTMLInputElement;
@@ -168,7 +178,7 @@ gestionDePlanilla(){
   //aqui si no comprendo que llamada hacer
 }
 
-//pantalla de gestion de empleados!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica los datos de un empleado ya existente)
 gestionEmpleados(){ //FUNCA
   const empleado = document.getElementById('gestEmplPSELECT') as HTMLInputElement;
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
@@ -190,12 +200,14 @@ gestionEmpleados(){ //FUNCA
   //AQUI STANDBY, NO HAY MODIFICAR
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un empleado ya existente)
 eliminarEmpleado(){ //FUNCA
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
   //@ts-ignore
   this.auth.eliminarEmpleados(this.toNum(cedula.value));
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un empleado nuevo a la db)
 agregarEmpleado(){ //FUNCA
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA2') as HTMLInputElement;
   const nombre = document.getElementById('gestEmplPNOMBRE2') as HTMLInputElement;
@@ -215,10 +227,7 @@ agregarEmpleado(){ //FUNCA
   this.api.call_AgregarEmpleados(cedula.value, nombre.value, apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
 }
 
-
-
-
-//pantalla de gestion de servicios!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica un servicio ya existente)
 
 guardarServicio(){
   const servicio = document.getElementById('gestServPSELECT') as HTMLInputElement;
@@ -229,18 +238,20 @@ guardarServicio(){
   //STANDBY
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un servicio ya existente)
 eliminarServicio(){
   const servicio = document.getElementById('gestServPSELECT') as HTMLInputElement;
   this.api.eliminarServicio(servicio.value);
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo servicio a la db)
 agregarNuevoServicio(){
   const descripcion = document.getElementById('gestServPDESCRIPCION2') as HTMLInputElement;
 
   this.api.agregarServicios(descripcion.value);
 }
 
-//pantalla de gestion de tipos de equipos!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica un tipo de equipo ya existente)
 guardarTipoEquipo(){ //FUNCA, VERIFICAR QUE SEA SI CON LA DESCRIPCION QUE SE QUIERE TRABAJAR
   //const gym = document.getElementById('gestTipEquipPGYM') as HTMLInputElement;
   // id = document.getElementById('gestTipEquipPID') as HTMLInputElement;
@@ -249,20 +260,20 @@ guardarTipoEquipo(){ //FUNCA, VERIFICAR QUE SEA SI CON LA DESCRIPCION QUE SE QUI
   //no hay metodo de modificacion
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un tipo de equipo ya existente)
 eliminarTipoEquipo(){
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCION') as HTMLInputElement;
   this.api.call_EliminarTipoEquipo(descripcion.value) //ESTO NO ES UNA DESCRIPCION ES LA ID CON LA QUE TRABAJA
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo de equipo a la db)
 agregarNuevoEquipo(){
  // const id = document.getElementById('gestTipEquipPIDNUEVO') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCIONNUEVO') as HTMLInputElement;
   this.api.call_AgregarTipoEquipo(descripcion.value);
 }
 
-
-//PANTALLA DE GESTION DE INVENTARIO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica un inventario ya existente)
 guardarInventario(){
   const gym = document.getElementById('gestInvetPGYM') as HTMLInputElement;
   const maquina = document.getElementById('gestInvetPMAQUINA') as HTMLInputElement;
@@ -275,11 +286,13 @@ guardarInventario(){
   //STANDBY
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un inventario ya existente)
 eliminarInventario(){ //FUNCA, SI NO LO HACE ES PORQUE TRABAJA CON IDS
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE') as HTMLInputElement;
   this.api.eliminarInventario(numeroDeSerie.value)
 }
 
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo inventario a la db)
 agregarNuevoInventario(){
   const tipoDeEquipo = document.getElementById('gestInvetPTIPO2') as HTMLInputElement;
   const marca = document.getElementById('gestInvetPMARCA2') as HTMLInputElement;
@@ -289,7 +302,7 @@ agregarNuevoInventario(){
 
 }
 
-//pantalla GESTION DE PRODUCTOS
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica un producto ya creado)
   modificarProducto(){
     const gym = document.getElementById('gestProductPGYM') as HTMLInputElement;
     const producto = document.getElementById('gestProductPPRODUCTO') as HTMLInputElement;
@@ -301,11 +314,13 @@ agregarNuevoInventario(){
     //STANDBY
   }
 
+  //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un producto ya existente)
   eliminarProducto(){ //FUNCA, CUIDADO CON IDS
     const numeroBarras = document.getElementById('gestProductPCODIGO') as HTMLInputElement;
     this.api.eliminarProductos(numeroBarras.value);
   }
 
+  //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo producto a la db)
   agregarProducto(){
     const gym = document.getElementById('gestProductPGYMNUEVO') as HTMLInputElement;
     const nombre = document.getElementById('gestProductPNOMBRENUEVO') as HTMLInputElement;
@@ -316,7 +331,7 @@ agregarNuevoInventario(){
     this.api.agregarProductos(numeroBarras.value, nombre.value, descripcion.value, costo.value);
   }
 
-//pantalla CONFIGURACION GIMNASIO
+ //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (asocia un tratamiento a un spa)
   asociarTratamientoASpa(){
     const spa = document.getElementById('confGymPSpaSPA') as HTMLInputElement;
     const tratamiento = document.getElementById('confGymPSpaTratamiento') as HTMLInputElement;
@@ -324,6 +339,7 @@ agregarNuevoInventario(){
     this.api.asociarTratamientoASpa(spa.value, tratamiento.value); // SPA DEBERIA DE SER LA SUCURSAL, TAMBIEN AMBOS PARAMETROS RECIBEN IDS
   }
 
+  //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (asocia un producto a una tienda)
   asociarProductosATienda(){
     const gym = document.getElementById('confGymPProducSELECT') as HTMLInputElement;
     const producto = document.getElementById('confGymPProducASOCIAR') as HTMLInputElement;
@@ -331,6 +347,7 @@ agregarNuevoInventario(){
     this.api.asociarProductosATienda(gym.value, producto.value); //SON IDS, SI DA PROBLEMAS ES ESO
   }
 
+  //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (asocia un inventario a un gym y le da un costo)
   asociarInventario(){
     const gym = document.getElementById('confGymPInventarioGYM') as HTMLInputElement;
     const equipo = document.getElementById('confGymPInventarioEQUIPO') as HTMLInputElement;
@@ -339,6 +356,7 @@ agregarNuevoInventario(){
     this.api.asociarInventario(gym.value, equipo.value, costo.value)
   }
 
+  //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (crea una clase y la agrega a la db)
   crearClase(){
     const clase = document.getElementById('confGymPCrearSELECT') as HTMLInputElement;
     const tipo = document.getElementById('confGymPCrearTIPO') as HTMLInputElement;
@@ -352,14 +370,16 @@ agregarNuevoInventario(){
     this.api.crearClase(tipo.value, instructor.value, grupalOno.value, capacidad.value, fecha.value, horaInicio.value, horaFinalizacion.value)
   }
 
+  //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (copia un calendario y sus actividades desde una fecha hasta otra)
   copiarCalendario(){
     const fInicio = document.getElementById('copCalenPDIA1') as HTMLInputElement;
     const fFinal = document.getElementById('copCalenPDIA2') as HTMLInputElement;
     const aMover = document.getElementById('copCalenPMOVIMIENTO') as HTMLInputElement;
 
-    //this.api.copiarCalendarioActividades(aCopiar.value, aPegar.value);// AQUI LOS PARAMETRO SNO ESTOY SEGURO QUE FUNCIONEN, VERIFICAR QUE LOS PARAMETROS QUE RECIVE SON LOS QUE NECESITA
+    this.api.copiarCalendarioActividades(fInicio.value, fFinal.value, aMover.value);// AQUI LOS PARAMETRO SNO ESTOY SEGURO QUE FUNCIONEN, VERIFICAR QUE LOS PARAMETROS QUE RECIVE SON LOS QUE NECESITA
   }
 
+  //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (copia los datos correspondientes a un gimnasio y los añade a uno completamente nuevo)
   copiarGym(){
     const aCopiar = document.getElementById('copGympSELECT') as HTMLInputElement;
     const aPegar = document.getElementById('copGympNUEVO') as HTMLInputElement;
