@@ -131,8 +131,8 @@ agregarTratamiento(){ //ESTE ES EL DE MODIFICAR, NO ESTA
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un tratamineto ya existente)
 eliminarTratamiento(){
-  const tratamiento = document.getElementById('gestTratSpaPSELECT') as HTMLInputElement;
-  this.api.call_EliminarTratamiento(tratamiento.value) //DEBE DE SER EL ID, HAY QUE OBTENERLO DE ALGUNA MANERA
+  const tratamientoID= document.getElementById('gestTratSpaID') as HTMLInputElement;
+  this.api.call_EliminarTratamiento(tratamientoID.value) //DEBE DE SER EL ID, HAY QUE OBTENERLO DE ALGUNA MANERA
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un tratamiento nuevo a la db)
@@ -153,8 +153,8 @@ guardarPuesto(){ //No hay para modificar este valo
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un puesto ya existente)
 eliminarPuesto(){
-  const descripcion = document.getElementById('gestPuestPSELECT') as HTMLInputElement; //VERIFICAR ESTE, SACAR ID DEL PUESTO Y PASARA ESE PARAMETRO
-  this.api.call_EliminarPuesto(descripcion.value); //ESTO RECIVE COMO PARAMETRO PUESTO_ID
+  const puestoID = document.getElementById('gestPuestPID') as HTMLInputElement; //VERIFICAR ESTE, SACAR ID DEL PUESTO Y PASARA ESE PARAMETRO
+  this.api.call_EliminarPuesto(puestoID.value); //ESTO RECIVE COMO PARAMETRO PUESTO_ID
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo puesto a la db)
@@ -164,7 +164,7 @@ agregarNuevoPuesto(){ //ELIMINAR CASILLA DE NOMBRE DEL HTML
   this.api.call_AgregarPuesto(descripcion.value);
 }
 
-//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados ()
+//Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modificar una planilla ya existente)
 gestionDePlanilla(){
   const tipoPlanilla = document.getElementById('gestTipPlaPSELECT') as HTMLInputElement;
   const id = document.getElementById('gestTipPlaPID') as HTMLInputElement;
@@ -173,9 +173,21 @@ gestionDePlanilla(){
   const pagoClase = document.getElementById('gestTipPlaPPAGOPORCLASE') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipPlaPDESCRIPCION') as HTMLInputElement;
 
-  this.api.call_AgregarPlanilla(descripcion.value);
+  //this.api.call_AgregarPlanilla(descripcion.value);
 
   //aqui si no comprendo que llamada hacer
+}
+
+eliminarPlanilla(){
+  const id = document.getElementById('gestTipPlaPID') as HTMLInputElement;
+
+  this.api.call_EliminarPlanilla(id.value);
+}
+
+agregarNuevaPlanilla(){
+  const descripcion = document.getElementById('gestTipPlaPPLANILLA2') as HTMLInputElement;
+
+  this.api.call_AgregarPlanilla(descripcion.value);
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica los datos de un empleado ya existente)
@@ -204,7 +216,7 @@ gestionEmpleados(){ //FUNCA
 eliminarEmpleado(){ //FUNCA
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
   //@ts-ignore
-  this.auth.eliminarEmpleados(this.toNum(cedula.value));
+  this.auth.eliminarEmpleados(this.toNum(cedula.value)); //CUIDADO CON ESTE TONUM, QUIZA LLEGUE A DAR PROBLEMAS
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un empleado nuevo a la db)
@@ -233,15 +245,14 @@ guardarServicio(){
   const servicio = document.getElementById('gestServPSELECT') as HTMLInputElement;
   const IDunico = document.getElementById('gestServPID') as HTMLInputElement;
   const nombre = document.getElementById('gestServPNOMBRE') as HTMLInputElement;
-  const pagoHoras = document.getElementById('gestServPDESCRIPCION') as HTMLInputElement;
 
   //STANDBY
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un servicio ya existente)
 eliminarServicio(){
-  const servicio = document.getElementById('gestServPSELECT') as HTMLInputElement;
-  this.api.eliminarServicio(servicio.value);
+  const servicioid = document.getElementById('gestServPID') as HTMLInputElement;
+  this.api.eliminarServicio(servicioid.value);
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo servicio a la db)
@@ -262,8 +273,8 @@ guardarTipoEquipo(){ //FUNCA, VERIFICAR QUE SEA SI CON LA DESCRIPCION QUE SE QUI
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un tipo de equipo ya existente)
 eliminarTipoEquipo(){
-  const descripcion = document.getElementById('gestTipEquipPDESCRIPCION') as HTMLInputElement;
-  this.api.call_EliminarTipoEquipo(descripcion.value) //ESTO NO ES UNA DESCRIPCION ES LA ID CON LA QUE TRABAJA
+  const descripcionid = document.getElementById('gestTipEquipPID') as HTMLInputElement;
+  this.api.call_EliminarTipoEquipo(descripcionid.value) //ESTO NO ES UNA DESCRIPCION ES LA ID CON LA QUE TRABAJA
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo de equipo a la db)

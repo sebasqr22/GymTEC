@@ -2477,19 +2477,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/sebastianqr.2208/.nuget/packages/": {}
+    "C:\\Users\\sebas\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/sebastianqr.2208/Documents/GIT/GymTEC/API/API.csproj",
+      "projectUniqueName": "C:\\Users\\sebas\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
       "projectName": "API",
-      "projectPath": "/Users/sebastianqr.2208/Documents/GIT/GymTEC/API/API.csproj",
-      "packagesPath": "/Users/sebastianqr.2208/.nuget/packages/",
-      "outputPath": "/Users/sebastianqr.2208/Documents/GIT/GymTEC/API/obj/",
+      "projectPath": "C:\\Users\\sebas\\OneDrive\\Escritorio\\GymTEC\\API\\API.csproj",
+      "packagesPath": "C:\\Users\\sebas\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\sebas\\OneDrive\\Escritorio\\GymTEC\\API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/sebastianqr.2208/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\sebas\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -2547,20 +2547,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[6.0.16, 6.0.16]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.osx-x64",
-            "version": "[6.0.16, 6.0.16]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[6.0.16, 6.0.16]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -2569,7 +2555,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.203/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.408\\RuntimeIdentifierGraph.json"
       }
     }
   }
