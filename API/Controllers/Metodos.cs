@@ -104,9 +104,9 @@ namespace Metodos{
             comando.Parameters.AddWithValue("@Distrito", Distrito);
             comando.Parameters.AddWithValue("@Canton", Canton);
             comando.Parameters.AddWithValue("@Provincia", Provincia);
-            comando.Parameters.AddWithValue("@Fecha_apertura", DateTime.ParseExact(Hora_apertura, "yyyy-MM-dd", CultureInfo.InvariantCulture));
-            comando.Parameters.AddWithValue("@Hora_apertura", DateTime.ParseExact(Hora_apertura, "HH:mm:ss", CultureInfo.InvariantCulture));
-            comando.Parameters.AddWithValue("@Hora_cierre", DateTime.ParseExact(Hora_cierre, "HH:mm:ss", CultureInfo.InvariantCulture));
+            comando.Parameters.AddWithValue("@Fecha_apertura", Fecha_apertura);
+            comando.Parameters.AddWithValue("@Hora_apertura", Hora_apertura);
+            comando.Parameters.AddWithValue("@Hora_cierre", Hora_cierre);
             comando.Parameters.AddWithValue("@Max_capacidad", Int64.Parse(Max_capacidad));
             comando.Parameters.AddWithValue("@Cedula_administrador", Int64.Parse(Cedula_administrador));
             comando.ExecuteNonQuery();
@@ -289,76 +289,33 @@ namespace Metodos{
       }
 
       [HttpGet]
-      [Route("cliente/BuscarClase")]
-      public dynamic BuscarClase(string Codigo_sucursal,string Id_servicio, string fechaInicio, string fecha_fin){
-        try{
-          DB_Handler.ConectarServer();
-          DB_Handler.AbrirConexion();
-          string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
-                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
-                           WHERE SUCURSAL.Codigo_sucursal = @Codigo_sucursal AND CLASE.Id_servicio = Id_servicio AND @fecha_inicio <= Fecha AND Fecha <= fecha_fin
-                           GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
-          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Codigo_sucursal", Codigo_sucursal);
-            comando.Parameters.AddWithValue("@Id_servicio", Id_servicio);
-            comando.Parameters.AddWithValue("@fecha_inicio", fechaInicio);
-            comando.Parameters.AddWithValue("@fecha_fin", fecha_fin);
-            comando.ExecuteNonQuery();
-            SqlDataReader reader = comando.ExecuteReader();
-            if (reader.HasRows) { 
-                var clasesBuscadas = new List<dynamic>();
-                while (reader.Read()) {
-                    clasesBuscadas.Add(new {
-                        Fecha = reader.GetString(0),
-                        Hora_inicio = reader.GetString(1),
-                        Hora_fin = reader.GetString(2),
-                        EmpleadoNombre = reader.GetString(3),
-                        EmpleadoApellido1 = reader.GetString(4),
-                        EmpleadoApellido2 = reader.GetString(5),
-                        Capacidad = reader.GetInt32(6)
-                    });
-                }
-                DB_Handler.CerrarConexion();
-                return new JsonResult(clasesBuscadas);
-            }
-          }
-          DB_Handler.CerrarConexion();
-          return new { message = "No hay clases en este rango de fechas" };
-
-        }catch{
-          return new { message = "error" };
-        }
-      }
-
-      [HttpGet]
       [Route("cliente/BuscarClasePorSucursal")]
       public dynamic BuscarClasePorSucursal(string Codigo_sucursal){
         try{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
-                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
+                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Codigo_suc = SUCURSAL.Codigo_sucursal
                            WHERE SUCURSAL.Codigo_sucursal = @Codigo_sucursal
                            GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Codigo_sucursal", Codigo_sucursal);
+            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
             comando.ExecuteNonQuery();
-            SqlDataReader reader = comando.ExecuteReader();
-            if (reader.HasRows) { 
-                var clasesBuscadas = new List<dynamic>();
-                while (reader.Read()) {
-                    clasesBuscadas.Add(new {
-                        Fecha = reader.GetString(0),
-                        Hora_inicio = reader.GetString(1),
-                        Hora_fin = reader.GetString(2),
-                        EmpleadoNombre = reader.GetString(3),
-                        EmpleadoApellido1 = reader.GetString(4),
-                        EmpleadoApellido2 = reader.GetString(5),
-                        Capacidad = reader.GetInt32(6)
-                    });
-                }
-                DB_Handler.CerrarConexion();
-                return new JsonResult(clasesBuscadas);
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) { 
+                  var clasesBuscadas = new List<dynamic>();
+                  while (reader.Read()) {
+                      clasesBuscadas.Add(new {
+                          Fecha = reader.GetString(0),
+                          Hora_inicio = reader.GetString(1),
+                          Hora_fin = reader.GetString(2),
+                          Empleado = reader.GetString(3),
+                          Cupos_disponibles = reader.GetInt32(4)
+                      });
+                  }
+                  DB_Handler.CerrarConexion();
+                  return new JsonResult(clasesBuscadas);
+              }
             }
           }
           DB_Handler.CerrarConexion();
@@ -376,11 +333,11 @@ namespace Metodos{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
-                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
-                           WHERE CLASE.Id_servicio = Id_servicio
+                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Codigo_suc = SUCURSAL.Codigo_sucursal
+                           WHERE CLASE.Id_servicio = @Id_servicio
                            GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Id_servicio", Id_servicio);
+            comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(Id_servicio));
             comando.ExecuteNonQuery();
             SqlDataReader reader = comando.ExecuteReader();
             if (reader.HasRows) { 
@@ -390,10 +347,8 @@ namespace Metodos{
                         Fecha = reader.GetString(0),
                         Hora_inicio = reader.GetString(1),
                         Hora_fin = reader.GetString(2),
-                        EmpleadoNombre = reader.GetString(3),
-                        EmpleadoApellido1 = reader.GetString(4),
-                        EmpleadoApellido2 = reader.GetString(5),
-                        Capacidad = reader.GetInt32(6)
+                        Empleado = reader.GetString(3),
+                        Capacidad = reader.GetInt32(4)
                     });
                 }
                 DB_Handler.CerrarConexion();
@@ -415,12 +370,12 @@ namespace Metodos{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
-                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Nombre_suc = SUCURSAL.Nombre
+                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Codigo_suc = SUCURSAL.Codigo_sucursal
                            WHERE @fecha_inicio <= Fecha AND Fecha <= fecha_fin
                            GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@fecha_inicio", fechaInicio);
-            comando.Parameters.AddWithValue("@fecha_fin", fecha_fin);
+            comando.Parameters.AddWithValue("@fecha_inicio", DateTime.ParseExact(fechaInicio, "yyyy-MM-dd", CultureInfo.InvariantCulture));
+            comando.Parameters.AddWithValue("@fecha_fin", DateTime.ParseExact(fecha_fin, "yyyy-MM-dd", CultureInfo.InvariantCulture));
             comando.ExecuteNonQuery();
             SqlDataReader reader = comando.ExecuteReader();
             if (reader.HasRows) { 
@@ -430,10 +385,8 @@ namespace Metodos{
                         Fecha = reader.GetString(0),
                         Hora_inicio = reader.GetString(1),
                         Hora_fin = reader.GetString(2),
-                        EmpleadoNombre = reader.GetString(3),
-                        EmpleadoApellido1 = reader.GetString(4),
-                        EmpleadoApellido2 = reader.GetString(5),
-                        Capacidad = reader.GetInt32(6)
+                        Empleado = reader.GetString(3),
+                        Capacidad = reader.GetInt32(4)
                     });
                 }
                 DB_Handler.CerrarConexion();
