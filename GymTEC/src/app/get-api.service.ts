@@ -132,8 +132,8 @@ export class GetApiService {
   }
 
 
-  copiarCalendarioActividades(fechaInicio:string, fechaFin:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarCalendarioActividades?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`, {}) //VERIFICAR QUE LA COPIA ESTE BIEN
+  copiarCalendarioActividades(fechaInicio:string, fechaFin:string, semanasAMover:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarCalendarioActividades?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&semanasAMover=${semanasAMover}`, {}) //VERIFICAR QUE LA COPIA ESTE BIEN
   }
 
   // string Codigo_sucursal, string idServicio
