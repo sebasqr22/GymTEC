@@ -83,7 +83,7 @@ namespace Metodos{
       public dynamic AgregarSucursal(string Codigo_sucursal, string Nombre, string Distrito, string Canton, string Provincia, string Fecha_apertura, string Hora_apertura, string Hora_cierre, string Max_capacidad, string Cedula_administrador){
         try{
 
-          string queryInsert = "INSERT INTO SUCURSAL VALUES (@Nombre, @Distrito, @Canton, @Provincia, @Fecha_apertura, @Hora_apertura, @Hora_cierre, @Max_capacidad, @Cedula_administrador)";
+          string queryInsert = "INSERT INTO SUCURSAL VALUES (@Codigo_sucursal, @Nombre, @Distrito, @Canton, @Provincia, @Fecha_apertura, @Hora_apertura, @Hora_cierre, @Max_capacidad, @Cedula_administrador)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
 

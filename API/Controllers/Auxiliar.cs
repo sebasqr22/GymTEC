@@ -287,8 +287,8 @@ namespace funcionesAuxiliares{
                             var clasesExistentes = new List<dynamic>();
                             while (reader.Read()) {
                                 clasesExistentes.Add(new {
-                                    Id_servicio = reader.GetInt32(0),
-                                    Num_clase = reader.GetInt32(1),
+                                    Num_clase = reader.GetInt32(0),
+                                    Id_servicio = reader.GetInt32(1),
                                     Fecha = reader.GetDateTime(2),
                                     HoraInicio = reader.GetTimeSpan(3),
                                     HoraFin = reader.GetTimeSpan(4),

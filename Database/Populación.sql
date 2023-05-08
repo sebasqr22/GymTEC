@@ -11,7 +11,7 @@ USE [GymTEC-DB]
 INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje relajante');
 INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje descarga muscular');
 INSERT INTO TRATAMIENTO (Nombre) VALUES ('Sauna');
-INSERT INTO TRATAMIENTO (Nombre) VALUES ('Ba�o a vapor');
+INSERT INTO TRATAMIENTO (Nombre) VALUES ('Bano a vapor');
 
 -- Puestos default de GymTEC.
 INSERT INTO PUESTO (Descripcion) VALUES ('Administrador: Gestiona la sucursal');
@@ -29,7 +29,7 @@ INSERT INTO SERVICIO (Descripcion) VALUES ('Indoor Cycling');
 INSERT INTO SERVICIO (Descripcion) VALUES ('Pilates');
 INSERT INTO SERVICIO (Descripcion) VALUES ('Yoga');
 INSERT INTO SERVICIO (Descripcion) VALUES ('Zumba');
-INSERT INTO SERVICIO (Descripcion) VALUES ('Nataci�n');
+INSERT INTO SERVICIO (Descripcion) VALUES ('Natacion');
 
 -- Tipo de equipo por default que maneja el gimnasio.
 INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Cintas de correr');
@@ -39,11 +39,11 @@ INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Remos');
 INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Pesas');
 
 -- Empleado Administrador General.
-INSERT INTO EMPLEADO VALUES (123456789, 'H�ctor', 'Perez', 'Rodr�guez', 'Dulce Nombre', 'Cartago', 'Cartago', 'pjhector01@gmail.com', '987654321hec', 3480000, 1, 1, NULL);
+INSERT INTO EMPLEADO VALUES (123456789, 'Hector', 'Perez', 'Rodriguez', 'Dulce Nombre', 'Cartago', 'Cartago', 'pjhector01@gmail.com', '987654321hec', 3480000, 1, 1, NULL);
 
 -- Sucursales ya existentes en los campus del Tecnol�gico de Costa Rica.
 INSERT INTO SUCURSAL VALUES (10001, 'GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789);
-INSERT INTO SUCURSAL VALUES (10002, 'GymTEC Campus San Jos�', 'Barrio Am�n', 'San Jos�', 'San Jos�', '2006-06-20', '7:00', '18:00', 25, 123456789);
+INSERT INTO SUCURSAL VALUES (10002, 'GymTEC Campus San Jose', 'Barrio Amon', 'San Jose', 'San Jose', '2006-06-20', '7:00', '18:00', 25, 123456789);
 INSERT INTO SUCURSAL VALUES (10003, 'GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123456789);
 
 UPDATE EMPLEADO SET Codigo_suc = 10001 WHERE Cedula = 123456789;
