@@ -10,6 +10,15 @@ DROP DATABASE prueba_funcionalidad
 
 USE [prueba_funcionalidad];
 
+use [GymTEC-DB]
+
+
+insert into clase (Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor) values (2, '2023-05-10', '7:00', '9:00', 'Presencial', 12, 123456789);
+
+
+select * from clase
+
+
 -- ///////////////////////////////////////// CONFIGURACION DE GIMNASIO /////////////////////////////////////////////////
 
 -- Aqui se agregarian valores a las tablas:
