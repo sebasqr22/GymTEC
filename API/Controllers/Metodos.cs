@@ -306,10 +306,10 @@ namespace Metodos{
                   var clasesBuscadas = new List<dynamic>();
                   while (reader.Read()) {
                       clasesBuscadas.Add(new {
-                          Fecha = reader.GetString(0),
-                          Hora_inicio = reader.GetString(1),
-                          Hora_fin = reader.GetString(2),
-                          Empleado = reader.GetString(3),
+                          Fecha = reader.GetDateTime(0),
+                          Hora_inicio = reader.GetTimeSpan(1),
+                          Hora_fin = reader.GetTimeSpan(2),
+                          Instructor = reader.GetString(3),
                           Cupos_disponibles = reader.GetInt32(4)
                       });
                   }
@@ -321,7 +321,8 @@ namespace Metodos{
           DB_Handler.CerrarConexion();
           return new { message = "No hay clases para esta sucursal" };
 
-        }catch{
+        }catch (Exception e) {
+          Console.WriteLine(e);
           return new { message = "error" };
         }
       }
@@ -344,9 +345,9 @@ namespace Metodos{
                 var clasesBuscadas = new List<dynamic>();
                 while (reader.Read()) {
                     clasesBuscadas.Add(new {
-                        Fecha = reader.GetString(0),
-                        Hora_inicio = reader.GetString(1),
-                        Hora_fin = reader.GetString(2),
+                        Fecha = reader.GetDateTime(0),
+                        Hora_inicio = reader.GetTimeSpan(1),
+                        Hora_fin = reader.GetTimeSpan(2),
                         Empleado = reader.GetString(3),
                         Capacidad = reader.GetInt32(4)
                     });
@@ -382,9 +383,9 @@ namespace Metodos{
                 var clasesBuscadas = new List<dynamic>();
                 while (reader.Read()) {
                     clasesBuscadas.Add(new {
-                        Fecha = reader.GetString(0),
-                        Hora_inicio = reader.GetString(1),
-                        Hora_fin = reader.GetString(2),
+                        Fecha = reader.GetDateTime(0),
+                        Hora_inicio = reader.GetTimeSpan(1),
+                        Hora_fin = reader.GetTimeSpan(2),
                         Empleado = reader.GetString(3),
                         Capacidad = reader.GetInt32(4)
                     });
