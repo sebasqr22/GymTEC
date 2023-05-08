@@ -799,7 +799,7 @@
             <br><br>
             <div class="form-group row">
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestTipEquipPID">
+                <input type="text" class="form-control form-control-user" id="gestTipEquipPID" readonly>
                 <label for="gestTipEquipPID">ID</label>
               </div>
 
@@ -877,7 +877,7 @@
             <a class="btn btn-outline-primary btn-user btn-block" (click)="guardarInventario()">
               Guardar
             </a>
-            <a class="btn btn-outline-danger btn-user btn-block" (click)="agregarNuevoEquipo()">
+            <a class="btn btn-outline-danger btn-user btn-block" (click)="eliminarInventario()">
               Eliminar
             </a>
 
@@ -904,7 +904,7 @@
 
 
             </div>
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarNuevoInventario()">
               Guardar
             </a><br>
           </div> <!--GESTION DE INVENTARIO-->
@@ -956,10 +956,6 @@
             <hr class="sidebar-divider">
             <h1 class="h3 mb-4 text-gray-800">Agregar Producto</h1>
 
-            <div class="col-sm">
-              <select class="form-control form-control-user" id="gestProductPGYMNUEVO"></select>
-              <label for="gestProductPGYMNUEVO">Gym</label>
-            </div>
 
             <div class="form-group row">
 
@@ -1100,11 +1096,6 @@
 
           <div id="confGymPCrear" class="container-fluid"> <!--CONFIGURACION CREAR GIMNASIO-->
             <h1 class="h3 mb-4 text-gray-800">Crear clase</h1>
-
-            <div class="col-sm">
-              <select class="form-control form-control-user" id="confGymPCrearSELECT"></select>
-              <label for="confGymPCrearSELECT">Clase</label>
-            </div>
 
             <hr class="sidebar-divider my-0">
             <br><br>

@@ -136,7 +136,7 @@ agregarNuevoTratamiento(){
 
 //pantall de gestion de puestos!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-guardarPuesto(){
+guardarPuesto(){ //No hay para modificar este valo
   const puesto = document.getElementById('gestPuestPSELECT') as HTMLInputElement;
   const ID = document.getElementById('gestPuestPID') as HTMLInputElement;
   const descripcion = document.getElementById('gestPuestPDESCRIPCION') as HTMLInputElement;
@@ -144,7 +144,7 @@ guardarPuesto(){
 }
 
 eliminarPuesto(){
-  const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement; //VERIFICAR ESTE, SACAR ID DEL PUESTO Y PASARA ESE PARAMETRO
+  const descripcion = document.getElementById('gestPuestPSELECT') as HTMLInputElement; //VERIFICAR ESTE, SACAR ID DEL PUESTO Y PASARA ESE PARAMETRO
   this.api.call_EliminarPuesto(descripcion.value); //ESTO RECIVE COMO PARAMETRO PUESTO_ID
 }
 
@@ -186,7 +186,8 @@ gestionEmpleados(){ //FUNCA
   const provincia = document.getElementById('gestEmplPPROVINCIA') as HTMLInputElement;
   //modificarEmpleado
   //@ts-ignore
-  this.api.call_AgregarEmpleados(cedula.value, nombre.value, apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
+
+  //AQUI STANDBY, NO HAY MODIFICAR
 }
 
 eliminarEmpleado(){ //FUNCA
@@ -196,7 +197,7 @@ eliminarEmpleado(){ //FUNCA
 }
 
 agregarEmpleado(){ //FUNCA
-  const cedula = document.getElementById('gestEmplPNUMEROCEDULA22') as HTMLInputElement;
+  const cedula = document.getElementById('gestEmplPNUMEROCEDULA2') as HTMLInputElement;
   const nombre = document.getElementById('gestEmplPNOMBRE2') as HTMLInputElement;
   const puestoQueDesem = document.getElementById('gestEmplPPUESTO2') as HTMLInputElement;
   const sucursalQueTrabaja = document.getElementById('gestEmplPSUCURSAL2') as HTMLInputElement;
@@ -211,7 +212,7 @@ agregarEmpleado(){ //FUNCA
   const provincia = document.getElementById('gestEmplPPROVINCIA2') as HTMLInputElement;
   //@ts-ignore
   //LA FUNCION LOS TRABAJA COMO IDs LOS PARAMETRO DE SUCURSAL, PUESTO Y PLANTILLA, HAY QUE OBTENERLOS COMO TAL
-  this.auth.agregarEmpleados(this.toNum(cedula.value), nombre.value,apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
+  this.api.call_AgregarEmpleados(cedula.value, nombre.value, apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
 }
 
 
@@ -234,10 +235,9 @@ eliminarServicio(){
 }
 
 agregarNuevoServicio(){
-  const nombre = document.getElementById('gestServPNOMBRE2') as HTMLInputElement;
   const descripcion = document.getElementById('gestServPDESCRIPCION2') as HTMLInputElement;
 
-  //FALTA LA LLAMDA DEL API SERVICE
+  this.api.agregarServicios(descripcion.value);
 }
 
 //pantalla de gestion de tipos de equipos!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -246,7 +246,7 @@ guardarTipoEquipo(){ //FUNCA, VERIFICAR QUE SEA SI CON LA DESCRIPCION QUE SE QUI
   // id = document.getElementById('gestTipEquipPID') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCION') as HTMLInputElement;
 
-  this.api.call_AgregarTipoEquipo(descripcion.value);
+  //no hay metodo de modificacion
 }
 
 eliminarTipoEquipo(){
@@ -284,8 +284,6 @@ agregarNuevoInventario(){
   const tipoDeEquipo = document.getElementById('gestInvetPTIPO2') as HTMLInputElement;
   const marca = document.getElementById('gestInvetPMARCA2') as HTMLInputElement;
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE2') as HTMLInputElement;
-  const costo = document.getElementById('gestInvetPCOSTOSUCURSAL2') as HTMLInputElement;
-  const asignadaAGym = document.getElementById('gestInvetPASIGNADA2') as HTMLInputElement;
 
   this.api.agregarInventario(numeroDeSerie.value, marca.value, tipoDeEquipo.value) //SI FALLA EL TIPO DE EQUIPO ES PORQUE ESTA TRABAJANDO COMO ID, MANDARLO COMO TAL
 
@@ -304,7 +302,7 @@ agregarNuevoInventario(){
   }
 
   eliminarProducto(){ //FUNCA, CUIDADO CON IDS
-    const numeroBarras = document.getElementById('gestProductPCODIGONUEVO') as HTMLInputElement;
+    const numeroBarras = document.getElementById('gestProductPCODIGO') as HTMLInputElement;
     this.api.eliminarProductos(numeroBarras.value);
   }
 
@@ -336,9 +334,9 @@ agregarNuevoInventario(){
   asociarInventario(){
     const gym = document.getElementById('confGymPInventarioGYM') as HTMLInputElement;
     const equipo = document.getElementById('confGymPInventarioEQUIPO') as HTMLInputElement;
-    // falta el componente de costo a asignar
+    const costo = document.getElementById('confGymPInventarioCOSTO') as HTMLInputElement;
 
-    //this.api.asociarInventario(gym.value, equipo.value, costo.value)
+    this.api.asociarInventario(gym.value, equipo.value, costo.value)
   }
 
   crearClase(){
@@ -352,6 +350,20 @@ agregarNuevoInventario(){
     const horaFinalizacion = document.getElementById('confGymPCrearHORAFINAL') as HTMLInputElement;
 
     this.api.crearClase(tipo.value, instructor.value, grupalOno.value, capacidad.value, fecha.value, horaInicio.value, horaFinalizacion.value)
+  }
+
+  copiarCalendario(){
+    const aCopiar = document.getElementById('copCalenPSEMANA1') as HTMLInputElement;
+    const aPegar = document.getElementById('copCalenPSEMANA2') as HTMLInputElement;
+
+    //this.api.copiarCalendarioActividades();
+  }
+
+  copiarGym(){
+    const aCopiar = document.getElementById('copGympSELECT') as HTMLInputElement;
+    const aPegar = document.getElementById('copGympNUEVO') as HTMLInputElement;
+
+    this.api.copiarGimnasio(aPegar.value, aCopiar.value); //a.copiar tiene que ser el id del gym que se esta copiando
   }
 
 }//bracket que cierras
