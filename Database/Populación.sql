@@ -39,14 +39,14 @@ INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Remos');
 INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Pesas');
 
 -- Empleado Administrador General.
-INSERT INTO EMPLEADO VALUES (123456789, 'Hector', 'Perez', 'Rodriguez', 'Dulce Nombre', 'Cartago', 'Cartago', 'pjhector01@gmail.com', '987654321hec', 3480000, 1, 1, NULL);
+INSERT INTO EMPLEADO VALUES (2020158103, 'Eduardo', 'Bolivar', 'Minguet', 'Curridabat', 'San Jose', 'Jose', 'boli01@gmail.com', '987654321edu', 32480000, 1, 1, NULL);
 
 -- Sucursales ya existentes en los campus del Tecnol�gico de Costa Rica.
-INSERT INTO SUCURSAL VALUES (10001, 'GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 123456789);
-INSERT INTO SUCURSAL VALUES (10002, 'GymTEC Campus San Jose', 'Barrio Amon', 'San Jose', 'San Jose', '2006-06-20', '7:00', '18:00', 25, 123456789);
-INSERT INTO SUCURSAL VALUES (10003, 'GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 123456789);
+INSERT INTO SUCURSAL VALUES (10001, 'GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 2020158103);
+INSERT INTO SUCURSAL VALUES (10002, 'GymTEC Campus San Jose', 'Barrio Amon', 'San Jose', 'San Jose', '2006-06-20', '7:00', '18:00', 25, 2020158103);
+INSERT INTO SUCURSAL VALUES (10003, 'GymTEC Campus San Carlos', 'San Carlos', 'San Carlos', 'Alajuela', '2009-04-10', '7:00', '18:00', 20, 2020158103);
 
-UPDATE EMPLEADO SET Codigo_suc = 10001 WHERE Cedula = 123456789;
+UPDATE EMPLEADO SET Codigo_suc = 10001 WHERE Cedula = 2020158103;
 
 -- Se tiene por default un Spa inactivo en cada sucursal.
 INSERT INTO SPA VALUES (10001, 0);
