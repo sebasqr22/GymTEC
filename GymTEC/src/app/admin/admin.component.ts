@@ -96,76 +96,59 @@ activarSucursal(){
   const horaApertura = document.getElementById('gestSucSpaHORARIOAPERTURA') as HTMLInputElement;
   const horaCierre = document.getElementById('gestSucSpaHORARIOCIERRE') as HTMLInputElement;
 
-  this.api.agregarSucursal(nombre.value, distrito.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value)
-}
 
-agregarSedes(){
-  //this.api.sede
+  this.api.agregarSucursal(sede.value, nombre.value, distrito.value, canton.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value);
 }
 
 //pantalla AGREGAR SPA
-activacionSpa(){
-  const sede = document.getElementById('sedegestSucSpaSELECT') as HTMLInputElement;
-  const nombre = document.getElementById('gestSucSpaNOMBRE') as HTMLInputElement;
-  const direccion = document.getElementById('gestSucSpaDIRECCION') as HTMLInputElement;
-  const fechaDeApertura = document.getElementById('gestSucSpaFECHAAPERTURA') as HTMLInputElement;
-  const horarioDeAtencion = document.getElementById('gestSucSpaHORARIOATENCION') as HTMLInputElement;
-  const empleadoAdmin = document.getElementById('gestSucSpaEMPLEADOADMINISTRADOR') as HTMLInputElement;
-  const capacidad = document.getElementById('gestSucSpaCAPACIDAD') as HTMLInputElement;
-  const numerosTelefono = document.getElementById('gestSucTiendaNUMEROS2') as HTMLInputElement;
-  const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO2') as HTMLInputElement;
+activacionSpa(){ //FUNCIONA, ACATAR DETALLE
+  const sede = document.getElementById('gestSucTiendaNUMEROSSEDESPA') as HTMLInputElement;
 
-  //this.api.activarSpa(nombre.value, FALTA EL NUMERO DE SPA QUE NO HACE FALTA);
+  this.api.activarSpa(sede.value); //HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
 //pantalla activar tienda!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-activacionTienda(){
-  const sede = document.getElementById('gestSucTiendaSELECT') as HTMLInputElement;
-  const nombre = document.getElementById('gestSucTiendaNOMBRE') as HTMLInputElement;
-  const direccion = document.getElementById('gestSucTiendaDIRECCION') as HTMLInputElement;
-  const fechaDeApertura = document.getElementById('gestSucTiendaFECHAAPERTURA') as HTMLInputElement;
-  const horarioDeAtencion = document.getElementById('gestSucTiendaHORARIODEATENCION') as HTMLInputElement;
-  const empleadoAdministrador = document.getElementById('gestSucTiendaEMPLEADOADMINISTRADOR') as HTMLInputElement;
-  const numerosDeTelefono = document.getElementById('gestSucTiendaNUMEROS') as HTMLInputElement;
-  const estadoActivo = document.getElementById('gestSucTiendaESTADOACTIVO') as HTMLInputElement;
+activacionTienda(){//FUNCIONA, ACATAR DETALLE
+  const sede = document.getElementById('gestSucTiendaNUMEROSSEDETIENDA') as HTMLInputElement;
 
-  //this.api.activarTienda() QUE ES ESTO QUE PIDE??????????????
+  this.api.activarTienda(sede.value);//HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
 // pantalla GESTION DE TRATAMIENTOS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-agregarTratamiento(){
+agregarTratamiento(){ //ESTE ES EL DE MODIFICAR, NO ESTA
   const tratamiento = document.getElementById('gestTratSpaPSELECT') as HTMLInputElement;
   const IDunico = document.getElementById('gestTratSpaID') as HTMLInputElement;
   const nombre = document.getElementById('gestTratSpaNOMNRE') as HTMLInputElement;
 
-  this.api.agregarTratamiento(nombre.value);
+  //STANDBY
 }
 
 eliminarTratamiento(){
-  //this.api.tratami DONDE ESTA ESTA FUNCION ??????????????
+  const tratamiento = document.getElementById('gestTratSpaPSELECT') as HTMLInputElement;
+  this.api.call_EliminarTratamiento(tratamiento.value) //DEBE DE SER EL ID, HAY QUE OBTENERLO DE ALGUNA MANERA
 }
 
 agregarNuevoTratamiento(){
-  const nombreNuevo = document.getElementById('gestTratSpaNOOMBRENUEVO') as HTMLInputElement;
+  const nombreNuevo = document.getElementById('gestTratSpaNOOMBRENUEVO') as HTMLInputElement; //TENER CUIDADO, VER SI HAY QUE ELIMINAR LA CASILLA DE NOMBRE Y TRABAJAR CON DESCRIPCION
 
+  this.api.agregarTratamiento(nombreNuevo.value);
 }
 
 //pantall de gestion de puestos!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-guardarPuesto(){
+guardarPuesto(){ //No hay para modificar este valo
   const puesto = document.getElementById('gestPuestPSELECT') as HTMLInputElement;
   const ID = document.getElementById('gestPuestPID') as HTMLInputElement;
   const descripcion = document.getElementById('gestPuestPDESCRIPCION') as HTMLInputElement;
-  //no hay metodo de modificar puesto
+  //STANDBY
 }
 
 eliminarPuesto(){
-  const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement;
-  this.api.call_EliminarPuesto(descripcion.value);
+  const descripcion = document.getElementById('gestPuestPSELECT') as HTMLInputElement; //VERIFICAR ESTE, SACAR ID DEL PUESTO Y PASARA ESE PARAMETRO
+  this.api.call_EliminarPuesto(descripcion.value); //ESTO RECIVE COMO PARAMETRO PUESTO_ID
 }
 
-agregarNuevoPuesto(){
-  const nombre = document.getElementById('gestPuestPNOMBREAGREGAR') as HTMLInputElement;
+agregarNuevoPuesto(){ //ELIMINAR CASILLA DE NOMBRE DEL HTML
   const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement;
 
   this.api.call_AgregarPuesto(descripcion.value);
@@ -186,7 +169,7 @@ gestionDePlanilla(){
 }
 
 //pantalla de gestion de empleados!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-gestionEmpleados(){
+gestionEmpleados(){ //FUNCA
   const empleado = document.getElementById('gestEmplPSELECT') as HTMLInputElement;
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
   const nombre = document.getElementById('gestEmplPNOMBRE') as HTMLInputElement;
@@ -203,19 +186,19 @@ gestionEmpleados(){
   const provincia = document.getElementById('gestEmplPPROVINCIA') as HTMLInputElement;
   //modificarEmpleado
   //@ts-ignore
-  this.api.call_AgregarEmpleados(cedula.value, nombre.value, apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
+
+  //AQUI STANDBY, NO HAY MODIFICAR
 }
 
-eliminarEmpleado(){
+eliminarEmpleado(){ //FUNCA
   const cedula = document.getElementById('gestEmplPNUMEROCEDULA') as HTMLInputElement;
   //@ts-ignore
   this.auth.eliminarEmpleados(this.toNum(cedula.value));
 }
 
-agregarEmpleado(){
-  const cedula = document.getElementById('gestEmplPNUMEROCEDULA22') as HTMLInputElement;
+agregarEmpleado(){ //FUNCA
+  const cedula = document.getElementById('gestEmplPNUMEROCEDULA2') as HTMLInputElement;
   const nombre = document.getElementById('gestEmplPNOMBRE2') as HTMLInputElement;
-  const direccion = document.getElementById('gestEmplPDIRECCION2') as HTMLInputElement;
   const puestoQueDesem = document.getElementById('gestEmplPPUESTO2') as HTMLInputElement;
   const sucursalQueTrabaja = document.getElementById('gestEmplPSUCURSAL2') as HTMLInputElement;
   const tipoDePlanilla = document.getElementById('gestEmplPLANILLA2') as HTMLInputElement;
@@ -228,7 +211,8 @@ agregarEmpleado(){
   const canton = document.getElementById('gestEmplPCANTON2') as HTMLInputElement;
   const provincia = document.getElementById('gestEmplPPROVINCIA2') as HTMLInputElement;
   //@ts-ignore
-  this.auth.agregarEmpleados(this.toNum(cedula.value), nombre.value,apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
+  //LA FUNCION LOS TRABAJA COMO IDs LOS PARAMETRO DE SUCURSAL, PUESTO Y PLANTILLA, HAY QUE OBTENERLOS COMO TAL
+  this.api.call_AgregarEmpleados(cedula.value, nombre.value, apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
 }
 
 
@@ -242,7 +226,7 @@ guardarServicio(){
   const nombre = document.getElementById('gestServPNOMBRE') as HTMLInputElement;
   const pagoHoras = document.getElementById('gestServPDESCRIPCION') as HTMLInputElement;
 
-  //this.api.guardarServicio(); no acepta la funcion api.guardarservicio, solo this.guardarservicio
+  //STANDBY
 }
 
 eliminarServicio(){
@@ -251,28 +235,27 @@ eliminarServicio(){
 }
 
 agregarNuevoServicio(){
-  const nombre = document.getElementById('gestServPNOMBRE2') as HTMLInputElement;
   const descripcion = document.getElementById('gestServPDESCRIPCION2') as HTMLInputElement;
 
-  //no hay funcion para agregar nuevos servicios
+  this.api.agregarServicios(descripcion.value);
 }
 
 //pantalla de gestion de tipos de equipos!!!!!!!!!!!!!!!!!!!!!!!!!!!
-guardarTipoEquipo(){
-  const gym = document.getElementById('gestTipEquipPGYM') as HTMLInputElement;
-  const id = document.getElementById('gestTipEquipPID') as HTMLInputElement;
+guardarTipoEquipo(){ //FUNCA, VERIFICAR QUE SEA SI CON LA DESCRIPCION QUE SE QUIERE TRABAJAR
+  //const gym = document.getElementById('gestTipEquipPGYM') as HTMLInputElement;
+  // id = document.getElementById('gestTipEquipPID') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCION') as HTMLInputElement;
 
-  //this.guardarTipoEquipo(); por que esta funcion recibe como parametro la descripcion?
+  //no hay metodo de modificacion
 }
 
 eliminarTipoEquipo(){
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCION') as HTMLInputElement;
-  this.api.call_EliminarTipoEquipo(descripcion.value)
+  this.api.call_EliminarTipoEquipo(descripcion.value) //ESTO NO ES UNA DESCRIPCION ES LA ID CON LA QUE TRABAJA
 }
 
 agregarNuevoEquipo(){
-  const id = document.getElementById('gestTipEquipPIDNUEVO') as HTMLInputElement;
+ // const id = document.getElementById('gestTipEquipPIDNUEVO') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCIONNUEVO') as HTMLInputElement;
   this.api.call_AgregarTipoEquipo(descripcion.value);
 }
@@ -289,10 +272,10 @@ guardarInventario(){
   const costo = document.getElementById('gestInvetPCOSTOSUCURSAL') as HTMLInputElement;
   const asignadaAGym = document.getElementById('gestInvetPASIGNADA') as HTMLInputElement;
 
-  //this.api.agregarInventario(numeroDeSerie.value, marca.value, sucursal.value, tipoDeEquipo.value, descripcion.value)
+  //STANDBY
 }
 
-eliminarInventario(){
+eliminarInventario(){ //FUNCA, SI NO LO HACE ES PORQUE TRABAJA CON IDS
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE') as HTMLInputElement;
   this.api.eliminarInventario(numeroDeSerie.value)
 }
@@ -301,11 +284,9 @@ agregarNuevoInventario(){
   const tipoDeEquipo = document.getElementById('gestInvetPTIPO2') as HTMLInputElement;
   const marca = document.getElementById('gestInvetPMARCA2') as HTMLInputElement;
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE2') as HTMLInputElement;
-  const costo = document.getElementById('gestInvetPCOSTOSUCURSAL2') as HTMLInputElement;
-  const asignadaAGym = document.getElementById('gestInvetPASIGNADA2') as HTMLInputElement;
 
-  //this.api.agregarInventario(numeroDeSerie.value, marca.value, sucursal.value, tipoDeEquipo.value, descripcion.value) la sucursal esta dando problemas
-  
+  this.api.agregarInventario(numeroDeSerie.value, marca.value, tipoDeEquipo.value) //SI FALLA EL TIPO DE EQUIPO ES PORQUE ESTA TRABAJANDO COMO ID, MANDARLO COMO TAL
+
 }
 
 //pantalla GESTION DE PRODUCTOS
@@ -317,11 +298,11 @@ agregarNuevoInventario(){
     const descripcion = document.getElementById('gestProductPDESCRIPCION') as HTMLInputElement;
     const costo = document.getElementById('gestProductPCOSTO') as HTMLInputElement;
 
-    //no acepta la llamada this.api.asociarproducto
+    //STANDBY
   }
 
-  eliminarProducto(){
-    const numeroBarras = document.getElementById('gestProductPCODIGONUEVO') as HTMLInputElement;
+  eliminarProducto(){ //FUNCA, CUIDADO CON IDS
+    const numeroBarras = document.getElementById('gestProductPCODIGO') as HTMLInputElement;
     this.api.eliminarProductos(numeroBarras.value);
   }
 
@@ -340,22 +321,22 @@ agregarNuevoInventario(){
     const spa = document.getElementById('confGymPSpaSPA') as HTMLInputElement;
     const tratamiento = document.getElementById('confGymPSpaTratamiento') as HTMLInputElement;
 
-    this.auth.agregarTratamientosSPA(spa.value, tratamiento.valueAsNumber);
+    this.api.asociarTratamientoASpa(spa.value, tratamiento.value); // SPA DEBERIA DE SER LA SUCURSAL, TAMBIEN AMBOS PARAMETROS RECIBEN IDS
   }
 
   asociarProductosATienda(){
     const gym = document.getElementById('confGymPProducSELECT') as HTMLInputElement;
     const producto = document.getElementById('confGymPProducASOCIAR') as HTMLInputElement;
 
-    //this.api.asociarProductosATienda(); parametros confusos, modificar html para obtener los codigos que solicita
+    this.api.asociarProductosATienda(gym.value, producto.value); //SON IDS, SI DA PROBLEMAS ES ESO
   }
 
   asociarInventario(){
     const gym = document.getElementById('confGymPInventarioGYM') as HTMLInputElement;
     const equipo = document.getElementById('confGymPInventarioEQUIPO') as HTMLInputElement;
+    const costo = document.getElementById('confGymPInventarioCOSTO') as HTMLInputElement;
 
-  
-    //this.asociarInventario(gym.value, equipo.value, QUE COSTO?);
+    this.api.asociarInventario(gym.value, equipo.value, costo.value)
   }
 
   crearClase(){
@@ -369,6 +350,20 @@ agregarNuevoInventario(){
     const horaFinalizacion = document.getElementById('confGymPCrearHORAFINAL') as HTMLInputElement;
 
     this.api.crearClase(tipo.value, instructor.value, grupalOno.value, capacidad.value, fecha.value, horaInicio.value, horaFinalizacion.value)
+  }
+
+  copiarCalendario(){
+    const aCopiar = document.getElementById('copCalenPSEMANA1') as HTMLInputElement;
+    const aPegar = document.getElementById('copCalenPSEMANA2') as HTMLInputElement;
+
+    //this.api.copiarCalendarioActividades();
+  }
+
+  copiarGym(){
+    const aCopiar = document.getElementById('copGympSELECT') as HTMLInputElement;
+    const aPegar = document.getElementById('copGympNUEVO') as HTMLInputElement;
+
+    this.api.copiarGimnasio(aPegar.value, aCopiar.value); //a.copiar tiene que ser el id del gym que se esta copiando
   }
 
 }//bracket que cierras

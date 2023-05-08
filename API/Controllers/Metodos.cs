@@ -658,7 +658,7 @@ namespace Metodos{
       
       [HttpPost]
       [Route("admin/CrearClase")]
-      public dynamic CrearClase(string servicioClase, string cedulaInstructor, string modalidad, string capacidad, string fecha, string horaInicio, string horaFinal){
+      public dynamic CrearClase(string idServicio, string cedulaInstructor, string modalidad, string capacidad, string fecha, string horaInicio, string horaFinal){
         try{
             if(string.IsNullOrEmpty(servicioClase) || string.IsNullOrEmpty(modalidad) || string.IsNullOrEmpty(fecha) || string.IsNullOrEmpty(horaInicio) || string.IsNullOrEmpty(horaFinal) || string.IsNullOrEmpty(capacidad) || string.IsNullOrEmpty(cedulaInstructor)){
               return new { message = "error" };}
@@ -670,9 +670,9 @@ namespace Metodos{
             }
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryInsert = "INSERT INTO CLASE VALUES (@Id_servicio, @Fecha, @Hora_inicio, @Hora_fin, @Modalidad, @Capacidad,@Cedula_instructor)";
+            string queryInsert = "INSERT INTO CLASE VALUES (@Id_servicio, @Fecha, @Hora_inicio, @Hora_fin, @Modalidad, @Capacidad, @Cedula_instructor)";
             using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-              comando.Parameters.AddWithValue("@Id_servicio", servicioClase);
+              comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(servicioClase));
               comando.Parameters.AddWithValue("@Fecha", DateTime.ParseExact(fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
               comando.Parameters.AddWithValue("@Hora_inicio", TimeSpan.ParseExact(horaInicio, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
               comando.Parameters.AddWithValue("@Hora_fin", TimeSpan.ParseExact(horaFinal, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
@@ -753,8 +753,8 @@ namespace Metodos{
           // ELIMINAR DE PRODUCTO
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string queryDelete = "DELETE FROM PRODUCTO WHERE Codigo_barras = @Codigo_barras";
-          using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
+          string queryDelete2 = "DELETE FROM PRODUCTO WHERE Codigo_barras = @Codigo_barras";
+          using (SqlCommand comando = new SqlCommand(queryDelete2, DB_Handler.conectarDB)) {
             comando.Parameters.AddWithValue("@Codigo_barras", Int64.Parse(codigoBarras));
             comando.ExecuteNonQuery();
           }
@@ -886,9 +886,9 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/AgregarEmpleado")]
-      public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, int id_puesto, int id_planilla, string codigo_suc){
+      public dynamic AgregarEmpleado(string cedula, string nombre, string apellido1, string apellido2, string distrito, string canton, string provincia, string correo, string contrasena, string salario, string id_puesto, string id_planilla, string codigo_suc){
         try{
-          if(string.IsNullOrEmpty(cedula) || cedula.Length != 9 ||string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(distrito) || string.IsNullOrEmpty(canton) || string.IsNullOrEmpty(provincia) || string.IsNullOrEmpty(correo) || !correo.Contains('@') || !correo.Contains('.') || string.IsNullOrEmpty(contrasena) || string.IsNullOrEmpty(salario) || id_puesto == 0 || id_planilla == 0 || string.IsNullOrEmpty(codigo_suc)){
+          if(string.IsNullOrEmpty(cedula) || cedula.Length != 9 ||string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(distrito) || string.IsNullOrEmpty(canton) || string.IsNullOrEmpty(provincia) || string.IsNullOrEmpty(correo) || !correo.Contains('@') || !correo.Contains('.') || string.IsNullOrEmpty(contrasena) || string.IsNullOrEmpty(salario) || string.IsNullOrEmpty(id_puesto) || string.IsNullOrEmpty(id_planilla) || string.IsNullOrEmpty(codigo_suc)){
             return new { message = "error" };}
 
           // INSERTAR EMPLEADO EN LA BASE DE DATOS
@@ -910,8 +910,8 @@ namespace Metodos{
             comando.Parameters.AddWithValue("@Correo", correo);
             comando.Parameters.AddWithValue("@Contrasena", contrasena);
             comando.Parameters.AddWithValue("@Salario", Int64.Parse(salario));
-            comando.Parameters.AddWithValue("@Id_Puesto", id_puesto);
-            comando.Parameters.AddWithValue("@Id_Planilla", id_planilla);
+            comando.Parameters.AddWithValue("@Id_Puesto", Int64.Parse(id_puesto));
+            comando.Parameters.AddWithValue("@Id_Planilla", Int64.Parse(id_planilla));
             comando.Parameters.AddWithValue("@Codigo_suc", Int64.Parse(codigo_suc));
             comando.ExecuteNonQuery();
           }
@@ -1048,23 +1048,23 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/EliminarPlanilla")]
-      public dynamic EliminarPlanilla(string descripcionPlanilla){
+      public dynamic EliminarPlanilla(string idPlanilla){
         try{
             // VERIFICACION DE DATOS
-            if(string.IsNullOrEmpty(descripcionPlanilla)){
+            if(string.IsNullOrEmpty(idPlanilla)){
                 return new { message = "error" };}
 
             // ELIMINAR PLANILLA EN LA BASE DE DATOS
-            dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux(descripcionPlanilla);
+            dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux(idPlanilla);
             if(!existePlanilla){
                 return new { message = "No existe esta planilla en la BD" };
             }
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryDelete = "DELETE FROM PLANILLA WHERE Descripcion = @Descripcion";
+            string queryDelete = "DELETE FROM PLANILLA WHERE Identificador = @idPlanilla";
             using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Descripcion", descripcionPlanilla);
+                comando.Parameters.AddWithValue("@Identificador", descripcionPlanilla);
                 comando.ExecuteNonQuery();
             }
             DB_Handler.CerrarConexion();
