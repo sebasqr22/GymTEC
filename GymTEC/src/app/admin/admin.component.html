@@ -539,7 +539,7 @@
             <h1 class="h3 mb-4 text-gray-800">Gestión de Tipos de Planilla</h1> <!--MODIFICAR ESTA VISTA DE ACA PARA QUE SEA SOLO PARA AGREGAR Y ELIMINAR TIPOS DE PLANILLA YA EXISTENTES-->
             <div class="col-sm">
               <select class="form-control form-control-user" id="gestTipPlaPSELECT"></select>
-              <label for="gestTipPlaPSELECT">Cedula del empleado</label> <!--CAMBIADO PARA FUNCIONAR CON CALCULOS EN BASE AL SALARIO DE UN EMPLEADO-->>
+              <label for="gestTipPlaPSELECT">Planilla a mostrar</label> <!--CAMBIADO PARA FUNCIONAR CON CALCULOS EN BASE AL SALARIO DE UN EMPLEADO-->
             </div>
 
             <div class="form-group row">
@@ -547,32 +547,38 @@
                 <input type="text" class="form-control form-control-user" id="gestTipPlaPID" readonly>
                 <label for="gestTipPlaPID">ID Único</label>
               </div>
-
               <div class="col-sm-6">
-                <input type="number" class="form-control form-control-user" id="gestTipPlaPPAGOMENSUAL" step="0.01">
-                <label for="gestTipPlaPPAGOMENSUAL">Pago Mensual</label>
+                <input type="text" class="form-control form-control-user" id="gestTipPlaPPLANILLA" >
+                <label for="gestTipPlaPPLANILLA">Descripcion</label>
               </div>
 
-              <div class="col-sm-6">
-                <input type="number" class="form-control form-control-user" id="gestTipPlaPPAGOPORHORAS" step="0.01">
-                <label for="gestTipPlaPPAGOPORHORAS">Pago por Horas</label>
-              </div>
 
-              <div class="col-sm-6">
-                <input type="number" class="form-control form-control-user" id="gestTipPlaPPAGOPORCLASE" step="0.01">
-                <label for="gestTipPlaPPAGOPORCLASE">Pago por Clase</label>
-              </div>
             </div>
 
-            <div class="col-sm">
-              <textarea class="form-control form-control-user" id="gestTipPlaPDESCRIPCION" rows="4"
-                        cols="50"></textarea>
-              <label for="gestTipPlaPDESCRIPCION">Descripción</label>
-            </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block" (click)="gestionDePlanilla()">
+            <a class="btn btn-outline-primary btn-user btn-block">
               Guardar
             </a>
+
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Eliminar
+            </a>
+
+            <hr class="sidebar-divider my-0">
+            <hr class="sidebar-divider">
+            <h1 class="h3 mb-4 text-gray-800">Agregar Nuevo Tipo Planilla</h1>
+            <div class="form-group row">
+              <div class="col-sm">
+                <input type="text" class="form-control form-control-user" id="gestTipPlaPPLANILLA2">
+                <label for="gestTipPlaPPLANILLA2">Descripcion</label>
+              </div>
+
+            </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Guardar nuevo
+            </a>
+            <br>
 
           </div> <!--GESTION DE TIPOS DE PLANILLA-->
 
@@ -1145,6 +1151,17 @@
           </div><!-- MARCO -->
 
           <div id="genPlanPComo" class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800">Calculos de planillas</h1>
+
+            <div class="col-sm">
+                <textarea class="form-control form-control-user" id="Planillas y valores correpsondientes" rows="20"
+                          cols="50"></textarea>
+              <label for="gestSucTiendaNUMEROS2">Planillas existentes</label>
+            </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block">
+              Generar planillas existentes
+            </a><br>
           </div>
 
           <div id="genPlanPMensuales" class="container-fluid"> <!--GENERACION PLANTILLA (MENSUALES)-->
@@ -1162,16 +1179,21 @@
             <h1 class="h3 mb-4 text-gray-800">Copiar Calendario Por Semana</h1>
 
             <div class="col-sm">
-              <input type="week" class="form-control form-control-user" id="copCalenPSEMANA1">
-              <label for="copCalenPSEMANA1">Semana a Copiar</label>
+              <input type="date" class="form-control form-control-user" id="copCalenPDIA1">
+              <label for="copCalenPDIA1">Dia Inicio a Copiar</label>
             </div>
 
             <div class="col-sm">
-              <input type="week" class="form-control form-control-user" id="copCalenPSEMANA2">
-              <label for="copCalenPSEMANA2">Semana Destino</label>
+              <input type="date" class="form-control form-control-user" id="copCalenPDIA2">
+              <label for="copCalenPDIA2">Dia Final a Copiar</label>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <div class="col-sm">
+              <input type="number" class="form-control form-control-user" id="copCalenPMOVIMIENTO">
+              <label for="copCalenPMOVIMIENTO">Semanas a mover</label>
+            </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="copiarCalendario()">
               Copiar
             </a><br>
           </div>
@@ -1189,7 +1211,7 @@
               <label for="copGympNUEVO">Nombre del nuevo Gym</label>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="copiarGym()">
               Copiar
             </a><br>
 

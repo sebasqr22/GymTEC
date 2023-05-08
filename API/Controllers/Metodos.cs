@@ -450,7 +450,7 @@ namespace Metodos{
 
       [HttpPost]
       [Route("admin/CopiarCalendarioActividades")]
-      public dynamic CopiarCalendarioActividades(string Id_servicio, string fechaInicio, string fechaFin, string Hora_inicio, string Hora_fin, string Modalidad, string Capacidad, string Cedula_instructor){
+      public dynamic CopiarCalendarioActividades(string fechaInicio, string fechaFin){ //VERIFICAR QUE LA COPIA ESTE BIEN
         try{ 
           // VERIFICAR EXISTENCIA DE CLASE 
           dynamic existeCalendario = aux.VerificarExistenciaClase_aux(Id_servicio, Cedula_instructor, Modalidad, fechaInicio, Hora_inicio);

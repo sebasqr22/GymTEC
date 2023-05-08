@@ -132,8 +132,8 @@ export class GetApiService {
   }
 
 
-  copiarCalendarioActividades(Id_servicio:string, fechaInicio:string, fechaFin:string, Hora_inicio:string, Hora_fin:string, Modalidad:string, Capacidad:string, Cedula_instructor:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarCalendarioActividades?Id_servicio=${Id_servicio}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&Hora_inicio=${Hora_inicio}&Hora_fin=${Hora_fin}&Modalidad=${Modalidad}&Capacidad=${Capacidad}&Cedula_instructor=${Cedula_instructor}&`, {})
+  copiarCalendarioActividades(fechaInicio:string, fechaFin:string){
+    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarCalendarioActividades?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`, {}) //VERIFICAR QUE LA COPIA ESTE BIEN
   }
 
   // string Codigo_sucursal, string idServicio
