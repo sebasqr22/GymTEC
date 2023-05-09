@@ -64,11 +64,92 @@ class ASISTENCIA_CLASE{
     return {'Cedula_cliente':cedula_cliente,"Id_servicio":id_servicio, "Num_clase":num_clase};
   }
 }
-
+/*
+CREATE TABLE IF NOT EXISTS EMPLEADO (
+            Cedula INTEGER NOT NULL,
+          	Nombre TEXT NOT NULL,
+	          Apellido1 TEXT NOT NULL,
+	          Apellido2 TEXT,
+	          Distrito TEXT,
+	          Canton TEXT,Provincia TEXT NOT NULL, Correo TEXT NOT NULL,
+	          Contrasena TEXT NOT NULL,Salario REAL NOT NULL, Id_puesto INTEGER NOT NULL, Id_planilla INTEGER NOT NULL,
+	          Codigo_suc INTEGER,
+                   PRIMARY KEY (Cedula),
+                 FOREIGN KEY (Codigo_suc) REFERENCES SUCURSAL(Codigo_sucursal));""");
+*/
 class EMPLEADO{
+  // crea la clase
+  static final cedulaColumn= "Cedula";
+  static final nombreColumn= "Nombre";
+  static final apellido1Column= "Apellido1";
+  static final apellido2Column= "Apellido2";
+  static final distritoColumn= "Distrito";
+  static final cantonColumn= "Canton";
+  static final provinciaColumn= "Provincia";
+  static final correoColumn= "Correo";
+  static final contrasenaColumn= "Contrasena";
+  static final salarioColumn= "Salario";
+  static final id_puestoColumn= "Id_puesto";
+  static final id_planillaColumn= "Id_planilla";
+  static final codigo_sucColumn= "Codigo_suc";
+  int cedula, id_puesto, id_planilla, codigo_suc;
+  String nombre, apellido1, apellido2, distrito, canton, provincia, correo, contrasena;
+  double salario;
 
+  EMPLEADO({this.cedula=0,this.nombre="",this.apellido1="",this.apellido2="",this.distrito="",this.canton="",this.provincia="",this.correo="",this.contrasena="",this.salario=0,this.id_puesto=0,this.id_planilla=0,this.codigo_suc=0});
+
+  EMPLEADO.fromMap(Map<String,dynamic> item):cedula=item["Cedula"], nombre=item["Nombre"],
+                                            apellido1=item["Apellido1"], apellido2=item["Apellido2"],distrito=item["Distrito"],
+                                            canton=item["Canton"],provincia=item["Provincia"],correo=item["Correo"],
+                                            contrasena=item["Contrasena"],salario=item["Salario"],id_puesto=item["Id_puesto"],
+                                            id_planilla=item["Id_planilla"],codigo_suc=item["Codigo_suc"];
+
+  
+  Map<String, Object> toMap(){
+    return {'Cedula':cedula,"Nombre":nombre, "Apellido1":apellido1,"Apellido2":apellido2, "Distrito":distrito,
+    "Canton":canton,"Provincia":provincia,"Correo":correo,"Contrasena":contrasena,"Salario":salario,"Id_puesto":id_puesto,"Id_planilla":id_planilla,"Codigo_suc":codigo_suc};
+  }
+}
+class SUCURSAL{
+  // crea la clase Sucursal
+  static final codigo_sucursalColumn= "Codigo_sucursal";
+  static final nombreColumn= "Nombre";
+  static final distritoColumn= "Distrito";
+  static final cantonColumn= "Canton";
+  static final provinciaColumn= "Provincia";
+  static final fecha_aperturaColumn= "Fecha_apertura";
+  static final hora_aperturaColumn= "Hora_apertura";
+  static final hora_cierreColumn= "Hora_cierre";
+  static final max_capacidadColumn= "Max_capacidad";
+  static final cedula_administradorColumn= "Cedula_administrador";
+  int codigo_sucursal, max_capacidad, cedula_administrador;
+  String nombre, distrito, canton, provincia, fecha_apertura, hora_apertura, hora_cierre;
+
+  SUCURSAL({this.codigo_sucursal=0,this.nombre="",this.distrito="",this.canton="",this.provincia="",this.fecha_apertura="",this.hora_apertura="",this.hora_cierre="",this.max_capacidad=0,this.cedula_administrador=0});
+
+  SUCURSAL.fromMap(Map<String,dynamic> item):codigo_sucursal=item["Codigo_sucursal"], nombre=item["Nombre"],
+                                            distrito=item["Distrito"], canton=item["Canton"],provincia=item["Provincia"],
+                                            fecha_apertura=item["Fecha_apertura"],hora_apertura=item["Hora_apertura"],
+                                            hora_cierre=item["Hora_cierre"],max_capacidad=item["Max_capacidad"],cedula_administrador=item["Cedula_administrador"];
+
+  Map<String, Object> toMap(){
+    return {'Codigo_sucursal':codigo_sucursal,"Nombre":nombre, "Distrito":distrito,"Canton":canton, "Provincia":provincia,
+    "Fecha_apertura":fecha_apertura,"Hora_apertura":hora_apertura,"Hora_cierre":hora_cierre,"Max_capacidad":max_capacidad,"Cedula_administrador":cedula_administrador};
+  }
 }
 
-class SUCURSAL{
-  
+class SERVICIO{
+  // Crea la clase segun el texto
+  static final identificadorColumn= "Identificador";
+  static final descripcionColumn= "Descripcion";
+  int identificador;
+  String descripcion;
+
+  SERVICIO({this.identificador=0,this.descripcion=""});
+
+  SERVICIO.fromMap(Map<String,dynamic> item):identificador=item["Identificador"], descripcion=item["Descripcion"];
+
+  Map<String, Object> toMap(){
+    return {'Identificador':identificador,"Descripcion":descripcion};
+  }
 }
