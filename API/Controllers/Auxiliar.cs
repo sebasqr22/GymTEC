@@ -540,13 +540,13 @@ namespace funcionesAuxiliares{
             }
         }
 
-        public dynamic VerificarExistenciaPlanilla_aux(string descripcionPlanilla){
+        public dynamic VerificarExistenciaPlanilla_aux(string id_planilla){
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM PLANILLA WHERE Descripcion = @Descripcion";
+                string querySelect = "SELECT * FROM PLANILLA WHERE Identificador = @Id";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Descripcion", descripcionPlanilla);
+                    comando.Parameters.AddWithValue("@Id", id_planilla);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
@@ -697,13 +697,13 @@ namespace funcionesAuxiliares{
             }
         }
         
-        public dynamic VerificarExistenciaPuesto_aux(string descripcionPuesto){
+        public dynamic VerificarExistenciaPuesto_aux(string id_puesto){
            try{ 
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM PUESTO WHERE Descripcion = @Descripcion";
+                string querySelect = "SELECT * FROM PUESTO WHERE Identificador = @Id";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Descripcion", descripcionPuesto);
+                    comando.Parameters.AddWithValue("@Id", id_puesto);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();

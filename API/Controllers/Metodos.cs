@@ -838,6 +838,46 @@ namespace Metodos{
         }
       }
 
+      [HttpGet]
+      [Route("admin/VerClasesConCupo")]
+      public dynamic VerClasesConCupo() {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = @"SELECT CLASE.Num_clase, CLASE.Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Cedula_instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos
+                          FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase
+                          GROUP BY CLASE.Num_clase, CLASE.Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Cedula_instructor, Capacidad
+                          HAVING Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) > 0";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.ExecuteNonQuery();
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var clases = new List<dynamic>();
+                while (reader.Read()) {
+                  clases.Add(new {
+                    Num_clase = reader.GetInt32(0),
+                    Id_servicio = reader.GetInt32(1),
+                    Fecha = reader.GetDateTime(2),
+                    Hora_inicio = reader.GetTimeSpan(3),
+                    Hora_fin = reader.GetTimeSpan(4),
+                    Modalidad = reader.GetString(5),
+                    Cedula_instructor = reader.GetInt32(6),
+                    Cupos = reader.GetInt32(7)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(clases);
+              } else {
+                return new { message = "vacio" };
+              }
+            }
+          }
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
       //Función utilizada para eliminar una clase ya existente
       [HttpPost]
       [Route("admin/EliminarClase")] 
@@ -1180,6 +1220,48 @@ namespace Metodos{
         }
       }
 
+      [HttpGet]
+      [Route("admin/VerAdministradores")]
+      public dynamic VerAdministradores() {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = "SELECT * FROM EMPLEADO WHERE Id_puesto = 1";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.ExecuteNonQuery();
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var admins = new List<dynamic>();
+                while (reader.Read()) {
+                  admins.Add(new {
+                    Cedula = reader.GetInt32(0),
+                    Nombre = reader.GetString(1),
+                    Apellido1 = reader.GetString(2),
+                    Apellido2 = reader.GetString(3),
+                    Distrito = reader.GetString(4),
+                    Canton = reader.GetString(5),
+                    Provincia = reader.GetString(6),
+                    Correo = reader.GetString(7),
+                    Contrasena = reader.GetString(8),
+                    Salario = reader.GetDouble(9),
+                    Id_puesto = reader.GetInt32(10),
+                    Id_planilla = reader.GetInt32(11),
+                    Codigo_suc = reader.GetInt32(12)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(admins);
+              } else {
+                return new { message = "vacio" };
+              }
+            }
+          }
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
       //Función utilizada para agregar un nuevo empleado a la db
       [HttpPost]
       [Route("admin/AgregarEmpleado")]
@@ -1298,7 +1380,7 @@ namespace Metodos{
                         Segundo_apellido = reader.GetString(4),
                         Horas_laboradas = reader.GetString(5),
                         Clases_impartidas = reader.GetString(6),
-                        Monto_total = reader.GetInt32(7)
+                        Monto_total = reader.GetDouble(7)
                     });
                 }
                 DB_Handler.CerrarConexion();
@@ -1432,9 +1514,9 @@ namespace Metodos{
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryDelete = "DELETE FROM PUESTO WHERE Id_puesto = @Id_puesto";
+            string queryDelete = "DELETE FROM PUESTO WHERE Identificador = @Id_puesto";
             using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Descripcion", Id_puesto);
+                comando.Parameters.AddWithValue("@Id_puesto", Id_puesto);
                 comando.ExecuteNonQuery();
                 DB_Handler.CerrarConexion();
             }
