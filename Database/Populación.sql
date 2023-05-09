@@ -39,7 +39,7 @@ INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Remos');
 INSERT INTO TIPO_EQUIPO (Descripcion) VALUES ('Pesas');
 
 -- Empleado Administrador General.
-INSERT INTO EMPLEADO VALUES (2020158103, 'Eduardo', 'Bolivar', 'Minguet', 'Curridabat', 'San Jose', 'Jose', 'boli01@gmail.com', '987654321edu', 32480000, 1, 1, NULL);
+INSERT INTO EMPLEADO VALUES (2020158103, 'Eduardo', 'Bolivar', 'Minguet', 'Granadilla', 'Curridabat', 'San Jose', 'boli01@gmail.com', '987654321edu', 32480000, 1, 1, NULL);
 
 -- Sucursales ya existentes en los campus del Tecnol�gico de Costa Rica.
 INSERT INTO SUCURSAL VALUES (10001, 'GymTEC Campus Central Cartago', 'Dulce Nombre', 'Cartago', 'Cartago', '2005-03-18', '7:00', '18:00', 40, 2020158103);

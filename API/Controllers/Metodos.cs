@@ -535,6 +535,38 @@ namespace Metodos{
         }
       }
 
+      [HttpGet]
+      [Route("admin/VerTotalidadInventario")]
+      public dynamic VerTotalidadInventario() {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string queryGet = "SELECT * FROM INVENTARIO";
+          using (SqlCommand comando = new SqlCommand(queryGet, DB_Handler.conectarDB)) {
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var todoInventario = new List<dynamic>();
+                while (reader.Read()) {
+                  todoInventario.Add(new {
+                    Num_serie = reader.GetInt32(0),
+                    Marca = reader.GetString(1),
+                    Tipo_equipo = reader.GetInt32(2)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(todoInventario);
+              }
+              else {
+                return new { message = "no hay inventario" };
+              }
+            }
+          }
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
       //Función utilizada para ver el inventario existente
       [HttpGet]
       [Route("admin/VerInventario")]
@@ -709,6 +741,38 @@ namespace Metodos{
             Console.WriteLine(e);
             return new { message = "error" };
           }
+      }
+
+      [HttpGet]
+      [Route("admin/VerTotalidadProductos")]
+      public dynamic VerTotalidadProductos() {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = "SELECT * FROM PRODUCTO";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var totalProductos = new List<dynamic>();
+                while (reader.Read()) {
+                  totalProductos.Add(new {
+                    Codigo_barras = reader.GetInt32(0), 
+                    Nombre = reader.GetString(1),
+                    Descripcion = reader.GetString(2),
+                    Costo = reader.GetDouble(3)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(totalProductos);
+              } else {
+                return new { message = "no hay productos" };
+              }
+            }
+          }
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
       }
 
       
@@ -1256,38 +1320,6 @@ namespace Metodos{
       public dynamic VerTratamientosSPA(){
         try{
           return aux.VerTratamientosSPA_aux();
-        }catch(Exception e){
-          Console.WriteLine(e);
-          return new { message = "error" };
-        }
-      }
-
-      //Funcion utilizada para asociar un tratamiento a un spa
-      [HttpPost]
-      [Route("admin/AgregarTratamientoSPA")]
-      public dynamic AgregarTratamientoSPA(string codigo_sucursal, int idTratamiento){
-        try{
-          // VERIFICACION DE DATOS
-          if (string.IsNullOrEmpty(codigo_sucursal) || idTratamiento == 0) {
-              return new { message = "error" };}
-
-          // INSERTAR TRATAMIENTO_SPA EN LA BASE DE DATOS
-          dynamic existeTratamientoSPA = aux.VerificarExistenciaTratamientoSPA_aux(codigo_sucursal, idTratamiento);
-            if (existeTratamientoSPA) {
-                return new { message = "Tratamiento ya existe en la BD. Error" };}
-
-            DB_Handler.ConectarServer();
-            DB_Handler.AbrirConexion();
-            string queryInsert = "INSERT INTO TRATAMIENTO_SPA VALUES (@Codigo, @IdTratamiento)";
-            using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
-                comando.Parameters.AddWithValue("@IdTratamiento", idTratamiento);
-                comando.ExecuteNonQuery();
-                DB_Handler.CerrarConexion();
-            }
-
-          return new { message = "ok" };
-
         }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };

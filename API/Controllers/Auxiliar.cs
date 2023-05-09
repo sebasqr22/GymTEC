@@ -611,7 +611,8 @@ namespace funcionesAuxiliares{
                                     Contraseña = reader.GetString(8),
                                     Salario = reader.GetDouble(9),
                                     Id_puesto = reader.GetInt32(10),
-                                    Id_planilla = reader.GetInt32(11)
+                                    Id_planilla = reader.GetInt32(11),
+                                    Codigo_sucursal = reader.GetInt32(12)
                                 });
                             }
                             DB_Handler.CerrarConexion();
