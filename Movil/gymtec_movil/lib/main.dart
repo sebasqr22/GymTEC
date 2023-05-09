@@ -502,6 +502,10 @@ class _ClassScreenState extends State<ClassScreen>{
     dateInput = TextEditingController();
     dateInput2 = TextEditingController();
     this._sqliteService= SqliteService();
+    this._sqliteService.initializeDB();
+    _updateClases();
+    _updateServicios();
+    _updateEmpleados();
   }
 
   @override
@@ -767,12 +771,16 @@ class _ClassScreenState extends State<ClassScreen>{
   }
 
   List<DropdownMenuItem<String>> get SucursalesItems{
-    List<DropdownMenuItem<String>> menuItems = <String>["Sucursal 1","Sucursal 2","Sucursal 3","Sucursal 4"].map((item) {
+    List<DropdownMenuItem<String>> menuItems = <String>["GymTEC Campus Central Cartago","GymTEC Campus San Carlos","GymTEC Campus San José"].map((item) {
                           return new DropdownMenuItem<String>(
-                            child: new Text(item,
+                            value: item,
+                            child: Container(
+                              height: 50,
+                              width: 190,
+                              child:Text(item,
                                 textAlign: TextAlign.center),
-                            value: item, 
-                          );
+                                
+                          ));
                         }).toList();
     return menuItems;
   }
@@ -782,7 +790,7 @@ class _ClassScreenState extends State<ClassScreen>{
       DropdownMenuItem(child: Text("Indoor Cycling"),value: "Indoor Cycling"),
       DropdownMenuItem(child: Text("Yoga"),value: "Yoga"),
       DropdownMenuItem(child: Text("Zumba"),value: "Zumba"),
-      DropdownMenuItem(child: Text("Natación"),value: "Natación"),
+      DropdownMenuItem(child: Text("Natación"),value: "Natacion"),
     ];
     return menuItems;
   }
@@ -791,12 +799,34 @@ class _ClassScreenState extends State<ClassScreen>{
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterClass(clases)));
   }
 
-  void _updateClases() async{
-    print("hika");
-    final response = await http.get(Uri.parse("https://2185-190-2-222-247.ngrok-free.app/usuarios/admin/VerClases"));
+  void _updateEmpleados() async{
+    final response = (await http.get(Uri.parse("https://dfd2-2803-6000-e001-acc-4cd4-be42-eccc-c067.ngrok-free.app/usuarios/admin/VerEmpleados")));
     final body = utf8.decode(response.bodyBytes);
-    //print(jsonDecode(body));
-    print("hika2");
+    final jsonBody = jsonDecode(body);
+    for(int i = 0; i<jsonBody.length-1;i++){
+      EMPLEADO c = EMPLEADO(cedula: jsonBody[i]["Cedula"],nombre: jsonBody[i]["Nombre"],apellido1: jsonBody[i]["Apellido1"],apellido2: jsonBody[i]["Apellido2"],distrito: jsonBody[i]["Distrito"],canton: jsonBody[i]["Canton"],provincia: jsonBody[i]["Provincia"],correo: jsonBody[i]["Correo"],contrasena: jsonBody[i]["Contrasena"],salario: jsonBody[i]["Salario"],id_puesto: jsonBody[i]["Id_puesto"], id_planilla: jsonBody[i]["Id_planilla"],codigo_suc: jsonBody[i]["Codigo_suc"]);
+      this._sqliteService.createEmpleado(c);
+    }
+  }
+
+  void _updateServicios() async{
+    final response = (await http.get(Uri.parse("https://dfd2-2803-6000-e001-acc-4cd4-be42-eccc-c067.ngrok-free.app/usuarios/admin/VerServicios")));
+    final body = utf8.decode(response.bodyBytes);
+    final jsonBody = jsonDecode(body);
+    for(int i = 0; i<jsonBody.length-1;i++){
+      SERVICIO c = SERVICIO(identificador:jsonBody[i]["identificador"],descripcion:jsonBody[i]["descripcion"]);
+      this._sqliteService.createServicio(c);
+    }
+  }
+
+  void _updateClases() async{
+    final response = (await http.get(Uri.parse("https://dfd2-2803-6000-e001-acc-4cd4-be42-eccc-c067.ngrok-free.app/usuarios/admin/VerClases")));
+    final body = utf8.decode(response.bodyBytes);
+    final jsonBody = jsonDecode(body);
+    for(int i = 0; i<jsonBody.length-1;i++){
+      CLASE c = CLASE(id_servicio:jsonBody[i]["id_servicio"],num_clase:jsonBody[i]["num_clase"],fecha:jsonBody[i]["fecha"],hora_fin: jsonBody[i]["hora_fin"],hora_inicio: jsonBody[i]["hora_inicio"],capacidad: jsonBody[i]["capacidad"],cedula_instructor: jsonBody[i]["cedula_instructor"]);
+      this._sqliteService.createClase(c);
+    }
   }
   // metodo de ver clases por sucursal
   void _verClasesPorSucursal(String sucursal) async{
@@ -860,7 +890,19 @@ class _RegisterClassState extends State<RegisterClass> {
     // than having to individually change instances of widgets.
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
-      
+       Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () { 
+      Navigator.of(context).pop(); // dismiss dialog
+    },
+  );
+  AlertDialog alert = AlertDialog(
+    title: Text("Mensaje de Registro"),
+    content: Text("Registro exitoso!"),
+    actions: [
+      okButton,
+    ],
+  ); 
     return Scaffold(
       backgroundColor: Colors.cyan[100],
         body: Center(
@@ -887,7 +929,14 @@ class _RegisterClassState extends State<RegisterClass> {
                         children: <Widget>[
                           TextButton(
                             child: const Text('Registrar clase'),
-                            onPressed: () {/* ... */},
+                            onPressed: () {
+                              showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        },
+                      );
+                            },
                           ),
                           const SizedBox(width: 8),
                         ],
@@ -908,7 +957,14 @@ class _RegisterClassState extends State<RegisterClass> {
                         children: <Widget>[
                           TextButton(
                             child: const Text('Registrar clase'),
-                            onPressed: () {/* ... */},
+                            onPressed: () {
+                              showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        },
+                      );
+                            },
                           ),
                           const SizedBox(width: 8),
                         ],
@@ -921,13 +977,13 @@ class _RegisterClassState extends State<RegisterClass> {
                   onPressed: () {
                     _ShowRegistrationState(context);
                   },
-                  child: const Text('Registrar Clase'),
+                  child: const Text('Regresar'),
                 ),
               ],
             ),
             margin: const EdgeInsets.all(10.0),
             width: 320.0,
-            height: 600.0,
+            height: 700.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
               color: Colors.cyan[100],
