@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "gymtec_movil",
+            "cwd": "Movil/gymtec_movil",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "gymtec_movil (profile mode)",
+            "cwd": "Movil/gymtec_movil",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "gymtec_movil (release mode)",
+            "cwd": "Movil/gymtec_movil",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
