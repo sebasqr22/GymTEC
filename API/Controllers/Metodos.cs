@@ -146,6 +146,77 @@ namespace Metodos{
         }
       }
 
+      [HttpGet]
+      [Route("admin/VerServiciosAsociados")]
+      public dynamic VerServiciosAsociados(string Codigo_Sucursal) {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          var total = new List<dynamic>();
+          string query1 = @"SELECT Identificador, Descripcion
+                          FROM SERVICIO LEFT JOIN SERVICIOS_EN_SUCURSAL ON Identificador = Id_servicio
+                          WHERE Codigo_sucursal = @Code";
+          using (SqlCommand comando = new SqlCommand(query1, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Code", Int64.Parse(Codigo_Sucursal));
+            comando.ExecuteNonQuery();
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var serviciosAsociados = new List<dynamic>();
+                while (reader.Read()) {
+                  serviciosAsociados.Add(new {
+                    Identificador = reader.GetInt32(0),
+                    Descripcion = reader.GetString(1)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(serviciosAsociados);
+              }
+              else {
+                return new { message = "no hay servicios asociados"};
+              }
+            }
+          }
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpGet]
+      [Route("admin/VerServiciosNoAsociados")]
+      public dynamic VerServiciosNoAsociados(string codigo_sucursal) {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query2 = @"SELECT Identificador, Descripcion
+                          FROM SERVICIO LEFT JOIN SERVICIOS_EN_SUCURSAL ON Identificador = Id_servicio
+                          WHERE Codigo_sucursal IS NULL OR Codigo_sucursal <> @Code";
+          using (SqlCommand comando = new SqlCommand(query2, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Code",Int64.Parse(codigo_sucursal));
+            comando.ExecuteNonQuery();
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var serviciosNoAsociados = new List<dynamic>();
+                while (reader.Read()) {
+                  serviciosNoAsociados.Add(new {
+                    Identificador = reader.GetInt32(0),
+                    Descripcion = reader.GetString(1)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(serviciosNoAsociados);
+              }
+              else {
+                return new { message = "vacio" };
+              }
+            }
+          }
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
       //Función utilizada para asociar inventario a una sucursal ya existente
       [HttpPost]
       [Route("admin/AsociarInventario")]
@@ -165,18 +236,55 @@ namespace Metodos{
           }
           DB_Handler.CerrarConexion();
 
-          // Actualizar sucursal en inventario
-          //string queryUpdate = "UPDATE INVENTARIO SET Codigo_sucursal = @Codigo_sucursal WHERE Num_serie = @Num_serie";
-          //DB_Handler.ConectarServer();
-          //DB_Handler.AbrirConexion();
-          //using (SqlCommand comando = new SqlCommand(queryUpdate, DB_Handler.conectarDB)) {
-            //comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
-            //comando.Parameters.AddWithValue("@Num_serie", num_serie);
-            //comando.ExecuteNonQuery();
-          //}
-          //DB_Handler.CerrarConexion();
-
           return new { message = "ok"};
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      //Función utilizada para ver el inventario existente
+      [HttpGet]
+      [Route("admin/VerInventario")]
+      public dynamic VerInventario(string codigo_suc){
+        try{
+          return aux.VerInventario_aux(codigo_suc);
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpGet]
+      [Route("admin/VerInventarioNoAsociado")]
+      public dynamic VerInventarioNoAsociado(string codigo_sucursal) {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query2 = @"SELECT Numero_serie, Marca, Tipo
+                          FROM INVENTARIO LEFT JOIN INVENTARIO_EN_SUCURSAL ON Numero_serie = Num_serie_maquina
+                          WHERE Codigo_sucursal IS NULL OR Codigo_sucursal <> @Code";
+          using (SqlCommand comando = new SqlCommand(query2, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Code", Int64.Parse(codigo_sucursal));
+            comando.ExecuteNonQuery();
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var inventarioNoAsociados = new List<dynamic>();
+                while (reader.Read()) {
+                  inventarioNoAsociados.Add(new {
+                    Numero_serie = reader.GetInt32(0),
+                    Marca = reader.GetString(1),
+                    Tipo = reader.GetInt32(2)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(inventarioNoAsociados);
+              }
+              else {
+                return new { message = "vacio" };
+              }
+            }
+          }
         } catch (Exception e) {
           Console.WriteLine(e);
           return new { message = "error" };
@@ -201,6 +309,55 @@ namespace Metodos{
           return new { message = "ok" };
           
         }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      //Función utilizada para ver los productos exitentes en la db
+      [HttpGet]
+      [Route("admin/VerProductos")]
+      public dynamic VerProductos(string codigo_gym){
+        try{
+          return aux.VerProductos_aux(codigo_gym);
+        }catch(Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpGet]
+      [Route("admin/VerProductosNoAsociados")]
+      public dynamic VerProductosNoAsociados(string codigo_sucursal) {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = @"SELECT Codigo_barras, Nombre, Descripcion, Costo
+                          FROM PRODUCTO LEFT JOIN VENTA_PRODUCTO ON Codigo_barras = Codigo_producto
+                          WHERE Codigo_sucursal IS NULL OR Codigo_sucursal <> @Code";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Code", Int64.Parse(codigo_sucursal));
+            comando.ExecuteNonQuery();
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var productosNoAsociados = new List<dynamic>();
+                while (reader.Read()) {
+                  productosNoAsociados.Add(new {
+                    Codigo_barras = reader.GetInt32(0),
+                    Nombre = reader.GetString(1),
+                    Descripcion = reader.GetString(2),
+                    Costo = reader.GetDouble(3)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(productosNoAsociados);
+              }
+              else {
+                return new { message = "Vacio" };
+              }
+            }
+          }
+        } catch (Exception e) {
           Console.WriteLine(e);
           return new { message = "error" };
         }
@@ -245,6 +402,74 @@ namespace Metodos{
           return new { message = "ok" };
 
         }catch  (Exception e){
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpGet]
+      [Route("admin/VerTratamientosAsociados")]
+      public dynamic VerTratamientosAsociados(string codigo_sucursal) {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = @"SELECT Id_tratamiento, Descripcion 
+                          FROM TRATAMIENTO_SPA JOIN TRATAMIENTO ON Id_tratamiento = Identificador 
+                          WHERE Codigo_sucursal = @Code";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Code", Int64.Parse(codigo_sucursal));
+            comando.ExecuteNonQuery();
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var tratamientosAsociados = new List<dynamic>();
+                while (reader.Read()) {
+                  tratamientosAsociados.Add(new {
+                    Identificador = reader.GetInt32(0),
+                    Descripcion = reader.GetString(1)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(tratamientosAsociados);
+              } else {
+                return new { message = "vacio" };
+              }
+            }
+          }
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
+
+      [HttpGet]
+      [Route("admin/VerTratamientosNoAsociados")]
+      public dynamic VerTratamientosNoAsociados(string codigo_sucursal) {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = @"SELECT Identificador, Descripcion
+                          FROM TRATAMIENTO LEFT JOIN TRATAMIENTO_SPA ON Identificador = Id_tratamiento
+                          WHERE Codigo_sucursal IS NULL OR Codigo_sucursal <> @Code";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.Parameters.AddWithValue("@Code", Int64.Parse(codigo_sucursal));
+            comando.ExecuteNonQuery();
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                var tratamientosNoAsociados = new List<dynamic>();
+                while (reader.Read()) {
+                  tratamientosNoAsociados.Add(new {
+                    Identificador = reader.GetInt32(0),
+                    Descripcion = reader.GetString(1)
+                  });
+                }
+                DB_Handler.CerrarConexion();
+                return new JsonResult(tratamientosNoAsociados);
+              } else {
+                return new { message = "vacio" };
+              }
+            }
+          }
+        } catch (Exception e) {
           Console.WriteLine(e);
           return new { message = "error" };
         }
@@ -567,18 +792,6 @@ namespace Metodos{
         }
       }
 
-      //Función utilizada para ver el inventario existente
-      [HttpGet]
-      [Route("admin/VerInventario")]
-      public dynamic VerInventario(string codigo_suc){
-        try{
-          return aux.VerInventario_aux(codigo_suc);
-        }catch(Exception e){
-          Console.WriteLine(e);
-          return new { message = "error" };
-        }
-      }
-
       //Función utilizada para agregar nuevo inventario a la db
       [HttpPost]
       [Route("admin/AgregarInventario")]
@@ -770,19 +983,6 @@ namespace Metodos{
             }
           }
         } catch (Exception e) {
-          Console.WriteLine(e);
-          return new { message = "error" };
-        }
-      }
-
-      
-      //Función utilizada para ver los productos exitentes en la db
-      [HttpGet]
-      [Route("admin/VerProductos")]
-      public dynamic VerProductos(string codigo_gym){
-        try{
-          return aux.VerProductos_aux(codigo_gym);
-        }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };
         }
@@ -1091,15 +1291,14 @@ namespace Metodos{
                 var planillaDeTodosLosEmpleados = new List<dynamic>();
                 while (reader.Read()) {
                     planillaDeTodosLosEmpleados.Add(new {
-                        Identificador = reader.GetInt32(0),
-                        Sucursal = reader.GetInt32(1),
-                        CedulaEmpleado = reader.GetString(2),
-                        Nombre = reader.GetString(3),
-                        Primer_apellido = reader.GetString(4),
-                        Segundo_apellido = reader.GetString(5),
-                        Horas_laboradas = reader.GetString(6),
-                        Clases_impartidas = reader.GetString(7),
-                        Monto_total = reader.GetString(8)
+                        Sucursal = reader.GetInt32(0),
+                        Cedula_empleado = reader.GetInt32(1),
+                        Nombre = reader.GetString(2),
+                        Primer_apellido = reader.GetString(3),
+                        Segundo_apellido = reader.GetString(4),
+                        Horas_laboradas = reader.GetString(5),
+                        Clases_impartidas = reader.GetString(6),
+                        Monto_total = reader.GetInt32(7)
                     });
                 }
                 DB_Handler.CerrarConexion();
@@ -1308,18 +1507,6 @@ namespace Metodos{
               DB_Handler.CerrarConexion();
           }
           return new { message = "ok" };
-        }catch(Exception e){
-          Console.WriteLine(e);
-          return new { message = "error" };
-        }
-      }
-
-      //Función utilizada para ver los tratamientos ya existentes ESTA FUNCION ESTA DUPLICADA
-      [HttpGet]
-      [Route("admin/VerTratamientosSPA")]
-      public dynamic VerTratamientosSPA(){
-        try{
-          return aux.VerTratamientosSPA_aux();
         }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };
