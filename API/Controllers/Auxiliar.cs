@@ -318,25 +318,19 @@ namespace funcionesAuxiliares{
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM SERVICIO WHERE Id_servicio = @Id_servicio";
+                string querySelect = "SELECT * FROM SERVICIO WHERE Identificador = @Id_servicio";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(Id_servicio));
+                    comando.ExecuteNonQuery();
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
-                            var serviciosExistentes = new List<dynamic>();
-                            while (reader.Read()) {
-                                serviciosExistentes.Add(new {
-                                    Identificador = reader.GetInt32(0),
-                                    Descripcion = reader.GetString(1)
-                                });
-                            }
                             DB_Handler.CerrarConexion();
-
                             //string json_tiposEquipoExistentes = JsonSerializer.Serialize(tiposEquipoExistentes);
-                            return new JsonResult(serviciosExistentes);
+                            return true;
                         }
                         else {
                             DB_Handler.CerrarConexion();
-                            return new { message = "No existe ese servicio en la BD" };
+                            return false;
                         }
                     }
                 }

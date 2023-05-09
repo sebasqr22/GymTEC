@@ -917,7 +917,7 @@ namespace Metodos{
         try{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string queryInsert = "DELETE FROM SERVICIO WHERE Id_servicio = @Id_servicio";
+          string queryInsert = "DELETE FROM SERVICIO WHERE Identificador = @Id_servicio";
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
             comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(Id_servicio));
             comando.ExecuteNonQuery();
