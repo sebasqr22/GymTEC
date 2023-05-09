@@ -475,7 +475,7 @@ namespace funcionesAuxiliares{
                             while (reader.Read()) {
                                 tratamientosExistentes.Add(new {
                                     Identificador = reader.GetInt32(0),
-                                    Nombre = reader.GetString(1),
+                                    Descripcion = reader.GetString(1),
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -566,14 +566,14 @@ namespace funcionesAuxiliares{
             }
         }
         
-        public dynamic VerificarExistenciaTratamiento_aux(string nombreTratamiento)
+        public dynamic VerificarExistenciaTratamiento_aux(string descripcionTratamiento)
         {
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM TRATAMIENTO WHERE Nombre = @Nombre";
+                string querySelect = "SELECT * FROM TRATAMIENTO WHERE Descripcion = @Nombre";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Nombre", nombreTratamiento);
+                    comando.Parameters.AddWithValue("@Nombre", descripcionTratamiento);
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();

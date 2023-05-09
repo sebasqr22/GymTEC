@@ -90,7 +90,7 @@ CREATE TABLE SERVICIO (
 -- Tratamientos dados dentro de los spas del gimnasio.
 CREATE TABLE TRATAMIENTO (
 	Identificador INT IDENTITY(1,1) NOT NULL,
-	Nombre NVARCHAR(50),
+	Descripcion NVARCHAR(50),
 	PRIMARY KEY (Identificador)
 );
 

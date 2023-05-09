@@ -1197,22 +1197,22 @@ namespace Metodos{
       //Función utilizada para agregar un nuevo tratamiento a la db
       [HttpPost]
       [Route("admin/AgregarTratamiento")]
-      public dynamic AgregarTratamiento(string nombreTratamiento){
+      public dynamic AgregarTratamiento(string descripcionTratamiento){
         try{
           // VERIFICACION DE DATOS
-          if (string.IsNullOrEmpty(nombreTratamiento)) {
+          if (string.IsNullOrEmpty(descripcionTratamiento)) {
               return new { message = "error" };}
 
           // INSERTAR TRATAMIENTO EN LA BASE DE DATOS
-          dynamic existeTratamiento = aux.VerificarExistenciaTratamiento_aux(nombreTratamiento);
+          dynamic existeTratamiento = aux.VerificarExistenciaTratamiento_aux(descripcionTratamiento);
             if (existeTratamiento) {
                 return new { message = "Tratamiento ya existe en la BD. Error" };}
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryInsert = "INSERT INTO TRATAMIENTO (Nombre) VALUES (@Nombre)";
+            string queryInsert = "INSERT INTO TRATAMIENTO (Descripcion) VALUES (@Nombre)";
             using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-                comando.Parameters.AddWithValue("@Nombre", nombreTratamiento);
+                comando.Parameters.AddWithValue("@Nombre", descripcionTratamiento);
                 comando.ExecuteNonQuery();
                 DB_Handler.CerrarConexion();
             }

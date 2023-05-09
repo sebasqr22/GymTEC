@@ -8,10 +8,10 @@
 USE [GymTEC-DB]
 
 -- Tratamientos que se ofrecen por default.
-INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje relajante');
-INSERT INTO TRATAMIENTO (Nombre) VALUES ('Masaje descarga muscular');
-INSERT INTO TRATAMIENTO (Nombre) VALUES ('Sauna');
-INSERT INTO TRATAMIENTO (Nombre) VALUES ('Bano a vapor');
+INSERT INTO TRATAMIENTO (Descripcion) VALUES ('Masaje relajante');
+INSERT INTO TRATAMIENTO (Descripcion) VALUES ('Masaje descarga muscular');
+INSERT INTO TRATAMIENTO (Descripcion) VALUES ('Sauna');
+INSERT INTO TRATAMIENTO (Descripcion) VALUES ('Bano a vapor');
 
 -- Puestos default de GymTEC.
 INSERT INTO PUESTO (Descripcion) VALUES ('Administrador: Gestiona la sucursal');
