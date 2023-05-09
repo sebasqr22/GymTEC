@@ -180,17 +180,16 @@ namespace funcionesAuxiliares{
             }
         }
 
-        public dynamic VerInventario_aux(string codigo_suc, string num_serie){
+        public dynamic VerInventario_aux(string codigo_suc){
             try{
                 // VER INVENTARIO EXISTENTE
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
                 string querySelect = @"SELECT Tipo, Marca, Numero_serie, Costo_sucursal 
                                     FROM INVENTARIO JOIN INVENTARIO_EN_SUCURSAL ON Numero_serie = Num_serie_maquina
-                                    WHERE Codigo_sucursal = @CodigoSuc AND Numero_serie = @IdMaquina"; 
+                                    WHERE Codigo_sucursal = @CodigoSuc"; 
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     comando.Parameters.AddWithValue("@CodigoSuc", Int64.Parse(codigo_suc));
-                    comando.Parameters.AddWithValue("@IdMaquina", Int64.Parse(num_serie));
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
                             var inventarioExistentes = new List<dynamic>();
@@ -216,17 +215,16 @@ namespace funcionesAuxiliares{
                 return new { message = "error en VerInventario_aux" };
             }
         }
-        public dynamic VerProductos_aux(string codigo_gym, string Codigo_producto){
+        public dynamic VerProductos_aux(string codigo_gym){
             try{
                 // VER PRODUCTOS EXISTENTES
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
                 string querySelect = @"SELECT Codigo_barras, Nombre, Descripcion, Costo 
                                     FROM PRODUCTO JOIN VENTA_PRODUCTO ON Codigo_barras = Codigo_producto
-                                    WHERE Codigo_sucursal = @Suc AND Codigo_barras = @Produ";
+                                    WHERE Codigo_sucursal = @Suc";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     comando.Parameters.AddWithValue("@Suc", Int64.Parse(codigo_gym));
-                    comando.Parameters.AddWithValue("@Produ", Int64.Parse(Codigo_producto));
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { // JSON estructura: { "Descripcion": "Gerente" }
                             var productosExistentes = new List<dynamic>();

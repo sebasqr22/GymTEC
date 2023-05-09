@@ -538,9 +538,9 @@ namespace Metodos{
       //Función utilizada para ver el inventario existente
       [HttpGet]
       [Route("admin/VerInventario")]
-      public dynamic VerInventario(string codigo_suc, string num_serie){
+      public dynamic VerInventario(string codigo_suc){
         try{
-          return aux.VerInventario_aux(codigo_suc, num_serie);
+          return aux.VerInventario_aux(codigo_suc);
         }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };
@@ -715,9 +715,9 @@ namespace Metodos{
       //Función utilizada para ver los productos exitentes en la db
       [HttpGet]
       [Route("admin/VerProductos")]
-      public dynamic VerProductos(string codigo_gym, string cod_producto){
+      public dynamic VerProductos(string codigo_gym){
         try{
-          return aux.VerProductos_aux(codigo_gym, cod_producto);
+          return aux.VerProductos_aux(codigo_gym);
         }catch(Exception e){
           Console.WriteLine(e);
           return new { message = "error" };
