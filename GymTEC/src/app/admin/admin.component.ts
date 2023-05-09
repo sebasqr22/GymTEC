@@ -23,7 +23,11 @@ export class AdminComponent implements OnInit{
 
   opcionesGlobales = {
     "puestos" : {},
-    "servicios" : {}
+    "servicios" : {},
+    "planillas" : {},
+    "tratamientos" : {},
+    "equipos" : {},
+    "empleados" : {}
   }
 
 
@@ -35,6 +39,12 @@ export class AdminComponent implements OnInit{
     this.cargarProvincias(["gestSucSpaPROVINCIA", "gestEmplPPROVINCIA", "gestEmplPPROVINCIA2"]);
     this.cargarPuestos(["gestPuestPSELECT"]);
     this.cargarServicios();
+    this.cargarPlanillas();
+    this.cargarTratamientos();
+    this.cargarEquipos();
+    this.cargarInfoGestionInventario();
+    this.cargarInfoGestionDeProductos();
+    this.cargarInfoAsociarInventario();
   }
 
   cambiarInfo(llegada:string, seleccionador:string, id:string, des:string){
@@ -54,8 +64,7 @@ export class AdminComponent implements OnInit{
   cargarPuestos(lista:any){
     this.api.call_VerPuestos().subscribe((data) => {
       const llegada = JSON.parse(JSON.stringify(data));
-      console.log(llegada)
-      this.opcionesGlobales.servicios = llegada;
+      this.opcionesGlobales.puestos = llegada;
       for(let i = 0; i < lista.length; i++){
         const tmp = document.getElementById(lista[i]) as HTMLInputElement;
 
@@ -67,7 +76,7 @@ export class AdminComponent implements OnInit{
           tmp.appendChild(opcion);
         }
       }
-      this.cambiarInfo('servicios', 'gestPuestPSELECT', 'gestPuestPID', 'gestPuestPDESCRIPCION');
+      this.cambiarInfo('puestos', 'gestPuestPSELECT', 'gestPuestPID', 'gestPuestPDESCRIPCION');
 
     })
   }
@@ -75,7 +84,7 @@ export class AdminComponent implements OnInit{
   cargarServicios(){
     this.api.verServicios().subscribe((data) => {
       const llegada = JSON.parse(JSON.stringify(data));
-      this.opcionesGlobales.puestos = llegada;
+      this.opcionesGlobales.servicios = llegada;
       const tmp = document.getElementById("gestServPSELECT") as HTMLInputElement;
 
       for(const op in llegada){
@@ -86,8 +95,113 @@ export class AdminComponent implements OnInit{
         tmp.appendChild(opcion);
       }
       
-      this.cambiarInfo('puestos', 'gestServPSELECT', 'gestServPID', 'gestServPDESCRIPCION');
+      this.cambiarInfo('servicios', 'gestServPSELECT', 'gestServPID', 'gestServPDESCRIPCION');
 
+    })
+  }
+
+  cargarPlanillas(){
+    this.api.call_VerPlanillas().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      this.opcionesGlobales.planillas = llegada;
+      const tmp = document.getElementById("gestTipPlaPSELECT") as HTMLInputElement;
+
+      for(const op in llegada){
+        const aux = llegada[op];
+        const opcion = document.createElement('option');
+        opcion.value = aux.descripcion;
+        opcion.textContent = aux.descripcion;
+        tmp.appendChild(opcion);
+      }
+      
+      this.cambiarInfo('planillas', 'gestTipPlaPSELECT', 'gestTipPlaPID', 'gestTipPlaPPLANILLA');
+
+    })
+  }
+
+  cargarTratamientos(){ 
+    this.api.verTratamientos().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      this.opcionesGlobales.tratamientos = llegada;
+      const tmp = document.getElementById("gestTratSpaPSELECT") as HTMLInputElement;
+
+      for(const op in llegada){
+        const aux = llegada[op];
+        const opcion = document.createElement('option');
+        opcion.value = aux.descripcion;
+        opcion.textContent = aux.descripcion;
+        tmp.appendChild(opcion);
+      }
+      
+      this.cambiarInfo('tratamientos', 'gestTratSpaPSELECT', 'gestTratSpaID', 'gestTratSpaNOMNRE');
+
+    })
+  }
+
+  cargarEquipos(){ 
+    this.api.call_VerTiposEquipo().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      this.opcionesGlobales.equipos = llegada;
+      const tmp = document.getElementById("gestTipEquipPGYM") as HTMLInputElement;
+
+      for(const op in llegada){
+        const aux = llegada[op];
+        const opcion = document.createElement('option');
+        opcion.value = aux.descripcion;
+        opcion.textContent = aux.descripcion;
+        tmp.appendChild(opcion);
+      }
+      
+      this.cambiarInfo('equipos', 'gestTipEquipPGYM', 'gestTipEquipPID', 'gestTipEquipPDESCRIPCION');
+
+    })
+  }
+
+  cargarInfoGestionInventario(){
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestInvetPGYM") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    //tercera llamada
+
+    this.api.call_VerTiposEquipo().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestInvetPTIPO2") as HTMLInputElement;
+
+      for(const op in llegada){
+        const aux = llegada[op];
+        const opcion = document.createElement('option');
+        opcion.value = aux.identificador;
+        opcion.textContent = aux.identificador;
+        tmp.appendChild(opcion);
+      }
+    })
+  }
+
+  buscarDeGestionInventario(){
+    const sucursal = document.getElementById("gestInvetPGYM") as HTMLInputElement;
+    this.api.verInventario(sucursal.value).subscribe((data) =>{
+      console.log(data)
+    })
+  }
+
+  cargarInfoGestionDeProductos(){
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestProductPGYM") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
     })
   }
   
@@ -100,6 +214,207 @@ export class AdminComponent implements OnInit{
         const provincia = this.provincias[i];
         const option = new Option(provincia, provincia);
         p.add(option);
+      }
+    }
+  }
+
+  cargarInfoAsociarInventario(){
+    //primera llamada
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("confGymPInventarioGYM") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+    //segunda llamada
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("confGymPProducSELECT") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+    //tercera llamada
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("confGymPSpaSPA") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.call_VerEmpleados().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      console.log(llegada)
+      this.opcionesGlobales.empleados = llegada;
+      const tmp = document.getElementById("gestEmplPSELECT") as HTMLInputElement;
+
+      for(const op in llegada){
+        const aux = llegada[op];
+        const opcion = document.createElement('option');
+        opcion.value = aux.cedula;
+        opcion.textContent = aux.cedula;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestSucTiendaNUMEROSSEDESPA") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestSucTiendaNUMEROSSEDETIENDA") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.call_VerPuestos().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestEmplPPUESTO") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].identificador;
+        opcion.textContent = llegada[i].identificador;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestEmplPSUCURSAL") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.call_VerPlanillas().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestEmplPLANILLA") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].identificador;
+        opcion.textContent = llegada[i].identificador;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.call_VerPuestos().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestEmplPPUESTO2") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].identificador;
+        opcion.textContent = llegada[i].identificador;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestEmplPSUCURSAL2") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.call_VerPlanillas().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestEmplPLANILLA2") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].identificador;
+        opcion.textContent = llegada[i].identificador;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("gestSucTiendaSEDEELIMINAR") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+  }
+
+  cambiarInfo2(){
+    const seleccionado = document.getElementById("gestEmplPSELECT") as HTMLInputElement;
+
+    const cedula = document.getElementById("gestEmplPNUMEROCEDULA") as HTMLInputElement;
+    const nombre =  document.getElementById("gestEmplPNOMBRE") as HTMLInputElement;
+    const primer_apellido =  document.getElementById("gestEmplPPRIMERAPELLIDO") as HTMLInputElement;
+    const segundo_apellido =  document.getElementById("gestEmplPSEGUNDOAPELLIDO") as HTMLInputElement;
+    const provincia =  document.getElementById("gestEmplPPROVINCIA") as HTMLInputElement;
+    const canton =  document.getElementById("gestEmplPCANTON") as HTMLInputElement;
+    const distrito =  document.getElementById("gestEmplPDISTRITO") as HTMLInputElement;
+    const puesto =  document.getElementById("gestEmplPPUESTO") as HTMLInputElement;
+    const sucursal =  document.getElementById("gestEmplPSUCURSAL") as HTMLInputElement;
+    const planilla =  document.getElementById("gestEmplPLANILLA") as HTMLInputElement;
+    const salario =  document.getElementById("gestEmplPSALARIO") as HTMLInputElement;
+    const correo =  document.getElementById("gestEmplPCORREO") as HTMLInputElement;
+    const pass =  document.getElementById("gestEmplPPASSWORD") as HTMLInputElement;
+    //@ts-ignore
+    const info = this.opcionesGlobales["empleados"];
+    for(const op in info){
+      //@ts-ignore
+      if(seleccionado.value == info[op].cedula){
+        //@ts-ignore
+        cedula.value = info[op].cedula
+        //@ts-ignore
+        nombre.value = info[op].nombre
+        //@ts-ignore
+        primer_apellido.value = info[op].apellido1
+        //@ts-ignore
+        segundo_apellido.value = info[op].apellido2
+        //@ts-ignore
+        provincia.value = info[op].provincia
+        //@ts-ignore
+        canton.value = info[op].canton
+        //@ts-ignore
+        distrito.value = info[op].distrito
+        //@ts-ignore
+        puesto.value = info[op].id_puesto
+        //@ts-ignore
+        //sucursal.value = info[op].
+        //@ts-ignore
+        planilla.value = info[op].id_planilla
+        //@ts-ignore
+        salario.value = info[op].salario
+        //@ts-ignore
+        correo.value = info[op].correo
+        //@ts-ignore
+        pass.value = info[op].contraseña
       }
     }
   }
@@ -151,21 +466,19 @@ toNum(dato:string):number{
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega una sucursal a la db)
-activarSucursal(){
-  const sede = document.getElementById('sedegestSucSpaSELECT') as HTMLInputElement;
-  const nombre = document.getElementById('gestSucSpaNOMBRE') as HTMLInputElement;
-  const fechaDeApertura = document.getElementById('gestSucSpaFECHAAPERTURA') as HTMLInputElement;
-  const empleadoAdmin = document.getElementById('gestSucSpaEMPLEADOADMINISTRADOR') as HTMLInputElement;
-  const capacidad = document.getElementById('gestSucSpaCAPACIDAD') as HTMLInputElement;
-  const numerosTelefono = document.getElementById('gestSucTiendaNUMEROS2') as HTMLInputElement;
-  const provincia = document.getElementById("gestSucSpaPROVINCIA") as HTMLInputElement;
-  const canton = document.getElementById("gestSucSpaCANTON") as HTMLInputElement;
-  const distrito = document.getElementById("gestSucSpaDISTRITO") as HTMLInputElement;
-  const horaApertura = document.getElementById('gestSucSpaHORARIOAPERTURA') as HTMLInputElement;
-  const horaCierre = document.getElementById('gestSucSpaHORARIOCIERRE') as HTMLInputElement;
+  activarSucursal(){
+  const Codigo_sucursal = document.getElementById('gestSucSpaCODIGO') as HTMLInputElement;
+  const Nombre = document.getElementById('gestSucSpaNOMBRE') as HTMLInputElement;
+  const Distrito = document.getElementById('gestSucSpaDISTRITO') as HTMLInputElement;
+  const Canton = document.getElementById('gestSucSpaCANTON') as HTMLInputElement;
+  const Provincia = document.getElementById('gestSucSpaPROVINCIA') as HTMLInputElement;
+  const Fecha_apertura = document.getElementById('gestSucSpaFECHAAPERTURA') as HTMLInputElement;
+  const Hora_apertura = document.getElementById('gestSucSpaHORARIOAPERTURA') as HTMLInputElement;
+  const Hora_cierre = document.getElementById('gestSucSpaHORARIOCIERRE') as HTMLInputElement;
+  const Max_capacidad = document.getElementById('gestSucSpaCAPACIDAD') as HTMLInputElement;
+  const Cedula_administrador = document.getElementById('gestSucSpaEMPLEADOADMINISTRADOR') as HTMLInputElement;
 
-
-  this.api.agregarSucursal(sede.value, nombre.value, distrito.value, canton.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value).subscribe((data) => {
+  this.api.agregarSucursal(Codigo_sucursal.value, Nombre.value, Distrito.value, Canton.value, Provincia.value, Fecha_apertura.value, Hora_apertura.value, Hora_cierre.value, Max_capacidad.value, Cedula_administrador.value).subscribe((data) => {
     const llegada = JSON.parse(JSON.stringify(data));
     alert(llegada.message)
   });
@@ -345,6 +658,14 @@ guardarServicio(){
 eliminarServicio(){
   const servicioid = document.getElementById('gestServPID') as HTMLInputElement;
   this.api.eliminarServicio(servicioid.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  });
+}
+
+eliminarSucursal(){
+  const sucursalid = document.getElementById('gestSucTiendaSEDEELIMINAR') as HTMLInputElement;
+  this.api.eliminarSucursal(sucursalid.value).subscribe((data) => {
     const llegada = JSON.parse(JSON.stringify(data));
     alert(llegada.message)
   });
