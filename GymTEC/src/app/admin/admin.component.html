@@ -347,7 +347,7 @@
                 <label for="gestSucSpaCAPACIDAD">Capacidad Máxima</label>
               </div>
 
-            
+
 
             </div>
 
@@ -868,17 +868,17 @@
             </a>
 
 
-            
+
             <hr class="sidebar-divider my-0">
             <br><br>
             <div class="col-sm">
-              <select class="form-control form-control-user" id="gestInvetPMAQUINA"></select>
+              <select class="form-control form-control-user" id="gestInvetPMAQUINA" (change)="cambiarEnGestionInventario()"></select>
               <label for="gestInvetPMAQUINA">Máquina</label>
             </div>
             <div class="form-group row">
 
-              
-              
+
+
 
               <div class="col-sm-6">
                 <input type="text" class="form-control form-control-user" id="gestInvetPTIPO">
@@ -947,7 +947,7 @@
               </div>
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block" (click)="guardarInventario()">
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="buscarDeGestionProductos()">
               Buscar
             </a>
 
@@ -1003,7 +1003,7 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="number" class="form-control form-control-user" id="gestProductPDESCRIPCIONNUEVO">
+                <input type="text" class="form-control form-control-user" id="gestProductPDESCRIPCIONNUEVO">
                 <label for="gestProductPDESCRIPCIONNUEVO">Descripcion</label>
               </div>
 
@@ -1025,7 +1025,10 @@
               <select class="form-control form-control-user" id="confGymPSpaSPA"></select>
               <label for="confGymPSpaSPA">SPA</label>
             </div>
-
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="buscarEnAsociacionDeSpa()">
+              Buscar
+            </a>
+            <br><br>
             <div class="col-sm">
               <select class="form-control form-control-user" id="confGymPSpaTratamiento"></select>
               <label for="confGymPSpaTratamiento">Tratamiento</label>
@@ -1063,6 +1066,10 @@
               <label for="confGymPProducSELECT">Gym</label>
             </div>
 
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="buscarEnAsociacionDeProductos()">
+              Buscar
+            </a><br>
+
             <div class="col-sm">
               <select class="form-control form-control-user" id="confGymPProducASOCIAR"></select>
               <label for="confGymPProducASOCIAR">Producto</label>
@@ -1095,6 +1102,10 @@
               <select class="form-control form-control-user" id="confGymPInventarioGYM"></select>
               <label for="confGymPInventarioGYM">GYM</label>
             </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="buscarEnAsociacionDeInventario()">
+              Buscar
+            </a><br>
 
             <div class="col-sm">
               <select class="form-control form-control-user" id="confGymPInventarioEQUIPO"></select>
@@ -1181,7 +1192,7 @@
             <h1 class="h3 mb-4 text-gray-800">Calculos de planillas</h1>
 
             <div class="col-sm">
-                <textarea class="form-control form-control-user" id="Planillas y valores correpsondientes" rows="20"
+                <textarea class="form-control form-control-user" id="gestSucTiendaNUMEROS2" rows="20"
                           cols="50"></textarea>
               <label for="gestSucTiendaNUMEROS2">Planillas existentes</label>
             </div>

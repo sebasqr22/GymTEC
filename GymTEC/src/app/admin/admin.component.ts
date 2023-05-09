@@ -27,7 +27,9 @@ export class AdminComponent implements OnInit{
     "planillas" : {},
     "tratamientos" : {},
     "equipos" : {},
-    "empleados" : {}
+    "empleados" : {},
+    "maquinas":{},
+    "productos":{}
   }
 
 
@@ -184,11 +186,121 @@ export class AdminComponent implements OnInit{
       }
     })
   }
-
+  //a
   buscarDeGestionInventario(){
     const sucursal = document.getElementById("gestInvetPGYM") as HTMLInputElement;
-    this.api.verInventario(sucursal.value).subscribe((data) =>{
-      console.log(data)
+    this.api.verInventario(sucursal.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      this.opcionesGlobales.maquinas = llegada;
+
+      const tmp = document.getElementById("gestInvetPMAQUINA") as HTMLInputElement
+
+      for(const op in llegada){
+        const aux = llegada[op];
+        const opcion = document.createElement('option');
+        opcion.value = aux.num_serie;
+        opcion.textContent = aux.num_serie;
+        tmp.appendChild(opcion);
+      }
+      
+      this.cambiarEnGestionInventario();
+
+    })
+  }
+
+  buscarDeGestionProductos(){
+    const sucursal = document.getElementById("gestInvetPGYM") as HTMLInputElement;
+  }
+
+  cambiarEnGestionInventario(){
+    const maquina = document.getElementById("gestInvetPMAQUINA") as HTMLInputElement;
+    const marca = document.getElementById("gestInvetPMARCA") as HTMLInputElement;
+    const tipo = document.getElementById("gestInvetPTIPO") as HTMLInputElement;
+    const serie = document.getElementById("gestInvetPNUMEROSERIE") as HTMLInputElement;
+    const costo = document.getElementById("gestInvetPCOSTOSUCURSAL") as HTMLInputElement;
+
+    //@ts-ignore
+    const info = this.opcionesGlobales.maquinas;
+    for(const op in info){
+      //@ts-ignore
+      if(maquina.value == info[op].num_serie){
+        //@ts-ignore
+        marca.value = info[op].marca;
+        //@ts-ignore
+        tipo.value = info[op].tipo_equipo;
+        //@ts-ignore
+        serie.value = info[op].num_serie;
+        //@ts-ignore
+        costo.value = info[op].costo_sucursal;
+      }
+    }
+  }
+
+  buscarEnAsociacionDeProductos(){
+    this.api.verTotalidadProductos().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("confGymPProducASOCIAR") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_barras;
+        opcion.textContent = llegada[i].codigo_barras;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    const sucursal = document.getElementById("confGymPProducSELECT") as HTMLInputElement;
+    this.api.verProductos(sucursal.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      console.log(llegada)
+      const tmp = document.getElementById("confGymPProducASOCIADOS") as HTMLTextAreaElement;
+      for(const i in llegada){
+        tmp.append(`${llegada[i].codigo_barras}. ${llegada[i].nombre} (${llegada[i].descripcion}) Costo:${llegada[i].costo}\n`);
+      }
+    })
+  }
+
+  buscarEnAsociacionDeSpa(){
+    this.api.verServicios().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("confGymPSpaTratamiento") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].identificador;
+        opcion.textContent = llegada[i].identificador;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    const sucursal = document.getElementById("confGymPSpaSPA") as HTMLInputElement;
+    this.api.verTratamientosAsociados(sucursal.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("confGymPSpaASOCIADOS") as HTMLTextAreaElement;
+      for(const i in llegada){
+        tmp.append(`${llegada[i].identificador}. ${llegada[i].descripcion}\n`);
+      }
+    })
+  }
+
+  buscarEnAsociacionDeInventario(){
+    this.api.verTotalidadInventario().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("confGymPInventarioEQUIPO") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].num_serie;
+        opcion.textContent = llegada[i].num_serie;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    const sucursal = document.getElementById("confGymPInventarioGYM") as HTMLInputElement;
+    this.api.verInventario(sucursal.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      console.log(llegada)
+      const tmp = document.getElementById("confGymPInventarioASOCIADO") as HTMLTextAreaElement;
+      for(const i in llegada){
+        tmp.append(`${llegada[i].num_serie}. ${llegada[i].marca}---Tipo:${llegada[i].tipo_equipo}---Costo:${llegada[i].costo_sucursal}\n`);
+      }
     })
   }
 
@@ -725,9 +837,11 @@ guardarInventario(){
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un inventario ya existente)
 eliminarInventario(){ //FUNCA, SI NO LO HACE ES PORQUE TRABAJA CON IDS
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE') as HTMLInputElement;
+  console.log(numeroDeSerie.value)
   this.api.eliminarInventario(numeroDeSerie.value).subscribe((data) => {
     const llegada = JSON.parse(JSON.stringify(data));
     alert(llegada.message)
+    console.log(llegada)
   })
 }
 
@@ -784,7 +898,10 @@ agregarNuevoInventario(){
     const spa = document.getElementById('confGymPSpaSPA') as HTMLInputElement;
     const tratamiento = document.getElementById('confGymPSpaTratamiento') as HTMLInputElement;
 
-    this.api.asociarTratamientoASpa(spa.value, tratamiento.value); // SPA DEBERIA DE SER LA SUCURSAL, TAMBIEN AMBOS PARAMETROS RECIBEN IDS
+    this.api.asociarTratamientoASpa(spa.value, tratamiento.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert(llegada.message)
+    }); // SPA DEBERIA DE SER LA SUCURSAL, TAMBIEN AMBOS PARAMETROS RECIBEN IDS
   }
 
   //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (asocia un producto a una tienda)
