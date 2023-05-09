@@ -39,7 +39,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar una sucursal de la db
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarSucursal")]
       public dynamic EliminarSucursal(string codigo_suc){
         try{
@@ -364,7 +364,7 @@ namespace Metodos{
       }
 
       //Funcion utilizada para eliminar o desasociar un producto de una tienda
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarProductoDeTienda")]
       public dynamic EliminarProductoDeTienda(string codigo_sucursal, string Codigo_producto) {
         try {
@@ -476,7 +476,7 @@ namespace Metodos{
       }
 
        //Funcion utilizada para eliminar la relacion de una sucursal con un tratamiento
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarTratamientoDeSPA")]
       public dynamic EliminarTratamientoDeSPA(string codigo_sucursal, int idTratamiento){
         try{
@@ -726,7 +726,7 @@ namespace Metodos{
       }
       
       //Función utilizada para eliminar un inventario ya existente
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarInventario")] 
       public dynamic EliminarInventario(string Numero_serie){
         // VERIFICAR QUE EXISTE EL INVENTARIO EN LA BASE DE DATOS
@@ -839,7 +839,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar una clase ya existente
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarClase")] 
       public dynamic EliminarClase(string Num_clase) {//, string Id_servicio, string cedulaInstructor, string modalidad, string fecha, string horaInicio){
         // VERIFICAR QUE NO EXISTE LA CLASE EN LA BASE DE DATOS
@@ -865,7 +865,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un servicio ya existente
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarServicio")]
       public dynamic EliminarServicio(string Id_servicio){
         // VERIFICAR QUE NO EXISTE EL SERVICIO EN LA BASE DE DATOS
@@ -1018,7 +1018,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un producto ya existente
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarProducto")]
       public dynamic EliminarProducto(string codigoBarras){
         // VERIFICAR QUE NO EXISTE EL PRODUCTO EN LA BASE DE DATOS
@@ -1141,7 +1141,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un tipo de equipo ya existente
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarTipoEquipo")]
       public dynamic EliminarTipoEquipo(string idTipoEquipo){
         try{
@@ -1221,7 +1221,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un empleado ya existente
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarEmpleado")]
       public dynamic EliminarEmpleado(string cedula){
         try{
@@ -1348,7 +1348,7 @@ namespace Metodos{
         }
 
       //Función utilizada para eliminar una planilla ya existente
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarPlanilla")]
       public dynamic EliminarPlanilla(string idPlanilla){
         try{
@@ -1418,7 +1418,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un puesto ya existente
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarPuesto")]
       public dynamic EliminarPuesto(string Id_puesto){
         try{
@@ -1487,7 +1487,7 @@ namespace Metodos{
       }
 
       //Función utilizada para eliminar un tratamiento ya existente
-      [HttpDelete]
+      [HttpPost]
       [Route("admin/EliminarTratamiento")]
       public dynamic EliminarTratamiento(string idTratamiento){
         try{

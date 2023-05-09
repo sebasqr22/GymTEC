@@ -2,11 +2,15 @@ import 'package:gymtec_movil/database_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+
+/// This is the dedicated to connect the application with the database.
 class SqliteService {
+  /// This method initialize the database.
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
     print("creando base de datos");
 
+    /// Return the database, if the database doesn't exist it will create a new one.
     return openDatabase(
       join(path, 'miBases2.db'),
       onCreate: (database, version) async {
@@ -55,12 +59,13 @@ await database.execute("""CREATE TABLE IF NOT EXISTS ASISTENCIA_CLASE (Cedula_cl
 Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
  FOREIGN KEY (Id_servicio, Num_clase) REFERENCES CLASE(Id_servicio, Num_clase));
  """,
-      );// FALTAN LOS ALTER
+      );
      },
      version: 1,
     );
   }
 
+  /// This method create a new user in the database.
   Future createCliente(CLIENTE cliente) async {
     int result = 0;
     final Database db = await initializeDB();
@@ -70,6 +75,7 @@ Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
     print("CLIENTE CREADO EXITOSAMENTE");  
   }
 
+  /// This method create a new Servicio in the database.
   Future createServicio(SERVICIO servicio) async {
     int result = 0;
     final Database db = await initializeDB();
@@ -79,6 +85,8 @@ Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
     print("SERVICIO CREADO EXITOSAMENTE");  
   }
 
+
+  /// This method create a new CLASE in the database.
   Future createClase(CLASE clase) async {
     int result = 0;
     final Database db = await initializeDB();
@@ -88,6 +96,7 @@ Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
     print("CLASE CREADA EXITOSAMENTE");  
   }
 
+  /// This method create a new EMPLEADO in the database.
   Future createEmpleado(EMPLEADO emp) async {
     int result = 0;
     final Database db = await initializeDB();
@@ -97,6 +106,7 @@ Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
     print("EMPLEADO CREADO EXITOSAMENTE");  
   }
 
+  /// This method return true if a client exists.
   Future<bool> obtenerClientePorCedula(double cedula) async {
   final db = await initializeDB();
   List<Map<String, dynamic>> maps = await db.query('CLIENTE',
@@ -113,6 +123,7 @@ Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
   return false;
 }
 
+  /// This method return true if a client exists.
   Future<bool> iniciarSesion(String correo, String password) async {
   final db = await initializeDB();
   List<Map<String, dynamic>> maps = await db.query('CLIENTE',
@@ -127,6 +138,8 @@ Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
   return false;
 }
 
+
+  /// This method return a list of classes that are available for a specific Sucursal.
   Future<List<CLASE>> buscarClasesPorSucursal(String sucursal) async{
     final db = await initializeDB();
   List<Map<String, dynamic>> maps = await db.rawQuery("SELECT fecha, hora_inicio, hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles"+
@@ -143,6 +156,8 @@ Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
   return [];
   }
 
+
+  /// This method return a list of classes that are available for a specific Servicio.
   Future<List<CLASE>> buscarClasesPorServicio(String servicio) async{
     final db = await initializeDB();
   List<Map<String, dynamic>> maps = await db.rawQuery("SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles"+
@@ -159,6 +174,7 @@ Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
   return [];
   }
 
+  /// This method return a list of classes that are available for a specific Periodo.
   Future<List<CLASE>> buscarClasesPorPeriodo(String fecha_inicio,fecha_fin) async{
     final db = await initializeDB();
   List<Map<String, dynamic>> maps = await db.rawQuery("SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles"+
@@ -175,6 +191,7 @@ Num_clase INTEGER NOT NULL,PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase),
   return [];
   }
 
+  /// This method return a list of classes that are available for a specific Instructor.
   Future<bool> registrarClase(String cedulaClient, String Num_clase, String Id_servicio, String Cedula_instructor) async{
     final db = await initializeDB();
     List<Map<String, dynamic>> maps = await db.rawQuery("INSERT INTO ASISTENCIA_CLASE (Cedula_cliente, Id_servicio, Num_clase)"+

@@ -298,6 +298,11 @@
 
             <div class="form-group row">
               <div class="col-sm-6 mb-3 mb-sm-0">
+                <input type="number" class="form-control form-control-user" id="gestSucSpaCODIGO">
+                <label for="gestSucSpaNOMBRE">Codigo Sucursal</label>
+              </div>
+
+              <div class="col-sm-6 mb-3 mb-sm-0">
                 <input type="text" class="form-control form-control-user" id="gestSucSpaNOMBRE">
                 <label for="gestSucSpaNOMBRE">Nombre</label>
               </div>
@@ -323,12 +328,12 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestSucSpaHORARIOAPERTURA"> <!--cambiar el datatype a el date para horas-->
+                <input type="time" class="form-control form-control-user" id="gestSucSpaHORARIOAPERTURA"> <!--cambiar el datatype a el date para horas-->
                 <label for="gestSucSpaHORARIOAPERTURA">Horario de apertura</label>
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestSucSpaHORARIOCIERRE">
+                <input type="time" class="form-control form-control-user" id="gestSucSpaHORARIOCIERRE">
                 <label for="gestSucSpaHORARIOCIERRE">Horario de cierre</label>
               </div>
 
@@ -342,16 +347,23 @@
                 <label for="gestSucSpaCAPACIDAD">Capacidad Máxima</label>
               </div>
 
-              <div class="col-sm">
-                <textarea class="form-control form-control-user" id="gestSucTiendaNUMEROS2" rows="4"
-                          cols="50"></textarea>
-                <label for="gestSucTiendaNUMEROS2">Números de Teléfono</label>
-              </div>
+            
 
             </div>
 
             <a class="btn btn-outline-primary btn-user btn-block" (click)="activarSucursal()">
               Guardar
+            </a>
+            <hr class="sidebar-divider my-0">
+            <br><br>
+            <h1 class="h3 mb-4 text-gray-800">Eliminar sucursal</h1>
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="gestSucTiendaSEDEELIMINAR"></select>
+              <label for="gestSucTiendaSEDEELIMINAR">Sede</label>
+            </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="eliminarSucursal()">
+              Eliminar
             </a>
 
             <hr class="sidebar-divider my-0">
@@ -444,7 +456,7 @@
             <h1 class="h3 mb-4 text-gray-800">Gestión de Tratamientos</h1>
 
             <div class="col-sm">
-              <select class="form-control form-control-user" id="gestTratSpaPSELECT"></select>
+              <select class="form-control form-control-user" id="gestTratSpaPSELECT" (change)="this.cambiarInfo('tratamientos', 'gestTratSpaPSELECT', 'gestTratSpaID', 'gestTratSpaNOMNRE');"></select>
               <label for="gestTratSpaPSELECT">Tratamientos</label>
             </div>
 
@@ -534,7 +546,7 @@
           <div id="gestTipPlaP" class="container-fluid">
             <h1 class="h3 mb-4 text-gray-800">Gestión de Tipos de Planilla</h1> <!--MODIFICAR ESTA VISTA DE ACA PARA QUE SEA SOLO PARA AGREGAR Y ELIMINAR TIPOS DE PLANILLA YA EXISTENTES-->
             <div class="col-sm">
-              <select class="form-control form-control-user" id="gestTipPlaPSELECT"></select>
+              <select class="form-control form-control-user" id="gestTipPlaPSELECT" (change)="this.cambiarInfo('planillas', 'gestTipPlaPSELECT', 'gestTipPlaPID', 'gestTipPlaPPLANILLA');"></select>
               <label for="gestTipPlaPSELECT">Planilla a mostrar</label> <!--CAMBIADO PARA FUNCIONAR CON CALCULOS EN BASE AL SALARIO DE UN EMPLEADO-->
             </div>
 
@@ -587,6 +599,10 @@
               <label for="gestEmplPSELECT">Empleado</label>
             </div>
 
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="cambiarInfo2()">
+              Cargar
+            </a>
+
             <hr class="sidebar-divider my-0">
             <br><br>
 
@@ -627,17 +643,17 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestEmplPPUESTO">
+                <select type="text" class="form-control form-control-user" id="gestEmplPPUESTO"></select>
                 <label for="gestEmplPPUESTO">Puesto que desempeña</label>
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestEmplPSUCURSAL">
+                <select type="text" class="form-control form-control-user" id="gestEmplPSUCURSAL"></select>
                 <label for="gestEmplPSUCURSAL">Sucursal en la que trabaja</label>
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestEmplPLANILLA">
+                <select type="text" class="form-control form-control-user" id="gestEmplPLANILLA"></select>
                 <label for="gestEmplPLANILLA">Tipo de planilla</label>
               </div>
 
@@ -704,17 +720,17 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestEmplPPUESTO2">
+                <select type="text" class="form-control form-control-user" id="gestEmplPPUESTO2"></select>
                 <label for="gestEmplPPUESTO2">Puesto que desempeña</label>
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestEmplPSUCURSAL2">
+                <select type="text" class="form-control form-control-user" id="gestEmplPSUCURSAL2"></select>
                 <label for="gestEmplPSUCURSAL2">Sucursal en la que trabaja</label>
               </div>
 
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestEmplPLANILLA2">
+                <select type="text" class="form-control form-control-user" id="gestEmplPLANILLA2"></select>
                 <label for="gestEmplPLANILLA2">Tipo de planilla</label>
               </div>
 
@@ -744,7 +760,7 @@
           <div id="gestServP" class="container-fluid">
             <h1 class="h3 mb-4 text-gray-800">Gestión de Servicios</h1>
             <div class="col-sm">
-              <select class="form-control form-control-user" id="gestServPSELECT" (change)="this.cambiarInfo('puestos', 'gestServPSELECT', 'gestServPID', 'gestServPDESCRIPCION')"></select>
+              <select class="form-control form-control-user" id="gestServPSELECT" (change)="this.cambiarInfo('servicios', 'gestServPSELECT', 'gestServPID', 'gestServPDESCRIPCION')"></select>
               <label for="gestServPSELECT">Servicio</label>
             </div>
 
@@ -792,7 +808,7 @@
             <h1 class="h3 mb-4 text-gray-800">Gestión de tipos de equipo</h1>
             <div class="form-group row">
               <div class="col-sm">
-                <select class="form-control form-control-user" id="gestTipEquipPGYM"></select>
+                <select class="form-control form-control-user" id="gestTipEquipPGYM" (change)="this.cambiarInfo('equipos', 'gestTipEquipPGYM', 'gestTipEquipPID', 'gestTipEquipPDESCRIPCION');"></select>
                 <label for="gestTipEquipPGYM">Gym</label>
               </div>
             </div>
@@ -844,15 +860,26 @@
                 <select class="form-control form-control-user" id="gestInvetPGYM"></select>
                 <label for="gestInvetPGYM">Gym</label>
               </div>
-              <div class="col-sm">
-                <select class="form-control form-control-user" id="gestInvetPMAQUINA"></select>
-                <label for="gestInvetPMAQUINA">Máquina</label>
-              </div>
             </div>
 
+
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="buscarDeGestionInventario()">
+              Buscar
+            </a>
+
+
+            
             <hr class="sidebar-divider my-0">
             <br><br>
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="gestInvetPMAQUINA"></select>
+              <label for="gestInvetPMAQUINA">Máquina</label>
+            </div>
             <div class="form-group row">
+
+              
+              
+
               <div class="col-sm-6">
                 <input type="text" class="form-control form-control-user" id="gestInvetPTIPO">
                 <label for="gestInvetPTIPO">Tipo de Equipo</label>
@@ -888,7 +915,7 @@
             <h1 class="h3 mb-4 text-gray-800">Agregar Inventario</h1>
             <div class="form-group row">
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="gestInvetPTIPO2">
+                <select type="text" class="form-control form-control-user" id="gestInvetPTIPO2"></select>
                 <label for="gestInvetPTIPO2">Tipo de Equipo</label>
               </div>
 
@@ -918,14 +945,18 @@
                 <select class="form-control form-control-user" id="gestProductPGYM"></select>
                 <label for="gestProductPGYM">Gym</label>
               </div>
-              <div class="col-sm">
-                <select class="form-control form-control-user" id="gestProductPPRODUCTO"></select>
-                <label for="gestProductPPRODUCTO">Producto</label>
-              </div>
             </div>
+
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="guardarInventario()">
+              Buscar
+            </a>
 
             <hr class="sidebar-divider my-0">
             <br><br>
+            <div class="col-sm">
+              <select class="form-control form-control-user" id="gestProductPPRODUCTO"></select>
+              <label for="gestProductPPRODUCTO">Producto</label>
+            </div>
             <div class="form-group row">
               <div class="col-sm-6">
                 <input type="text" class="form-control form-control-user" id="gestProductPNOMBRE">

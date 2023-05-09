@@ -44,7 +44,7 @@ export class GetApiService {
 
   //EliminarPuesto(string Id_puesto){
   call_EliminarPuesto(idPuesto:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarPuesto?idPuesto=${idPuesto}`, {});
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarPuesto?Id_puesto=${idPuesto}`, {});
   }
 
   call_VerPlanillas(){
@@ -64,11 +64,11 @@ export class GetApiService {
   }
 
   call_AgregarEmpleados(cedula:string, nombre:string, apellido1:string, apellido2:string, distrito:string, canton:string, provincia:string, correo:string, contrasena:string, salario:string, id_puesto:number, id_planilla:number, nombre_suc:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarEmpleados?cedula=${cedula}&nombre=${nombre}&apellido1=${apellido1}&apellido2=${apellido2}&distrito=${distrito}&canton=${canton}&provincia=${provincia}&correo=${correo}&contrasena=${contrasena}&salario=${salario}&id_puesto=${id_puesto}&id_planilla=${id_planilla}&nombre_suc=${nombre_suc}`, {});
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarEmpleado?cedula=${cedula}&nombre=${nombre}&apellido1=${apellido1}&apellido2=${apellido2}&distrito=${distrito}&canton=${canton}&provincia=${provincia}&correo=${correo}&contrasena=${contrasena}&salario=${salario}&id_puesto=${id_puesto}&id_planilla=${id_planilla}&codigo_suc=${nombre_suc}`, {});
   }
 
   call_EliminarEmpleados(cedula:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarEmpleados?cedula=${cedula}`, {});
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarEmpleado?cedula=${cedula}`, {});
   }
 
   call_VerTiposEquipo(){
@@ -76,7 +76,7 @@ export class GetApiService {
   }
 
   call_AgregarTipoEquipo(descripcionTipoEquipo:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTipoEquipo?descripcionTipoEquipo=${descripcionTipoEquipo}`, {});
+    return this.http.post(`https://localhost:7194/usuarios/admin/AgregarTipoEquipo?descripcion=${descripcionTipoEquipo}`, {});
   }
 
   // EliminarTipoEquipo(string idTipoEquipo)
@@ -123,8 +123,8 @@ export class GetApiService {
     return this.http.post(`https://localhost:7194/usuarios/admin/AgregarInventario?numSerie=${numSerie}&marca=${marca}&idTipoEquipo=${idTipoEquipo}`, {})
   }
 
-  verInventario(){
-    return this.http.get(`https://localhost:7194/usuarios/admin/VerInventario`);
+  verInventario(codigoSucursal:string){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerInventario?codigo_suc=${codigoSucursal}`);
   }
 
   eliminarInventario(Numero_serie:string){
@@ -153,11 +153,11 @@ export class GetApiService {
 
   //EliminarSucursal(string codigo_suc){
   eliminarSucursal(codigoSucursal:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarSucursal?codigoSucursal=${codigoSucursal}`, {})
+    return this.http.post(`https://localhost:7194/usuarios/admin/EliminarSucursal?codigo_suc=${codigoSucursal}`, {})
   }
 
   verSucursales(){
-    return this.http.post(`https://localhost:7194/usuarios/admin/VerSucursal`, {})
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerSucursal`)
   }
 
   //AsociarInventario(string Codigo_sucursal, string num_serie, string costo) {
