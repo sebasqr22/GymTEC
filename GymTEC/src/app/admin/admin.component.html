@@ -486,7 +486,7 @@
             <h1 class="h3 mb-4 text-gray-800">Gestión de puestos</h1>
 
             <div class="col-sm">
-              <select class="form-control form-control-user" id="gestPuestPSELECT"></select>
+              <select class="form-control form-control-user" id="gestPuestPSELECT" (change)="cambiarInfo('puestos', 'gestPuestPSELECT', 'gestPuestPID', 'gestPuestPDESCRIPCION')"></select>
               <label for="gestPuestPSELECT">Puesto</label>
             </div>
 
@@ -570,7 +570,7 @@
               </div>
 
             </div>
-            
+
             <a class="btn btn-outline-primary btn-user btn-block" (click)="agregarNuevaPlanilla()">
               Guardar nuevo
             </a>
@@ -744,7 +744,7 @@
           <div id="gestServP" class="container-fluid">
             <h1 class="h3 mb-4 text-gray-800">Gestión de Servicios</h1>
             <div class="col-sm">
-              <select class="form-control form-control-user" id="gestServPSELECT"></select>
+              <select class="form-control form-control-user" id="gestServPSELECT" (change)="this.cambiarInfo('puestos', 'gestServPSELECT', 'gestServPID', 'gestServPDESCRIPCION')"></select>
               <label for="gestServPSELECT">Servicio</label>
             </div>
 

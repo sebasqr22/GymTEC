@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { AuthService } from '../auth.service';
+import { GetApiService } from '../get-api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +10,7 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent implements OnInit{
   mostrar = false
-  constructor(private auth:AuthService) { }
+  constructor(private auth:AuthService, private api:GetApiService, private router:Router) { }
 
   ngOnInit() {
     const signin = document.getElementById("signin") as HTMLInputElement
@@ -60,12 +62,26 @@ export class LoginComponent implements OnInit{
   }
   login(form:any){
     const valor = form.value;
-    this.auth.login(parseInt(valor.cedula, 10), valor.password);
+    //call_LoginCliente(parseInt(valor.cedula, 10), valor.password)
+    this.api.call_LoginCliente(valor.cedula, valor.password).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      if(llegada.message == "cliente"){
+        this.router.navigate(['/cliente'])
+      }
+
+    })
   }
 
   register(form:any){
     const valor = form.value;
+    console.log(valor)
     // @ts-ignore
-    this.auth.register(parseInt(valor.cedula, 10), valor.nombre, valor.apellido1, valor.apellido2, valor.fechaNacimiento, parseInt(valor.peso, 10), valor.direccion, valor.email, valor.password);
+    //this.auth.register(parseInt(valor.cedula, 10), valor.nombre, valor.apellido1, valor.apellido2, valor.fechaNacimiento, parseInt(valor.peso, 10), valor.direccion, valor.email, valor.password);
+    this.api.call_SignUpCliente(valor.cedula.toString(), valor.nombre, valor.apellido1, valor.apellido2, valor.fechaNacimiento, valor.peso, valor.direccion, valor.email, valor.password).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      if(llegada.message == "ok"){
+        this.router.navigate(['/cliente'])
+      }
+    })
   }
 }

@@ -67,7 +67,7 @@
 
 
 
-            <form #form="ngForm" (ngSubmit)="register(form)">
+            <form #regi="ngForm" (ngSubmit)="register(regi)">
               <div class="form-floating mb-3">
                 <input type="number" class="form-control" id="cedula" step="1" placeholder="Cédula" name="cedula" ngModel>
                 <label for="floatingInput">Cédula</label>
@@ -85,7 +85,7 @@
                 <label for="floatingInput">Apellido 2</label>
               </div>
               <div class="form-floating mb-3">
-                <input type="date" class="form-control" id="fecha" placeholder="Fecha de Nacimiento" name="fechaDenNcimiento" ngModel>
+                <input type="date" class="form-control" id="fecha" placeholder="Fecha de Nacimiento" name="fechaNacimiento" ngModel>
                 <label for="floatingInput">Fecha de Nacimiento</label>
               </div>
               <div class="form-floating mb-3">

@@ -9,7 +9,7 @@ import { GetApiService } from '../get-api.service';
 })
 export class AdminComponent implements OnInit{
   constructor(private auth:AuthService, private api:GetApiService) { }
-  nombre = 'Sebas';
+  nombre = 'EDUARDO';
   tipo = 'SPA';
   dropdown = 0;
 
@@ -21,6 +21,11 @@ export class AdminComponent implements OnInit{
 
   provincias = ["San José", "Alajuela", "Cartago", "Limón", "Guanacaste", "Puntarenas", "Heredia"]
 
+  opcionesGlobales = {
+    "puestos" : {},
+    "servicios" : {}
+  }
+
 
   ngOnInit() {
     for (let i = 0; i < this.pantallas.length; i++) {
@@ -28,7 +33,64 @@ export class AdminComponent implements OnInit{
       tmp.style.display = 'none'
     }
     this.cargarProvincias(["gestSucSpaPROVINCIA", "gestEmplPPROVINCIA", "gestEmplPPROVINCIA2"]);
+    this.cargarPuestos(["gestPuestPSELECT"]);
+    this.cargarServicios();
   }
+
+  cambiarInfo(llegada:string, seleccionador:string, id:string, des:string){
+    const tmp = document.getElementById(seleccionador) as HTMLInputElement;
+    const idA =  document.getElementById(id) as HTMLInputElement;
+    const desA =  document.getElementById(des) as HTMLInputElement;
+    //@ts-ignore
+    const info = this.opcionesGlobales[llegada];
+    for(const op in info){
+      if(tmp.value == info[op].descripcion){
+        idA.value = info[op].identificador;
+        desA.value = info[op].descripcion;
+      }
+    }
+  }
+
+  cargarPuestos(lista:any){
+    this.api.call_VerPuestos().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      console.log(llegada)
+      this.opcionesGlobales.servicios = llegada;
+      for(let i = 0; i < lista.length; i++){
+        const tmp = document.getElementById(lista[i]) as HTMLInputElement;
+
+        for(const op in llegada){
+          const aux = llegada[op];
+          const opcion = document.createElement('option');
+          opcion.value = aux.descripcion;
+          opcion.textContent = aux.descripcion;
+          tmp.appendChild(opcion);
+        }
+      }
+      this.cambiarInfo('servicios', 'gestPuestPSELECT', 'gestPuestPID', 'gestPuestPDESCRIPCION');
+
+    })
+  }
+
+  cargarServicios(){
+    this.api.verServicios().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      this.opcionesGlobales.puestos = llegada;
+      const tmp = document.getElementById("gestServPSELECT") as HTMLInputElement;
+
+      for(const op in llegada){
+        const aux = llegada[op];
+        const opcion = document.createElement('option');
+        opcion.value = aux.descripcion;
+        opcion.textContent = aux.descripcion;
+        tmp.appendChild(opcion);
+      }
+      
+      this.cambiarInfo('puestos', 'gestServPSELECT', 'gestServPID', 'gestServPDESCRIPCION');
+
+    })
+  }
+  
 
   //Función utilizada para cargar cada una de las 7 provincias en los componentes select que las necesitan
   cargarProvincias(lista:any){
@@ -103,21 +165,30 @@ activarSucursal(){
   const horaCierre = document.getElementById('gestSucSpaHORARIOCIERRE') as HTMLInputElement;
 
 
-  this.api.agregarSucursal(sede.value, nombre.value, distrito.value, canton.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value);
+  this.api.agregarSucursal(sede.value, nombre.value, distrito.value, canton.value, provincia.value, fechaDeApertura.value, horaApertura.value, horaCierre.value, capacidad.value, empleadoAdmin.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  });
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (activa el spa correspondiente a una sede)
 activacionSpa(){ //FUNCIONA, ACATAR DETALLE
   const sede = document.getElementById('gestSucTiendaNUMEROSSEDESPA') as HTMLInputElement;
 
-  this.api.activarSpa(sede.value); //HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
+  this.api.activarSpa(sede.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  }); //HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (activa la tienda correspondiente a una sede)
 activacionTienda(){//FUNCIONA, ACATAR DETALLE
   const sede = document.getElementById('gestSucTiendaNUMEROSSEDETIENDA') as HTMLInputElement;
 
-  this.api.activarTienda(sede.value);//HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
+  this.api.activarTienda(sede.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  });//HAY QUE OBTENER EL CODIGO DE LA SEDE, NO EL NOMBRE
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (Modifica un tratamiento ya existente)
@@ -132,14 +203,20 @@ agregarTratamiento(){ //ESTE ES EL DE MODIFICAR, NO ESTA
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un tratamineto ya existente)
 eliminarTratamiento(){
   const tratamientoID= document.getElementById('gestTratSpaID') as HTMLInputElement;
-  this.api.call_EliminarTratamiento(tratamientoID.value) //DEBE DE SER EL ID, HAY QUE OBTENERLO DE ALGUNA MANERA
+  this.api.call_EliminarTratamiento(tratamientoID.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  }) //DEBE DE SER EL ID, HAY QUE OBTENERLO DE ALGUNA MANERA
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un tratamiento nuevo a la db)
 agregarNuevoTratamiento(){
   const nombreNuevo = document.getElementById('gestTratSpaNOOMBRENUEVO') as HTMLInputElement; //TENER CUIDADO, VER SI HAY QUE ELIMINAR LA CASILLA DE NOMBRE Y TRABAJAR CON DESCRIPCION
 
-  this.api.agregarTratamiento(nombreNuevo.value);
+  this.api.agregarTratamiento(nombreNuevo.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  });
 }
 
 
@@ -154,14 +231,20 @@ guardarPuesto(){ //No hay para modificar este valo
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un puesto ya existente)
 eliminarPuesto(){
   const puestoID = document.getElementById('gestPuestPID') as HTMLInputElement; //VERIFICAR ESTE, SACAR ID DEL PUESTO Y PASARA ESE PARAMETRO
-  this.api.call_EliminarPuesto(puestoID.value); //ESTO RECIVE COMO PARAMETRO PUESTO_ID
+  this.api.call_EliminarPuesto(puestoID.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  }); //ESTO RECIVE COMO PARAMETRO PUESTO_ID
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo puesto a la db)
 agregarNuevoPuesto(){ //ELIMINAR CASILLA DE NOMBRE DEL HTML
   const descripcion = document.getElementById('gestPuestPDESCRIPCIONAGREGAR') as HTMLInputElement;
 
-  this.api.call_AgregarPuesto(descripcion.value);
+  this.api.call_AgregarPuesto(descripcion.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  })
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modificar una planilla ya existente)
@@ -181,13 +264,19 @@ gestionDePlanilla(){
 eliminarPlanilla(){
   const id = document.getElementById('gestTipPlaPID') as HTMLInputElement;
 
-  this.api.call_EliminarPlanilla(id.value);
+  this.api.call_EliminarPlanilla(id.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  });
 }
 
 agregarNuevaPlanilla(){
   const descripcion = document.getElementById('gestTipPlaPPLANILLA2') as HTMLInputElement;
 
-  this.api.call_AgregarPlanilla(descripcion.value);
+  this.api.call_AgregarPlanilla(descripcion.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  });
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica los datos de un empleado ya existente)
@@ -236,7 +325,10 @@ agregarEmpleado(){ //FUNCA
   const provincia = document.getElementById('gestEmplPPROVINCIA2') as HTMLInputElement;
   //@ts-ignore
   //LA FUNCION LOS TRABAJA COMO IDs LOS PARAMETRO DE SUCURSAL, PUESTO Y PLANTILLA, HAY QUE OBTENERLOS COMO TAL
-  this.api.call_AgregarEmpleados(cedula.value, nombre.value, apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value)
+  this.api.call_AgregarEmpleados(cedula.value, nombre.value, apellido1.value, apellido2.value, distrito.value, canton.value, provincia.value, correo.value, contrasena.value, salario.value, puestoQueDesem.value, tipoDePlanilla.value, sucursalQueTrabaja.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  })
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica un servicio ya existente)
@@ -252,14 +344,20 @@ guardarServicio(){
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un servicio ya existente)
 eliminarServicio(){
   const servicioid = document.getElementById('gestServPID') as HTMLInputElement;
-  this.api.eliminarServicio(servicioid.value);
+  this.api.eliminarServicio(servicioid.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  });
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo servicio a la db)
 agregarNuevoServicio(){
   const descripcion = document.getElementById('gestServPDESCRIPCION2') as HTMLInputElement;
 
-  this.api.agregarServicios(descripcion.value);
+  this.api.agregarServicios(descripcion.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  });
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica un tipo de equipo ya existente)
@@ -274,14 +372,20 @@ guardarTipoEquipo(){ //FUNCA, VERIFICAR QUE SEA SI CON LA DESCRIPCION QUE SE QUI
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un tipo de equipo ya existente)
 eliminarTipoEquipo(){
   const descripcionid = document.getElementById('gestTipEquipPID') as HTMLInputElement;
-  this.api.call_EliminarTipoEquipo(descripcionid.value) //ESTO NO ES UNA DESCRIPCION ES LA ID CON LA QUE TRABAJA
+  this.api.call_EliminarTipoEquipo(descripcionid.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  }) //ESTO NO ES UNA DESCRIPCION ES LA ID CON LA QUE TRABAJA
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo de equipo a la db)
 agregarNuevoEquipo(){
  // const id = document.getElementById('gestTipEquipPIDNUEVO') as HTMLInputElement;
   const descripcion = document.getElementById('gestTipEquipPDESCRIPCIONNUEVO') as HTMLInputElement;
-  this.api.call_AgregarTipoEquipo(descripcion.value);
+  this.api.call_AgregarTipoEquipo(descripcion.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  });
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (modifica un inventario ya existente)
@@ -300,7 +404,10 @@ guardarInventario(){
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un inventario ya existente)
 eliminarInventario(){ //FUNCA, SI NO LO HACE ES PORQUE TRABAJA CON IDS
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE') as HTMLInputElement;
-  this.api.eliminarInventario(numeroDeSerie.value)
+  this.api.eliminarInventario(numeroDeSerie.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  })
 }
 
 //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo inventario a la db)
@@ -309,7 +416,10 @@ agregarNuevoInventario(){
   const marca = document.getElementById('gestInvetPMARCA2') as HTMLInputElement;
   const numeroDeSerie = document.getElementById('gestInvetPNUMEROSERIE2') as HTMLInputElement;
 
-  this.api.agregarInventario(numeroDeSerie.value, marca.value, tipoDeEquipo.value) //SI FALLA EL TIPO DE EQUIPO ES PORQUE ESTA TRABAJANDO COMO ID, MANDARLO COMO TAL
+  this.api.agregarInventario(numeroDeSerie.value, marca.value, tipoDeEquipo.value).subscribe((data) => {
+    const llegada = JSON.parse(JSON.stringify(data));
+    alert(llegada.message)
+  }) //SI FALLA EL TIPO DE EQUIPO ES PORQUE ESTA TRABAJANDO COMO ID, MANDARLO COMO TAL
 
 }
 
@@ -328,7 +438,10 @@ agregarNuevoInventario(){
   //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (elimina un producto ya existente)
   eliminarProducto(){ //FUNCA, CUIDADO CON IDS
     const numeroBarras = document.getElementById('gestProductPCODIGO') as HTMLInputElement;
-    this.api.eliminarProductos(numeroBarras.value);
+    this.api.eliminarProductos(numeroBarras.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert(llegada.message)
+    });
   }
 
   //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (agrega un nuevo producto a la db)
@@ -339,7 +452,10 @@ agregarNuevoInventario(){
     const descripcion = document.getElementById('gestProductPDESCRIPCIONNUEVO') as HTMLInputElement;
     const costo = document.getElementById('gestProductPCOSTONUEVO') as HTMLInputElement;
 
-    this.api.agregarProductos(numeroBarras.value, nombre.value, descripcion.value, costo.value);
+    this.api.agregarProductos(numeroBarras.value, nombre.value, descripcion.value, costo.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert(llegada.message)
+    });
   }
 
  //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (asocia un tratamiento a un spa)
@@ -355,7 +471,10 @@ agregarNuevoInventario(){
     const gym = document.getElementById('confGymPProducSELECT') as HTMLInputElement;
     const producto = document.getElementById('confGymPProducASOCIAR') as HTMLInputElement;
 
-    this.api.asociarProductosATienda(gym.value, producto.value); //SON IDS, SI DA PROBLEMAS ES ESO
+    this.api.asociarProductosATienda(gym.value, producto.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert(llegada.message)
+    }); //SON IDS, SI DA PROBLEMAS ES ESO
   }
 
   //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (asocia un inventario a un gym y le da un costo)
@@ -364,7 +483,10 @@ agregarNuevoInventario(){
     const equipo = document.getElementById('confGymPInventarioEQUIPO') as HTMLInputElement;
     const costo = document.getElementById('confGymPInventarioCOSTO') as HTMLInputElement;
 
-    this.api.asociarInventario(gym.value, equipo.value, costo.value)
+    this.api.asociarInventario(gym.value, equipo.value, costo.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert(llegada.message)
+    })
   }
 
   //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (crea una clase y la agrega a la db)
@@ -378,7 +500,10 @@ agregarNuevoInventario(){
     const horaInicio = document.getElementById('confGymPCrearHORAINICIO') as HTMLInputElement;
     const horaFinalizacion = document.getElementById('confGymPCrearHORAFINAL') as HTMLInputElement;
 
-    this.api.crearClase(tipo.value, instructor.value, grupalOno.value, capacidad.value, fecha.value, horaInicio.value, horaFinalizacion.value)
+    this.api.crearClase(tipo.value, instructor.value, grupalOno.value, capacidad.value, fecha.value, horaInicio.value, horaFinalizacion.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert(llegada.message)
+    })
   }
 
   //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (copia un calendario y sus actividades desde una fecha hasta otra)
@@ -387,7 +512,10 @@ agregarNuevoInventario(){
     const fFinal = document.getElementById('copCalenPDIA2') as HTMLInputElement;
     const aMover = document.getElementById('copCalenPMOVIMIENTO') as HTMLInputElement;
 
-    this.api.copiarCalendarioActividades(fInicio.value, fFinal.value, aMover.value);// AQUI LOS PARAMETRO SNO ESTOY SEGURO QUE FUNCIONEN, VERIFICAR QUE LOS PARAMETROS QUE RECIVE SON LOS QUE NECESITA
+    this.api.copiarCalendarioActividades(fInicio.value, fFinal.value, aMover.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert(llegada.message)
+    });// AQUI LOS PARAMETRO SNO ESTOY SEGURO QUE FUNCIONEN, VERIFICAR QUE LOS PARAMETROS QUE RECIVE SON LOS QUE NECESITA
   }
 
   //Función encargada de tomar los componentes mostrados en la pagina y enviarlos al api para llevar a cabo la función necesaria con los datos proporcionados (copia los datos correspondientes a un gimnasio y los añade a uno completamente nuevo)
@@ -395,7 +523,10 @@ agregarNuevoInventario(){
     const aCopiar = document.getElementById('copGympSELECT') as HTMLInputElement;
     const aPegar = document.getElementById('copGympNUEVO') as HTMLInputElement;
 
-    this.api.copiarGimnasio(aPegar.value, aCopiar.value); //a.copiar tiene que ser el id del gym que se esta copiando
+    this.api.copiarGimnasio(aPegar.value, aCopiar.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert(llegada.message)
+    }); //a.copiar tiene que ser el id del gym que se esta copiando
   }
 
 }//bracket que cierras

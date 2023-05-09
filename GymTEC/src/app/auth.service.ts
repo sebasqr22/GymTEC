@@ -43,11 +43,6 @@ export class AuthService {
   //   })
   // }
 
-  verPuestos(descripcionPuesto:string){
-    this.api.call_VerPuestos(descripcionPuesto).subscribe((data)=>{
-      console.log(data);
-    })
-  }
 
   agregarPuesto(descripcionPuesto:string){
     this.api.call_AgregarPuesto(descripcionPuesto).subscribe((data)=>{

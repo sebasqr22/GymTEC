@@ -34,8 +34,8 @@ export class GetApiService {
     return this.http.get(`https://localhost:7194/usuarios/admin/VerTratamientos`);
   }
 
-  call_VerPuestos(descripcionPuesto:string){
-    return this.http.get(`https://localhost:7194/usuarios/admin/VerPuestos?descripcionPuesto=${descripcionPuesto}`);
+  call_VerPuestos(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerPuestos`);
   }
 
   call_AgregarPuesto(descripcionPuesto:string){
@@ -182,7 +182,7 @@ export class GetApiService {
 
   // antes decia VerSericios, fue un typo
   verServicios(){
-    return this.http.post(`https://localhost:7194/usuarios/admin/VerServicios`, {})
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerServicios`)
   }
 
   agregarServicios(descripcion:string){

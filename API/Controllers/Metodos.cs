@@ -1301,9 +1301,9 @@ namespace Metodos{
           try {              
               // VERIFICACION DE DATOS
               if (string.IsNullOrEmpty(cedula) || string.IsNullOrEmpty(nombre)|| string.IsNullOrEmpty(apellido1) || string.IsNullOrEmpty(apellido2) || string.IsNullOrEmpty(fechaNacimiento)|| string.IsNullOrEmpty(peso) || string.IsNullOrEmpty(direccion) || string.IsNullOrEmpty(correoElectronico)|| string.IsNullOrEmpty(contrasena)) {
-                  return new { message = "error" };}
-              if (cedula.Length != 9 || cedula[0] == '0' || !correoElectronico.Contains("@") || !correoElectronico.Contains(".")) {
-                  return new { message = "error" };}
+                  return new { message = "error1" };}
+              if (cedula.Length < 9 || cedula[0] == '0' || !correoElectronico.Contains("@") || !correoElectronico.Contains(".")) {
+                  return new { message = cedula.Length };}
 
               // SEPARAR FECHA DE NACIMIENTO
               string[] fechaNSeparada = fechaNacimiento.Split("-");
@@ -1335,7 +1335,7 @@ namespace Metodos{
 
           } catch (Exception e) {
               Console.WriteLine(e);
-              return new { message = "error" };
+              return new { message = fechaNacimiento };
           }
       }
 
