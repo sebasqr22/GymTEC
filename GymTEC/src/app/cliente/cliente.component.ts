@@ -132,6 +132,44 @@ export class ClienteComponent implements OnInit{
       alert(llegada.message)
     })
   }
+
+  cargarDatos(data:any){
+    const cargar = document.getElementById("") as HTMLInputElement;
+    cargar.value = data
+
+  }
+
+  porSucursal(){
+    const info = document.getElementById("busquedasede") as HTMLInputElement;
+    this.api.buscarClasePorSucursal(info.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert("Ver Consola")
+      console.log(llegada)
+      //this.cargarDatos(llegada)
+    })
+  }
+
+  porPeriodo(){
+    const info2 = document.getElementById("busquedafechaInicio") as HTMLInputElement;
+    const info3 = document.getElementById("busquedafechaFinaliza") as HTMLInputElement;
+
+    this.api.buscarClasePorPeriodos(info2.value, info3.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert("Ver Consola")
+      console.log(llegada)
+    })
+  }
+
+  porTipoClase(){
+    const info2 = document.getElementById("busquedatipoDeClase") as HTMLInputElement;
+
+    this.api.buscarClasePorServicio(info2.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert("Ver Consola")
+      console.log(llegada)
+    })
+  }
+
   logout(){
     alert("logout")
   }

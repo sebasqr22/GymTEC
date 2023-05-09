@@ -229,17 +229,17 @@ export class GetApiService {
 
   //BuscarClasePorSucursal(string Codigo_sucursal){
   buscarClasePorSucursal(codigoSucursal:string){
-      return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClasePorSucursal?codigoSucursal=${codigoSucursal}`, {})
+      return this.http.get(`https://localhost:7194/usuarios/cliente/BuscarClasePorSucursal?Codigo_sucursal=${codigoSucursal}`, {})
   }
 
   //BuscarClasePorServicio(string Id_servicio){
   buscarClasePorServicio(Id_servicio:string){
-      return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClasePorServicio?Id_servicio=${Id_servicio}`, {})
+      return this.http.get(`https://localhost:7194/usuarios/cliente/BuscarClasePorServicio?Id_servicio=${Id_servicio}`, {})
   }
 
   //BuscarClasePorPeriodos(string fechaInicio, string fecha_fin){
   buscarClasePorPeriodos(fechaInicio:string, fecha_fin:string){
-    return this.http.get(`https://localhost:7194/usuarios/admin/BuscarClasePorPeriodos?fechaInicio=${fechaInicio}&fecha_fin=${fecha_fin}`, {})
+    return this.http.get(`https://localhost:7194/usuarios/cliente/BuscarClasePorPeriodos?fechaInicio=${fechaInicio}&fecha_fin=${fecha_fin}`, {})
   }
 
   verTotalidadInventario(){

@@ -169,11 +169,11 @@
                 <label for="busquedafechaFinaliza">Fecha de Finalización</label>
               </div>
               <div class="col-sm-6">
-                <select class="form-control form-control-user" id="busquedasede"></select>
+                <input type="text" class="form-control form-control-user" id="busquedasede">
                 <label for="busquedasede">Sede</label>
               </div>
               <div class="col-sm-6">
-                <select class="form-control form-control-user" id="busquedatipoDeClase"></select>
+                <input type="text" class="form-control form-control-user" id="busquedatipoDeClase">
                 <label for="busquedatipoDeClase">Tipo de clase</label>
               </div>
               <div class="col-sm">
@@ -185,8 +185,16 @@
 
             </div>
 
-            <a class="btn btn-outline-primary btn-user btn-block" (click)="buscarClases()">
-              Buscar
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="porSucursal()">
+              Buscar por sucursal
+            </a>
+
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="porPeriodo()">
+              Buscar por periodo
+            </a>
+
+            <a class="btn btn-outline-primary btn-user btn-block" (click)="porTipoClase()">
+              Buscar por tipo de clase
             </a>
 
             <br><br>
