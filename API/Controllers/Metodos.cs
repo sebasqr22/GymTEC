@@ -19,6 +19,45 @@ namespace Metodos{
       private DatabaseHandler DB_Handler = new DatabaseHandler();  
       AuxiliarFunctions aux = new AuxiliarFunctions();
 
+      [HttpGet]
+      [Route("admin/VerClientes")]
+      public dynamic VerClientes() {
+        try {
+          DB_Handler.ConectarServer();
+          DB_Handler.AbrirConexion();
+          string query = "SELECT * FROM CLIENTE";
+          using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+            comando.ExecuteNonQuery();
+            using (SqlDataReader reader = comando.ExecuteReader()) {
+              if (reader.HasRows) {
+                 var clientes = new List<dynamic>();
+                 while (reader.Read()) {
+                  clientes.Add(new {
+                    Cedula = reader.GetInt32(0),
+                    Nombre = reader.GetString(1),
+                    Apellido1 = reader.GetString(2),
+                    Apellido2 = reader.GetString(3),
+                    Dia_nacimiento = reader.GetString(4),
+                    Mes_nacimiento = reader.GetString(5),
+                    Ano_nacimiento = reader.GetString(6),
+                    Peso = reader.GetDouble(7),
+                    Direccion = reader.GetString(8),
+                    Correo = reader.GetString(9),
+                    Contrasena = reader.GetString(10)
+                  });
+                 }
+                 DB_Handler.CerrarConexion();
+                 return new JsonResult(clientes);
+              } else {
+                return new { message = "no hay clientes" };
+              }
+            }
+          }
+        } catch (Exception e) {
+          Console.WriteLine(e);
+          return new { message = "error" };
+        }
+      }
       //Función utilizada para ver los datos correspondientes a un cliente en especifico
       [HttpPost]
       [Route("admin/VerClienteEspecifico")]
