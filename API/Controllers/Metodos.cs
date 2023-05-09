@@ -1676,31 +1676,49 @@ namespace Metodos{
 
       //Función utilizada para realizar el login de un cliente
       [HttpPost]
-      [Route("login/LoginCliente")]
-      public dynamic LoginCliente(string cedula, string contrasena){
+      [Route("login/Login")]
+      public dynamic Login(string cedula, string contrasena){
         try{
           // VERIFICACION DE DATOS
           if (string.IsNullOrEmpty(cedula) || string.IsNullOrEmpty(contrasena)) {
-              return new { message = "error" };}
-          if (cedula.Length != 9 || cedula[0] == '0') {
-              return new { message = "error" };}
+              return new { message = "error: valores nulos" };}
 
           // VERIFICAR QUE NO SEA UN EMPLEADO
           dynamic esEmpleado = aux.VerificarExistenciaEmpleado_aux(cedula);
           if (esEmpleado) {
-             DB_Handler.ConectarServer();
+            DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
             string querySelect = "SELECT * FROM EMPLEADO WHERE Cedula = @Cedula AND Contrasena = @Contrasena";
             using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
                 comando.Parameters.AddWithValue("@Contrasena", aux.EncriptarContrasenaMD5_aux(contrasena));
+                comando.ExecuteNonQuery();
                 SqlDataReader reader = comando.ExecuteReader();
                 if (reader.HasRows) {
+                    var empleado = new List<dynamic>();
+                    while (reader.Read()) {
+                      empleado.Add(new {
+                        Cedula = reader.GetInt32(0),
+                        Nombre = reader.GetString(1),
+                        Apellido1 = reader.GetString(2),
+                        Apellido2 = reader.GetString(3),
+                        Distrito = reader.GetString(4),
+                        Canton = reader.GetString(5),
+                        Provincia = reader.GetString(6),
+                        Correo = reader.GetString(7),
+                        Contrasena = reader.GetString(8),
+                        Salario = reader.GetDouble(9),
+                        Id_puesto = reader.GetInt32(10),
+                        Id_planilla = reader.GetInt32(11),
+                        Codigo_suc = reader.GetInt32(12),
+                        Tipo = "admin"
+                      });
+                    }
                     DB_Handler.CerrarConexion();
-                    return new { message = "empleado" };
+                    return new JsonResult(empleado);
                 } else {
                     DB_Handler.CerrarConexion();
-                    return new { message = "error" };
+                    return new { message = "no existe ese usuario" };
                 }
             }
           }
@@ -1712,13 +1730,31 @@ namespace Metodos{
             using (SqlCommand comando = new SqlCommand(querySelect2, DB_Handler.conectarDB)) {
                 comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
                 comando.Parameters.AddWithValue("@Contrasena", aux.EncriptarContrasenaMD5_aux(contrasena));
+                comando.ExecuteNonQuery();
                 SqlDataReader reader = comando.ExecuteReader();
                 if (reader.HasRows) {
+                    var cliente = new List<dynamic>();
+                    while (reader.Read()) {
+                      cliente.Add(new {
+                        Cedula = reader.GetInt32(0),
+                        Nombre = reader.GetString(1),
+                        Apellido1 = reader.GetString(2),
+                        Apellido2 = reader.GetString(3),
+                        Dia_nacimiento = reader.GetString(4),
+                        Mes_nacimiento = reader.GetString(5),
+                        Ano_nacimiento = reader.GetString(6),
+                        Peso = reader.GetDouble(7),
+                        Direccion = reader.GetString(8),
+                        Correo = reader.GetString(9),
+                        Contrasena = reader.GetString(10),
+                        Tipo = "cliente"
+                      });
+                    }
                     DB_Handler.CerrarConexion();
-                    return new { message = "cliente" };
+                    return new JsonResult(cliente);
                 } else {
                     DB_Handler.CerrarConexion();
-                    return new { message = "error" };
+                    return new { message = "no existe ese usuario" };
                 }
             }
           }
