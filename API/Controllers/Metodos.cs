@@ -133,7 +133,7 @@ namespace Metodos{
           DB_Handler.AbrirConexion();
 
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
-            comando.Parameters.AddWithValue("@Codigo_sucursal", Int64.Parse(Codigo_sucursal));
+            comando.Parameters.AddWithValue("@codigoSucursal", Int64.Parse(Codigo_sucursal));
             comando.Parameters.AddWithValue("@idServicio", Int64.Parse(idServicio));
             comando.ExecuteNonQuery();
           }
@@ -491,15 +491,14 @@ namespace Metodos{
 
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
-            string queryDelete = "DELETE FROM TRATAMIENTO_SPA WHERE Codigo_sucursal = @Codigo";
+            string queryDelete = "DELETE FROM TRATAMIENTO_SPA WHERE Codigo_sucursal = @Codigo AND Id_tratamiento = @Trata";
             using (SqlCommand comando2 = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
                 comando2.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
+                comando2.Parameters.AddWithValue("@Trata", idTratamiento);
                 comando2.ExecuteNonQuery();
-                Console.WriteLine("Tratamiento eliminado exitosamente");
                 DB_Handler.CerrarConexion();
+                return new { message = "ok" };
             }
-
-            return aux.VerTratamientosSPA_aux();  // JSON
                   
         }catch(Exception e){
             Console.WriteLine(e);
@@ -550,20 +549,19 @@ namespace Metodos{
       //Función utilizada para registrar clientes a una clase ya existente
       [HttpPost]
       [Route("cliente/RegistrarClienteEnClase")]
-      public dynamic RegistrarClienteEnClase(string cedulaClient, string Num_clase, string Id_servicio, string Fecha, string Hora_inicio,string Modalidad, string Cedula_instructor){
+      public dynamic RegistrarClienteEnClase(string cedulaClient, string Num_clase){
         try{
           // VERIFICAR EXISTENCIA DE CLASE
-          dynamic existeClase = aux.VerificarExistenciaClase_aux(Id_servicio, Cedula_instructor, Modalidad, Fecha, Hora_inicio);
+          dynamic existeClase = aux.VerificarExistenciaClasePorNum_aux(Num_clase);
           if(!existeClase){
             return new { message = "No existe esta clase en la BD" };
           }
           // REGISTRAR CLIENTE EN CLASE
-          string queryInsert = "INSERT INTO ASISTENCIA_CLASE VALUES (@Num_clase, @Id_servicio, @Cedula_cliente)";
+          string queryInsert = "INSERT INTO ASISTENCIA_CLASE VALUES (@Cedula_cliente, @Num_clase)";
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           using (SqlCommand comando = new SqlCommand(queryInsert, DB_Handler.conectarDB)) {
             comando.Parameters.AddWithValue("@Num_clase", Num_clase);
-            comando.Parameters.AddWithValue("@Id_servicio", Id_servicio);
             comando.Parameters.AddWithValue("@Cedula_cliente", cedulaClient);
             comando.ExecuteNonQuery();
           }
@@ -598,7 +596,7 @@ namespace Metodos{
                           Hora_inicio = reader.GetTimeSpan(1),
                           Hora_fin = reader.GetTimeSpan(2),
                           Instructor = reader.GetString(3),
-                          Cupos_disponibles = reader.GetInt32(4)
+                          Cupos = reader.GetInt32(4)
                       });
                   }
                   DB_Handler.CerrarConexion();
@@ -638,7 +636,7 @@ namespace Metodos{
                         Hora_inicio = reader.GetTimeSpan(1),
                         Hora_fin = reader.GetTimeSpan(2),
                         Empleado = reader.GetString(3),
-                        Capacidad = reader.GetInt32(4)
+                        Cupos = reader.GetInt32(4)
                     });
                 }
                 DB_Handler.CerrarConexion();
@@ -662,8 +660,8 @@ namespace Metodos{
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
           string query = @"SELECT Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre + ' ' + Apellido1 + ' ' + Apellido2 AS Instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos_disponibles
-                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula JOIN SUCURSAL ON Codigo_suc = SUCURSAL.Codigo_sucursal
-                           WHERE @fecha_inicio <= Fecha AND Fecha <= fecha_fin
+                           FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula
+                           WHERE @fecha_inicio <= Fecha AND Fecha <= @fecha_fin
                            GROUP BY Fecha, Hora_inicio, Hora_fin, EMPLEADO.Nombre, Apellido1, Apellido2, Capacidad";
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
             comando.Parameters.AddWithValue("@fecha_inicio", DateTime.ParseExact(fechaInicio, "yyyy-MM-dd", CultureInfo.InvariantCulture));
@@ -678,7 +676,7 @@ namespace Metodos{
                         Hora_inicio = reader.GetTimeSpan(1),
                         Hora_fin = reader.GetTimeSpan(2),
                         Empleado = reader.GetString(3),
-                        Capacidad = reader.GetInt32(4)
+                        Cupos = reader.GetInt32(4)
                     });
                 }
                 DB_Handler.CerrarConexion();
@@ -688,7 +686,8 @@ namespace Metodos{
           DB_Handler.CerrarConexion();
           return new { message = "No hay clases en este rango de fechas" };
 
-        }catch{
+        }catch (Exception e) {
+          Console.WriteLine(e);
           return new { message = "error" };
         }
       }
@@ -844,9 +843,9 @@ namespace Metodos{
         try {
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string query = @"SELECT CLASE.Num_clase, CLASE.Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Cedula_instructor, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos
-                          FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase
-                          GROUP BY CLASE.Num_clase, CLASE.Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Cedula_instructor, Capacidad
+          string query = @"SELECT CLASE.Num_clase, CLASE.Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Cedula_instructor, Codigo_suc, Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) AS Cupos
+                          FROM CLASE LEFT JOIN ASISTENCIA_CLASE ON CLASE.Num_clase = ASISTENCIA_CLASE.Num_clase JOIN EMPLEADO ON Cedula_instructor = Cedula
+                          GROUP BY CLASE.Num_clase, CLASE.Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Cedula_instructor, Codigo_suc, Capacidad
                           HAVING Capacidad - COUNT(ASISTENCIA_CLASE.Num_clase) > 0";
           using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
             comando.ExecuteNonQuery();
@@ -862,7 +861,8 @@ namespace Metodos{
                     Hora_fin = reader.GetTimeSpan(4),
                     Modalidad = reader.GetString(5),
                     Cedula_instructor = reader.GetInt32(6),
-                    Cupos = reader.GetInt32(7)
+                    Codigo_sucursal = reader.GetInt32(7),
+                    Cupos = reader.GetInt32(8)
                   });
                 }
                 DB_Handler.CerrarConexion();
@@ -970,11 +970,6 @@ namespace Metodos{
             if(string.IsNullOrEmpty(idServicio) || string.IsNullOrEmpty(modalidad) || string.IsNullOrEmpty(fecha) || string.IsNullOrEmpty(horaInicio) || string.IsNullOrEmpty(horaFinal) || string.IsNullOrEmpty(capacidad) || string.IsNullOrEmpty(cedulaInstructor)){
               return new { message = "error" };}
 
-            // INSERTAR CLASE EN LA BASE DE DATOS
-            dynamic existeClase = aux.VerificarExistenciaClase_aux(idServicio, cedulaInstructor, modalidad, fecha, horaInicio);
-            if(existeClase){
-              return new { message = "Ya existe esta clase en la BD" };
-            }
             DB_Handler.ConectarServer();
             DB_Handler.AbrirConexion();
             string queryInsert = "INSERT INTO CLASE VALUES (@Id_servicio, @Fecha, @Hora_inicio, @Hora_fin, @Modalidad, @Capacidad, @Cedula_instructor)";
@@ -1073,7 +1068,7 @@ namespace Metodos{
 
           DB_Handler.ConectarServer();
           DB_Handler.AbrirConexion();
-          string queryDelete = "DELETE FROM VENTA_PRODUCTO WHERE Codigo_barras = @Codigo_barras";
+          string queryDelete = "DELETE FROM VENTA_PRODUCTO WHERE Codigo_producto = @Codigo_barras";
           using (SqlCommand comando = new SqlCommand(queryDelete, DB_Handler.conectarDB)) {
             comando.Parameters.AddWithValue("@Codigo_barras", Int64.Parse(codigoBarras));
             comando.ExecuteNonQuery();
@@ -1636,7 +1631,7 @@ namespace Metodos{
 
           } catch (Exception e) {
               Console.WriteLine(e);
-              return new { message = fechaNacimiento };
+              return new { message = "error" };
           }
       }
 

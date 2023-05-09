@@ -8,7 +8,7 @@
 
 CREATE DATABASE [GymTEC-DB];
 
-USE [GymTEC-DB];
+USE [GymTEC-DB]
 
 -- Tabla EMPLEADO
 -- Informacion de los empleados del gimnasio.
@@ -189,16 +189,15 @@ CREATE TABLE CLASE (
 	Modalidad NVARCHAR(50),
 	Capacidad INT,
 	Cedula_instructor INT NOT NULL,
-	PRIMARY KEY (Id_servicio, Num_clase)
+	PRIMARY KEY (Num_clase)
 );
 
 -- Tabla ASISTENCIA_CLASE
 -- Relaciona a los clientes con la clase a la que se registran.
 CREATE TABLE ASISTENCIA_CLASE (
 	Cedula_cliente INT NOT NULL,
-	Id_servicio INT NOT NULL,
 	Num_clase INT NOT NULL,
-	PRIMARY KEY (Cedula_cliente, Id_servicio, Num_clase)
+	PRIMARY KEY (Cedula_cliente, Num_clase)
 );
 
 ALTER TABLE EMPLEADO
@@ -259,4 +258,4 @@ ALTER TABLE ASISTENCIA_CLASE
 ADD CONSTRAINT FK_Assist_Client FOREIGN KEY (Cedula_cliente) REFERENCES CLIENTE(Cedula);
 
 ALTER TABLE ASISTENCIA_CLASE
-ADD CONSTRAINT FK_Assist_Class FOREIGN KEY (Id_servicio, Num_clase) REFERENCES CLASE(Id_servicio, Num_clase);
+ADD CONSTRAINT FK_Assist_Class FOREIGN KEY (Num_clase) REFERENCES CLASE(Num_clase);

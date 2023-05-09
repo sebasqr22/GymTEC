@@ -106,20 +106,22 @@ namespace funcionesAuxiliares{
                 DB_Handler.AbrirConexion();
                 string querySelect = "SELECT * FROM CLIENTE WHERE Cedula = @Cedula";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Cedula", Int64.Parse(cedula));
+                    comando.ExecuteNonQuery();
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             var cliente = new List<dynamic>();
                             while (reader.Read()) {
                                 cliente.Add(new {
-                                    Cedula = reader.GetString(0),
+                                    Cedula = reader.GetInt32(0),
                                     Nombre = reader.GetString(1),
                                     Apellido1 = reader.GetString(2),
                                     Apellido2 = reader.GetString(3),
-                                    Dia_nacimiento = reader.GetDateTime(4),
-                                    Mes_nacimiento = reader.GetTimeSpan(5),
-                                    Ano_nacimiento = reader.GetTimeSpan(6),
-                                    Peso = reader.GetInt32(7),
-                                    Direccion = reader.GetInt32(8),
+                                    Dia_nacimiento = reader.GetString(4),
+                                    Mes_nacimiento = reader.GetString(5),
+                                    Ano_nacimiento = reader.GetString(6),
+                                    Peso = reader.GetDouble(7),
+                                    Direccion = reader.GetString(8),
                                     Correo = reader.GetString(9),
                                     Contrasena = reader.GetString(10)
                                 });
@@ -280,7 +282,8 @@ namespace funcionesAuxiliares{
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM CLASE";
+                string querySelect = @"SELECT Num_clase, Id_servicio, Fecha, Hora_inicio, Hora_fin, Modalidad, Capacidad, Cedula_instructor, Codigo_suc
+                                    FROM CLASE JOIN EMPLEADO ON Cedula_instructor = Cedula";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) { 
@@ -293,7 +296,9 @@ namespace funcionesAuxiliares{
                                     HoraInicio = reader.GetTimeSpan(3),
                                     HoraFin = reader.GetTimeSpan(4),
                                     Modalidad = reader.GetString(5),
-                                    Cedula_instructor = reader.GetInt32(6)
+                                    Capacidad = reader.GetInt32(6),
+                                    Cedula_instructor = reader.GetInt32(7),
+                                    Codigo_sucursal = reader.GetInt32(8)
                                 });
                             }
                             DB_Handler.CerrarConexion();
@@ -372,17 +377,14 @@ namespace funcionesAuxiliares{
             }
         }
 
-        public dynamic VerificarExistenciaClase_aux(string Id_servicio, string cedulaInstructor, string modalidad, string fecha, string horaInicio){            
+        public dynamic VerificarExistenciaClasePorNum_aux(string Num_clase){            
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM CLASE WHERE Id_servicio = @Id_servicio AND Cedula_instructor = @Cedula_instructor AND Modalidad = @Modalidad AND Fecha = @Fecha AND Hora_inicio = @Hora_inicio";
+                string querySelect = "SELECT * FROM CLASE WHERE Num_clase = @Num";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Id_servicio", Int64.Parse(Id_servicio));
-                    comando.Parameters.AddWithValue("@Cedula_instructor", Int64.Parse(cedulaInstructor));
-                    comando.Parameters.AddWithValue("@Modalidad", modalidad);
-                    comando.Parameters.AddWithValue("@Fecha", DateTime.ParseExact(fecha, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
-                    comando.Parameters.AddWithValue("@Hora_inicio", TimeSpan.ParseExact(horaInicio, @"hh\:mm\:ss", System.Globalization.CultureInfo.InvariantCulture));
+                    comando.Parameters.AddWithValue("@Num", Int64.Parse(Num_clase));
+                    comando.ExecuteNonQuery();
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
@@ -440,6 +442,7 @@ namespace funcionesAuxiliares{
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
                     comando.Parameters.AddWithValue("@Codigo", Int64.Parse(codigo_sucursal));
                     comando.Parameters.AddWithValue("@Tratamiento", id_tratamiento);
+                    comando.ExecuteNonQuery();
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
