@@ -487,6 +487,29 @@ namespace funcionesAuxiliares{
             }
         }
 
+        public dynamic verExistenciaTipoEquipoPorDesc(string descripcion) {
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM TIPO_EQUIPO WHERE Descripcion = @Desc";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Desc", descripcion);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+            
+                DB_Handler.CerrarConexion();
+                return false;
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaTipoEquipo" };
+            }
+        }
+
         public dynamic VerificarExistenciaTipoEquipo_aux(string Identificador){
             try{
                 DB_Handler.ConectarServer();
@@ -534,6 +557,30 @@ namespace funcionesAuxiliares{
             }
         }
 
+        public dynamic verExistenciaPlanillaPorDesc(string descripcion) {
+            try{
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM PLANILLA WHERE Descripcion = @Desc";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Desc", descripcion);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+            
+                DB_Handler.CerrarConexion();
+                return false;
+
+            }catch(Exception e){
+                Console.WriteLine(e);
+                return new { message = "error en VerificarExistenciaPlanilla_aux" };
+            }
+        }
+
         public dynamic VerificarExistenciaPlanilla_aux(string id_planilla){
             try{
                 DB_Handler.ConectarServer();
@@ -557,15 +604,40 @@ namespace funcionesAuxiliares{
                 return new { message = "error en VerificarExistenciaPlanilla_aux" };
             }
         }
+
+        public dynamic VerExistenciaTratamientoPorDesc_aux(string descripcion) {
+            try {
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string query = "SELECT * FROM TRATAMIENTO WHERE Descripcion = @Desc";
+                using (SqlCommand comando = new SqlCommand(query, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Desc", descripcion);
+                    comando.ExecuteNonQuery();
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                        else {
+                            DB_Handler.CerrarConexion();
+                            return false;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e);
+                return new { message = "error" };
+            }
+        }
         
-        public dynamic VerificarExistenciaTratamiento_aux(string descripcionTratamiento)
+        public dynamic VerificarExistenciaTratamiento_aux(string id_tratamiento)
         {
             try{
                 DB_Handler.ConectarServer();
                 DB_Handler.AbrirConexion();
-                string querySelect = "SELECT * FROM TRATAMIENTO WHERE Descripcion = @Nombre";
+                string querySelect = "SELECT * FROM TRATAMIENTO WHERE Identificador = @ID";
                 using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
-                    comando.Parameters.AddWithValue("@Nombre", descripcionTratamiento);
+                    comando.Parameters.AddWithValue("@ID", Int64.Parse(id_tratamiento));
                     using (SqlDataReader reader = comando.ExecuteReader()) {
                         if (reader.HasRows) {
                             DB_Handler.CerrarConexion();
@@ -689,6 +761,27 @@ namespace funcionesAuxiliares{
                 Console.WriteLine(e);
                 return new { message = "error en VerPuestos_aux" };
             }
+        }
+
+        public dynamic verExistenciaPuestoPorDesc(string descripcion) {
+            try{ 
+                DB_Handler.ConectarServer();
+                DB_Handler.AbrirConexion();
+                string querySelect = "SELECT * FROM PUESTO WHERE Descripcion = @Desc";
+                using (SqlCommand comando = new SqlCommand(querySelect, DB_Handler.conectarDB)) {
+                    comando.Parameters.AddWithValue("@Desc", descripcion);
+                    using (SqlDataReader reader = comando.ExecuteReader()) {
+                        if (reader.HasRows) {
+                            DB_Handler.CerrarConexion();
+                            return true;
+                        }
+                    }
+                }
+                return false;
+                }catch(Exception e){
+                    Console.WriteLine(e);
+                    return new { message = "error en VerificarExistenciaPuesto_aux" };
+                }
         }
         
         public dynamic VerificarExistenciaPuesto_aux(string id_puesto){

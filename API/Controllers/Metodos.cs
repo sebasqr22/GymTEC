@@ -743,7 +743,7 @@ namespace Metodos{
           if(existeInventarioSucursal){
             string queryInsert2 = "DELETE FROM INVENTARIO_EN_SUCURSAL WHERE Num_serie_maquina = @Numero_serie";
             using (SqlCommand comando = new SqlCommand(queryInsert2, DB_Handler.conectarDB)) {
-              comando.Parameters.AddWithValue("@Num_serie_maquina", Int64.Parse(Numero_serie));
+              comando.Parameters.AddWithValue("@Numero_serie", Int64.Parse(Numero_serie));
               comando.ExecuteNonQuery();
             }
           }
@@ -1161,7 +1161,7 @@ namespace Metodos{
               return new { message = "error" };}
 
             // INSERTAR TIPO DE EQUIPO EN LA BASE DE DATOS
-            dynamic existeTipoEquipo = aux.VerificarExistenciaTipoEquipo_aux(descripcion);
+            dynamic existeTipoEquipo = aux.verExistenciaTipoEquipoPorDesc(descripcion);
             if(existeTipoEquipo){
               return new { message = "Ya existe este tipo de equipo en la BD" };
             }
@@ -1408,7 +1408,7 @@ namespace Metodos{
                   return new { message = "error" };}
 
               // INSERTAR PLANILLA EN LA BASE DE DATOS
-              dynamic existePlanilla = aux.VerificarExistenciaPlanilla_aux(descripcionPlanilla);
+              dynamic existePlanilla = aux.verExistenciaPlanillaPorDesc(descripcionPlanilla);
               if(existePlanilla){
                   return new { message = "Ya existe esta planilla en la BD" };
               }
@@ -1549,7 +1549,7 @@ namespace Metodos{
               return new { message = "error" };}
 
           // INSERTAR TRATAMIENTO EN LA BASE DE DATOS
-          dynamic existeTratamiento = aux.VerificarExistenciaTratamiento_aux(descripcionTratamiento);
+          dynamic existeTratamiento = aux.VerExistenciaTratamientoPorDesc_aux(descripcionTratamiento);
             if (existeTratamiento) {
                 return new { message = "Tratamiento ya existe en la BD. Error" };}
 
