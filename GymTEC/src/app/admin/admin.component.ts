@@ -188,6 +188,8 @@ export class AdminComponent implements OnInit{
   }
   //a
   buscarDeGestionInventario(){
+    const selectElement = document.getElementById("gestInvetPMAQUINA") as HTMLSelectElement;
+    selectElement.innerHTML = ""
     const sucursal = document.getElementById("gestInvetPGYM") as HTMLInputElement;
     this.api.verInventario(sucursal.value).subscribe((data) => {
       const llegada = JSON.parse(JSON.stringify(data));
@@ -209,7 +211,51 @@ export class AdminComponent implements OnInit{
   }
 
   buscarDeGestionProductos(){
-    const sucursal = document.getElementById("gestInvetPGYM") as HTMLInputElement;
+    const selectElement = document.getElementById("gestProductPPRODUCTO") as HTMLSelectElement;
+    selectElement.innerHTML = ""
+    const sucursal = document.getElementById("gestProductPGYM") as HTMLInputElement;
+    this.api.verProductos(sucursal.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      this.opcionesGlobales.productos = llegada;
+
+      const tmp = document.getElementById("gestProductPPRODUCTO") as HTMLInputElement
+
+      for(const op in llegada){
+        const aux = llegada[op];
+        const opcion = document.createElement('option');
+        opcion.value = aux.codigo_barras;
+        opcion.textContent = aux.codigo_barras;
+        tmp.appendChild(opcion);
+      }
+      
+      this.aplicarInfoGestionproductos();
+
+    })
+  }
+
+  aplicarInfoGestionproductos(){
+    const selector = document.getElementById("gestProductPPRODUCTO") as HTMLInputElement;
+    const nombre = document.getElementById("gestProductPNOMBRE") as HTMLInputElement;
+    const codigo = document.getElementById("gestProductPCODIGO") as HTMLInputElement;
+    const descripcion = document.getElementById("gestProductPDESCRIPCION") as HTMLInputElement;
+    const costo = document.getElementById("gestProductPCOSTO") as HTMLInputElement;
+
+    const info = this.opcionesGlobales.productos;
+    for(const op in info){
+      //@ts-ignore
+      if(selector.value == info[op].codigo_barras){
+        //@ts-ignore
+        nombre.value = info[op].nombre;
+        //@ts-ignore
+        //@ts-ignore
+        codigo.value = info[op].codigo_barras;
+        //@ts-ignore
+        descripcion.value = info[op].descripcion;
+        //@ts-ignore
+        costo.value = info[op].costo;
+        
+      }
+    }
   }
 
   cambiarEnGestionInventario(){
@@ -471,6 +517,39 @@ export class AdminComponent implements OnInit{
     this.api.verSucursales().subscribe((data) => {
       const llegada = JSON.parse(JSON.stringify(data));
       const tmp = document.getElementById("gestSucTiendaSEDEELIMINAR") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("copGympSELECT") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].codigo_sucursal;
+        opcion.textContent = llegada[i].codigo_sucursal;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.verServicios().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("confGymPCrearTIPO") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].identificador;
+        opcion.textContent = llegada[i].identificador;
+        tmp.appendChild(opcion);
+      }
+    })
+
+    this.api.verSucursales().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      const tmp = document.getElementById("copGympNUEVO") as HTMLInputElement;
       for(const i in llegada){
         const opcion = document.createElement('option');
         opcion.value = llegada[i].codigo_sucursal;

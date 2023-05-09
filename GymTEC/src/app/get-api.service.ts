@@ -14,7 +14,7 @@ export class GetApiService {
   }
 
   call_LoginCliente(cedula:string, contrasena:string){
-    return this.http.post(`https://localhost:7194/usuarios/login/LoginCliente?cedula=${cedula}&contrasena=${contrasena}`, {});
+    return this.http.post(`https://localhost:7194/usuarios/login/Login?cedula=${cedula}&contrasena=${contrasena}`, {});
   }
 
 
@@ -107,7 +107,7 @@ export class GetApiService {
   }
 
   crearClase(Id_servicio:string, cedulaInstructor:string, modalidad:string, capacidad:string, fecha:string, horaInicio:string, horaFinal:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/CrearClase?servicioClase=${Id_servicio}&cedulaInstructor=${cedulaInstructor}&modalidad=${modalidad}&capacidad=${capacidad}&fecha=${fecha}&horaInicio=${horaInicio}&horaFinal=${horaFinal}`, {})
+    return this.http.post(`https://localhost:7194/usuarios/admin/CrearClase?idServicio=${Id_servicio}&cedulaInstructor=${cedulaInstructor}&modalidad=${modalidad}&capacidad=${capacidad}&fecha=${fecha}&horaInicio=${horaInicio}&horaFinal=${horaFinal}`, {})
   }
 
   eliminarClase(Id_servicio:string, cedulaInstructor:string, modalidad:string, fecha:string, horaInicio:string){
@@ -116,6 +116,10 @@ export class GetApiService {
 
   verClases(){
     return this.http.get(`https://localhost:7194/usuarios/admin/VerClases`);
+  }
+
+  verClasesConCupo(){
+    return this.http.get(`https://localhost:7194/usuarios/admin/VerClasesConCupo`);
   }
 
   //AgregarInventario(string numSerie, string marca, string idTipoEquipo){
@@ -172,7 +176,7 @@ export class GetApiService {
 
   //CopiarGimnasio(string new_gym, string copied_gym) {
   copiarGimnasio(gym_nuevo:string, gym_viejo:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarGimnasio?gym_nuevo=${gym_nuevo}&gym_viejo=${gym_viejo}`, {})
+    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarGimnasio?new_gym=${gym_nuevo}&copied_gym=${gym_viejo}`, {})
   }
 
 
@@ -214,8 +218,8 @@ export class GetApiService {
     return this.http.get(`https://localhost:7194/usuarios/admin/VerClienteEspecifico?cedula=${cedula}`, {})
   }
 
-  registrarClienteEnClase(cedulaClient:string, Num_clase:string, Id_servicio:string, Fecha:string, Hora_inicio:string, Modalidad:string, Cedula_instructor:string){
-    return this.http.post(`https://localhost:7194/usuarios/admin/CopiarGRegistrarClienteEnClaseimnasio?cedulaClient=${cedulaClient}&Num_clase=${Num_clase}&Id_servicio=${Id_servicio}&Fecha=${Fecha}&Hora_inicio=${Hora_inicio}&Modalidad=${Modalidad}&Cedula_instructor=${Cedula_instructor}`, {})
+  registrarClienteEnClase(cedulaClient:string, Num_clase:string){
+    return this.http.post(`https://localhost:7194/usuarios/cliente/RegistrarClienteEnClase?cedulaClient=${cedulaClient}&Num_clase=${Num_clase}`, {})
   }
 
   //BuscarClase(string Codigo_sucursal,string Id_servicio, string fechaInicio, string fecha_fin){

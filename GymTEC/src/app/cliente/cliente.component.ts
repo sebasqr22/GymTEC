@@ -2,6 +2,7 @@ import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { GetApiService } from '../get-api.service';
 
 @Component({
   selector: 'app-cliente',
@@ -9,19 +10,25 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./cliente.component.css']
 })
 export class ClienteComponent implements OnInit{
-  constructor(private renderer: Renderer2, private el: ElementRef, private auth: AuthService,private router:Router,private route: ActivatedRoute ) { }
+  constructor(private renderer: Renderer2, private el: ElementRef, private auth: AuthService,private router:Router,private route: ActivatedRoute, private api:GetApiService ) { }
 
   dropdown = 0
 
   nombre = "Sebatian Quesada"
   activo = 'principal'
+  cedula = ""
   ngOnInit() {
     const busqueda = document.getElementById("busqueda") as HTMLInputElement
     const registro = document.getElementById("registro") as HTMLInputElement
     busqueda.style.display = 'none'
     registro.style.display = 'none'
 
-    this.auth.capaSeguridad(this.extraerCedula())
+    //this.auth.capaSeguridad(this.extraerCedula())
+    this.funcionesPrimeras();
+    //@ts-ignore
+    this.cedula = localStorage.getItem("cedula");
+    //@ts-ignore
+    this.nombre = localStorage.getItem("nombre");
   }
   
   extraerCedula():string{
@@ -102,6 +109,28 @@ export class ClienteComponent implements OnInit{
         alert("Los datos de Fecha de Inicio, Fecha de Finalización y Sede no deben estar vacíos!!")
       }
     }
+  }
+
+  funcionesPrimeras(){
+    this.api.verClasesConCupo().subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      console.log(llegada)
+      const tmp = document.getElementById("registroAClase") as HTMLInputElement;
+      for(const i in llegada){
+        const opcion = document.createElement('option');
+        opcion.value = llegada[i].num_clase;
+        opcion.textContent = llegada[i].num_clase;
+        tmp.appendChild(opcion);
+      }
+    })
+  }
+
+  registrar(){
+    const num_clase = document.getElementById("registroAClase") as HTMLInputElement;
+    this.api.registrarClienteEnClase(this.cedula, num_clase.value).subscribe((data) => {
+      const llegada = JSON.parse(JSON.stringify(data));
+      alert(llegada.message)
+    })
   }
   logout(){
     alert("logout")

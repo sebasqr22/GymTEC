@@ -954,7 +954,7 @@
             <hr class="sidebar-divider my-0">
             <br><br>
             <div class="col-sm">
-              <select class="form-control form-control-user" id="gestProductPPRODUCTO"></select>
+              <select class="form-control form-control-user" id="gestProductPPRODUCTO" (change)="aplicarInfoGestionproductos()"></select>
               <label for="gestProductPPRODUCTO">Producto</label>
             </div>
             <div class="form-group row">
@@ -969,7 +969,7 @@
               </div>
 
               <div class="col-sm-6">
-                <input type="number" class="form-control form-control-user" id="gestProductPDESCRIPCION">
+                <input type="text" class="form-control form-control-user" id="gestProductPDESCRIPCION">
                 <label for="gestProductPDESCRIPCION">Descripción</label>
               </div>
 
@@ -1145,17 +1145,20 @@
             <br><br>
             <div class="form-group row">
               <div class="col-sm-6">
-                <input type="text" class="form-control form-control-user" id="confGymPCrearTIPO">
+                <select type="text" class="form-control form-control-user" id="confGymPCrearTIPO"></select>
                 <label for="confGymPCrearTIPO">Tipo</label>
               </div>
 
               <div class="col-sm-6">
-                <select class="form-control form-control-user" id="confGymPCrearINSTRUCTOR"></select>
+                <input type=number class="form-control form-control-user" id="confGymPCrearINSTRUCTOR">
                 <label for="confGymPCrearINSTRUCTOR">Instructor</label>
               </div>
 
               <div class="col-sm-6">
-                <select class="form-control form-control-user" id="confGymPCrearGRUPOIND"></select>
+                <select class="form-control form-control-user" id="confGymPCrearGRUPOIND">
+                  <option>Grupal</option>
+                  <option>Individual</option>
+                </select>
                 <label for="confGymPCrearGRUPOIND">Grupal o individual</label>
               </div>
 
@@ -1170,13 +1173,13 @@
               </div>
 
               <div class="col-sm-6">
-                <input type=time class="form-control form-control-user" id="confGymPCrearHORAINICIO">
-                <label for="confGymPCrearHORAINICIO">Hora de inicio</label>
+                <input type=text class="form-control form-control-user" id="confGymPCrearHORAINICIO">
+                <label for="confGymPCrearHORAINICIO">Hora de inicio (HH:MM:SS)</label>
               </div>
 
               <div class="col-sm-6">
-                <input type=time class="form-control form-control-user" id="confGymPCrearHORAFINAL">
-                <label for="confGymPCrearHORAFINAL">Hora de finalización</label>
+                <input type=text class="form-control form-control-user" id="confGymPCrearHORAFINAL">
+                <label for="confGymPCrearHORAFINAL">Hora de finalización (HH:MM:SS)</label>
               </div>
 
             </div>
@@ -1245,7 +1248,7 @@
             </div>
 
             <div class="col-sm">
-              <input type="text" class="form-control form-control-user" id="copGympNUEVO">
+              <select type="text" class="form-control form-control-user" id="copGympNUEVO"></select>
               <label for="copGympNUEVO">Nombre del nuevo Gym</label>
             </div>
 

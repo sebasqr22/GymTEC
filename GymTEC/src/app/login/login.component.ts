@@ -65,9 +65,10 @@ export class LoginComponent implements OnInit{
     //call_LoginCliente(parseInt(valor.cedula, 10), valor.password)
     this.api.call_LoginCliente(valor.cedula, valor.password).subscribe((data) => {
       const llegada = JSON.parse(JSON.stringify(data));
-      if(llegada.message == "cliente"){
-        this.router.navigate(['/cliente'])
-      }
+      localStorage.setItem("cedula", llegada["0"].cedula)
+      localStorage.setItem("nombre", llegada["0"].nombre)
+      this.router.navigate(['/cliente'])
+      
 
     })
   }
